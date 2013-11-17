@@ -1,0 +1,53 @@
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  
+  <artifactId>LagerixPrj</artifactId>
+  <packaging>ear</packaging>
+  
+
+  <parent>
+		<groupId>de.hscoburg.etif.vbis</groupId>
+		<artifactId>lagerix</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+  <dependencies>
+    <!-- web and ejb modules -->
+    <dependency>
+      <groupId>de.hscoburg.etif.vbis</groupId>
+      <artifactId>LagerixEJBModule</artifactId>
+      <version>1.0.0</version>
+      <type>ejb</type>
+    </dependency>
+    <dependency>
+     <groupId>de.hscoburg.etif.vbis</groupId>
+      <artifactId>LagerixWebModule</artifactId>
+      <version>1.0.0</version>
+      <type>war</type>
+    </dependency>
+   </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-ear-plugin</artifactId>
+        <version>2.3.2</version>
+        <!-- configuring the ear plugin -->
+        <configuration>
+          <modules>
+            <webModule>
+              <groupId>de.hscoburg.etif.vbis</groupId>
+              <artifactId>LagerixWebModule</artifactId>
+            </webModule>
+            <ejbModule>
+              <groupId>de.hscoburg.etif.vbis</groupId>
+              <artifactId>LagerixEJBModule</artifactId>
+            </ejbModule>
+            
+          </modules>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
