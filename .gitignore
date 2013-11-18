@@ -21,6 +21,7 @@
 *.zip
 *.war
 *.jar
+*.ear
 
 # Logs and databases #
 ######################

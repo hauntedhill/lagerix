@@ -1,5 +1,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
   
+import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -17,7 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.UniqueConstraint;
  
-import org.apache.commons.codec.digest.DigestUtils;
+
 
 import de.hscoburg.etif.vbis.lagerix.backend.dto.UserDTO;
  /**
@@ -30,7 +31,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.dto.UserDTO;
 public class User implements Serializable {
           
     @Id
-    @Column(unique=true, nullable=false, length=128)
+    @Column(length=128)
     private String email;
   
     @Column(nullable=false, length=128)
@@ -71,8 +72,17 @@ public class User implements Serializable {
          
         this.email        = user.getEmail();
         this.firstName    = user.getFname();
-        this.lastName     = user.getLname();        
-        this.password     = DigestUtils.sha512Hex(user.getPassword1() );
+        this.lastName     = user.getLname();   
+        
+        
+        try
+        {
+        this.password     = SHA512.SHA512(user.getPassword1() );
+        }
+        catch(Exception e)
+        {
+            e.printStackTrace();
+        }
         this.registeredOn = new Date();
     }
  
