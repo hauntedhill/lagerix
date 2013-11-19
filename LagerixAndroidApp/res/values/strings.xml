@@ -1,12 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">AndroRest</string>
+    <string name="app_name">Lagerix</string>
     <string name="action_settings">Settings</string>
-    <string name="createEntry">Create Entry by</string>
-    <string name="author">Author: </string>
-    <string name="message">and Message: </string>
-    <string name="sendEntry">Send</string>
-    <string name="listEntries">List Entries</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
