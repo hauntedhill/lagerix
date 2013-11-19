@@ -10,6 +10,7 @@
 		<module>LagerixEJBModulePrj</module>
 		<module>LagerixWebModulePrj</module>
 		<module>LagerixPrj</module>
+		<module>LagerixAndroidApp</module>
 	</modules>
 
 	<dependencies>
