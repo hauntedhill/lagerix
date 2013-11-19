@@ -1,3 +1,6 @@
+# Local project files #
+#######################
+
 bin/
 gen/
 target/
@@ -5,3 +8,8 @@ target/
 .project
 .classpath
 local.properties
+
+# External Libraries needed for compilation #
+#############################################
+
+!libs/*
