@@ -25,6 +25,12 @@
       <version>1.0.0</version>
       <type>war</type>
     </dependency>
+	<dependency>
+     <groupId>de.hscoburg.etif.vbis</groupId>
+      <artifactId>LagerixEJBRemoteInterfacePrj</artifactId>
+      <version>1.0.0</version>
+      <type>jar</type>
+    </dependency>
    </dependencies>
 
   <build>
@@ -44,7 +50,11 @@
               <groupId>de.hscoburg.etif.vbis</groupId>
               <artifactId>LagerixEJBModule</artifactId>
             </ejbModule>
-            
+            <jarModule>
+              <groupId>de.hscoburg.etif.vbis</groupId>
+              <artifactId>LagerixEJBRemoteInterfacePrj</artifactId>
+              
+            </jarModule>
           </modules>
         </configuration>
       </plugin>

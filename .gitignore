@@ -23,6 +23,8 @@
 *.jar
 *.ear
 
+target/
+
 # Logs and databases #
 ######################
 *.log
