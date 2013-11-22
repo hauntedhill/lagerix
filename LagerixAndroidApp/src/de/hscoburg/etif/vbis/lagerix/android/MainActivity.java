@@ -1,51 +1,53 @@
 package de.hscoburg.etif.vbis.lagerix.android;
 
+import java.util.Calendar;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
+
 public class MainActivity extends Activity {
-	TextView tvStatus;
-	TextView tvResult;
+	TextView article_result;
+	TextView location_result;
+	RadioButton bookedIn;
+	String userID = "1111";
+	TextView restResult;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		tvStatus = (TextView) findViewById(R.id.tvStatus);
-		tvResult = (TextView) findViewById(R.id.tvResult);
+		article_result = (TextView) findViewById(R.id.label_articleIDResult);
+		location_result = (TextView) findViewById(R.id.label_storageIDResult);
+		
+		bookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
+		
+		restResult = (TextView) findViewById(R.id.label_restResult);
+	}
+	
+	public void scanBarcode(View view) {
 
-		Button scanBtn = (Button) findViewById(R.id.btnScan);
+		try {
 
-		//in some trigger function e.g. button press within your code you should add:
-		scanBtn.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
+			Intent intent = new Intent(
+					"com.google.zxing.client.android.SCAN");
+			intent.putExtra("RESULT_DISPLAY_DURATION_MS", 0l);
+			startActivityForResult(intent, 0);
 
-				try {
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Toast.makeText(getApplicationContext(), "ERROR:" + e, 1).show();
 
-					Intent intent = new Intent(
-							"com.google.zxing.client.android.SCAN");
-					intent.putExtra("RESULT_DISPLAY_DURATION_MS", 0l);
-					startActivityForResult(intent, 0);
-
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					Toast.makeText(getApplicationContext(), "ERROR:" + e, 1).show();
-
-				}
-
-			}
-		});
-
+		}
 	}
 
 	//In the same activity you’ll need the following to retrieve the results:
@@ -53,13 +55,37 @@ public class MainActivity extends Activity {
 		if (requestCode == 0) {
 
 			if (resultCode == RESULT_OK) {
-				tvStatus.setText(intent.getStringExtra("SCAN_RESULT_FORMAT"));
-				tvResult.setText(intent.getStringExtra("SCAN_RESULT"));
-			} else if (resultCode == RESULT_CANCELED) {
-				tvStatus.setText("Press a button to start a scan.");
-				tvResult.setText("Scan cancelled.");
+				String result = intent.getStringExtra("SCAN_RESULT");
+				if(result.charAt(0) == 'A')
+					article_result.setText(result.substring(1));
+				else if(result.charAt(0) == 'S')
+					location_result.setText(result.substring(1));
 			}
 		}
 	}
-
+	
+	public void sendEntry(View view) {
+		if(article_result.getText().length() != 0 && location_result.getText().length() != 0) {
+			RequestParams params = new RequestParams();
+			params.put("articleID", article_result.getText().toString());
+			params.put("locationID", location_result.getText().toString());
+			if(bookedIn.isChecked())
+				params.put("bookedIn", "true");
+			else
+				params.put("bookedIn", "false");
+			params.put("userID", userID);
+			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
+			LagerixRestClient.post("book/saveEntry", params, new TextHttpResponseHandler() {
+				@Override
+				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
+					restResult.setText("Erfolg!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody);
+				}
+				
+				@Override
+				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
+					restResult.setText("Fehler!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody+"\nError: "+error);
+				}
+			});
+		}
+	}
 }
