@@ -11,7 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
  
-import de.hscoburg.etif.vbis.lagerix.backend.dto.JsonResponse;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponse;
  
 @Path("/secure/timestamp")
 @Produces(MediaType.APPLICATION_JSON)

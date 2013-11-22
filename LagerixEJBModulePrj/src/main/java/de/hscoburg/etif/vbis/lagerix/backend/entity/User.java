@@ -20,7 +20,7 @@ import javax.persistence.UniqueConstraint;
  
 
 
-import de.hscoburg.etif.vbis.lagerix.backend.dto.UserDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
  /**
   * 
   * @author zuch1000

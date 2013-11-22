@@ -1,10 +1,12 @@
-package de.hscoburg.etif.vbis.lagerix.backend.dto;
+package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
  
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
+
 /**
  * 
  * @author zuch1000
  */
-public class UserDTO {
+public class UserDTO extends BaseDTO{
  
     private String email;
     private String fname;

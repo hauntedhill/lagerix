@@ -19,11 +19,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
  
-import de.hscoburg.etif.vbis.lagerix.backend.dto.JsonResponse;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.UserBean;
-import de.hscoburg.etif.vbis.lagerix.backend.dto.UserDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponse;
+//import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
+//import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
+//import de.hscoburg.etif.vbis.lagerix.backend.dao.UserBean;
+//import de.hscoburg.etif.vbis.lagerix.backend.dto.UserDTO;
 
  
 @Path("/auth")
@@ -31,8 +31,8 @@ import de.hscoburg.etif.vbis.lagerix.backend.dto.UserDTO;
 @Stateless
 public class UserManagementService {
  
-    @EJB
-    private UserBean userBean;
+    //@EJB
+    //private UserBean userBean;
  
     @GET
     @Path("ping")
@@ -66,14 +66,14 @@ public class UserManagementService {
         //read the user data from db and return to caller
         json.setStatus("SUCCESS");
          
-        User user = userBean.find(email);
+       // User user = userBean.find(email);
         req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
-        json.setData(user);
+        //json.setData(user);
          
         //we don't want to send the hashed password out in the json response
-        userBean.detach(user);
-        user.setPassword(null);
-        user.setGroups(null);
+        //userBean.detach(user);
+        //user.setPassword(null);
+        //user.setGroups(null);
         return json;
     }
  
@@ -96,7 +96,7 @@ public class UserManagementService {
         return json;
     }
  
-    @POST
+    /*@POST
     @Path("register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -138,6 +138,6 @@ public class UserManagementService {
         }
          
         return json;
-    }
+    }*/
  
 }

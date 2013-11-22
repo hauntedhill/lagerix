@@ -1,5 +1,6 @@
-package de.hscoburg.etif.vbis.lagerix.backend.dto;
+package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
  
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
 import java.util.Map;
 import javax.xml.bind.annotation.XmlRootElement;
  
@@ -9,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author zuch1000
  */
 @XmlRootElement 
-public class JsonResponse{
+public class JsonResponse extends BaseDTO{
      
     private static final float version = 1.0f;  
  

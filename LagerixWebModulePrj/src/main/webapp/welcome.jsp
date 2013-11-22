@@ -1,3 +1,6 @@
+<%@page import="de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.BookEntry"%>
+<%@page import="de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface"%>
+<%@page import="javax.naming.InitialContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"
 %><%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' 
 %><c:if test="${pageContext.request.userPrincipal!=null}">
@@ -24,6 +27,33 @@
      
     <%@ include file="/WEB-INF/includes/head/jquery.jsp" %>
      
+    
+    <% 
+    
+    
+    try {
+InitialContext ctx =new InitialContext();
+/* Nachfolgender JNDI-Name hat funktioniert
+bei Start des Clients in NetBeans 7.0.1 */
+String
+ejb_jndi_name
+="java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/ArticleManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface";
+ArticleManagerEJBRemoteInterface bean =
+(ArticleManagerEJBRemoteInterface) ctx.lookup(ejb_jndi_name);
+System.out.println("Resultat bean.help()=" +
+bean.saveBookEntry(new BookEntry()));
+
+
+} catch (Exception e) { System.out.println(e);
+}
+    
+    
+    %>
+    
+    
+    
+    
+    
     <script type="text/javascript">
         $(function(){
             "use strict";

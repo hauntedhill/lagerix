@@ -53,7 +53,7 @@
             <jarModule>
               <groupId>de.hscoburg.etif.vbis</groupId>
               <artifactId>LagerixEJBRemoteInterfacePrj</artifactId>
-              
+              <bundleDir>lib</bundleDir>
             </jarModule>
           </modules>
         </configuration>
