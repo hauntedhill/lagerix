@@ -12,7 +12,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
  *
  * @author zuch1000
  */
-public class StorageLocation  extends BaseDTO{
+public class StorageLocationDTO  extends BaseDTO{
 	private int id;
 	private int storageID;			//ID of the corresponding storage
 

@@ -10,7 +10,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author zuch1000
  */
 @XmlRootElement 
-public class JsonResponse extends BaseDTO{
+public class JsonResponseDTO extends BaseDTO{
      
     private static final float version = 1.0f;  
  
@@ -19,16 +19,16 @@ public class JsonResponse extends BaseDTO{
     private Map<String, Object> fieldErrors;
     private Object data;
  
-    public JsonResponse() {
+    public JsonResponseDTO() {
     }
      
-    public JsonResponse(String status) {
+    public JsonResponseDTO(String status) {
         this.status = status;
     }    
      
     //@XmlElement //we don't need this thanks to Jackson
     public float getVersion() {
-        return JsonResponse.version;
+        return JsonResponseDTO.version;
     }
          
     public String getStatus() {

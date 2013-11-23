@@ -13,7 +13,7 @@ import javax.persistence.TypedQuery;
    * @author zuch1000
    */
 @Stateless
-public class UserDAO {
+public class UserDAO extends BaseDAO<User>{
   
     @PersistenceContext
     private EntityManager em;

@@ -26,6 +26,10 @@ public class ArticleType {
     
     private String name;
     
+    private String description;
+    
+    private Integer minimumStock;
+    
     
     @OneToMany(targetEntity = Article.class,mappedBy = "articleType")
     private List<Article> articles;
@@ -87,6 +91,34 @@ public class ArticleType {
      */
     public void setStorage(Storage storage) {
         this.storage = storage;
+    }
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
+     * @return the minimumStock
+     */
+    public Integer getMinimumStock() {
+        return minimumStock;
+    }
+
+    /**
+     * @param minimumStock the minimumStock to set
+     */
+    public void setMinimumStock(Integer minimumStock) {
+        this.minimumStock = minimumStock;
     }
     
 }

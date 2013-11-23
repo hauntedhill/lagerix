@@ -21,40 +21,40 @@ public interface ArticleManagerEJBRemoteInterface {
  * @param entry A book entry containing information about booking process such as the ID of the corresponding article and location 
  * @return 0 if everything went fine or an error code
  */
-public int saveBookEntry(BookEntry entry);
+public int saveBookEntry(BookEntryDTO entry);
 
 /**
  * Returns all book entries for a specific article type
  * @param articleTypeID ID of the requested article type
  * @return List of book entries for the requested article type
  */
-public List<BookEntry> getBookEntriesForArticleType(int articleTypeID);
+public List<BookEntryDTO> getBookEntriesForArticleType(int articleTypeID);
 
 /**
  * Returns an article type specified by it's ID
  * @param articleTypeID ID of the requested article type
  * @return Object of type ArticleType
  */
-public ArticleType getArticleTypeByID(int articleTypeID);
+public ArticleTypeDTO getArticleTypeByID(int articleTypeID);
 
 /**
  * Returns an article type specified by it's name
  * @param articleTypeName name of the requested article type
  * @return Object of type ArticleType
  */
-public ArticleType getArticleTypeByName(String articleTypeName);
+public List<ArticleTypeDTO> searchArticleType(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock);
 
 /**
  * Returns all storage locations where a specified article type if currently stored
  * @param articleTypeID ID of the requested article type
  * @return List of storage locations
  */
-public List<StorageLocation> getLocationsForArticleType(int articleTypeID);
+public List<StorageLocationDTO> getLocationsForArticleType(int articleTypeID);
 
 /**
  * Returns all storage locations for a specific storage
  * @param storageID ID of the requested storage
  * @return List of all storage locations for the requested storage
  */
-public List<StorageLocation> getAllStorageLocationsForStorage(int storageID);  
+public List<StorageLocationDTO> getAllStorageLocationsForStorage(int storageID);  
 }

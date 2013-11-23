@@ -11,7 +11,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
  
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponse;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponseDTO;
  
 @Path("/secure/timestamp")
 @Produces(MediaType.APPLICATION_JSON)
@@ -21,9 +21,9 @@ public class TimeService {
     @GET
     @Path("now")
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonResponse getCurrentDate(@Context HttpServletRequest req) {
+    public JsonResponseDTO getCurrentDate(@Context HttpServletRequest req) {
  
-        JsonResponse json = new JsonResponse("SUCCESS");
+        JsonResponseDTO json = new JsonResponseDTO("SUCCESS");
         json.setData(new Date());
         return json;
     }

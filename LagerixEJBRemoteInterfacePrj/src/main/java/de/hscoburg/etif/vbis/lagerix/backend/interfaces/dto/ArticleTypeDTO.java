@@ -12,12 +12,12 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
  *
  * @author zuch1000
  */
-public class ArticleType extends BaseDTO{
+public class ArticleTypeDTO extends BaseDTO{
 	private int id;
 	private String name;
 	private String description;
 	private int minimumStock;
-	private int storageID;			//where the article type is stored in
+	private int yardID;			//where the article type is stored in
 
     /**
      * @return the id
@@ -78,14 +78,14 @@ public class ArticleType extends BaseDTO{
     /**
      * @return the storageID
      */
-    public int getStorageID() {
-        return storageID;
+    public int getYardID() {
+        return yardID;
     }
 
     /**
      * @param storageID the storageID to set
      */
-    public void setStorageID(int storageID) {
-        this.storageID = storageID;
+    public void setYardID(int yardID) {
+        this.yardID = yardID;
     }
 }

@@ -12,9 +12,9 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
  *
  * @author zuch1000
  */
-public class BookEntry extends BaseDTO {
+public class BookEntryDTO extends BaseDTO {
 	private int articleID;			//ID of the scanned article
-	private int locationID;			//ID of the scanned storage location
+	private int yardID;			//ID of the scanned storage location
 	private boolean bookedIn;		//true, if the article was booked int, false otherwise
 	private int userID;				//ID of the user account which was logged in on the device that sent the request
 	private long timestamp;			//Timestamp at which the booking request was sent
@@ -36,15 +36,15 @@ public class BookEntry extends BaseDTO {
     /**
      * @return the locationID
      */
-    public int getLocationID() {
-        return locationID;
+    public int getYardID() {
+        return yardID;
     }
 
     /**
      * @param locationID the locationID to set
      */
-    public void setLocationID(int locationID) {
-        this.locationID = locationID;
+    public void setYardID(int locationID) {
+        this.yardID = locationID;
     }
 
     /**

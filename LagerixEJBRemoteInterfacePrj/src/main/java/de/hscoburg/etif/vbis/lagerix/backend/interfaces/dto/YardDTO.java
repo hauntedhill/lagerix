@@ -13,10 +13,10 @@ import java.util.List;
  *
  * @author zuch1000
  */
-public class Storage  extends BaseDTO{
+public class YardDTO  extends BaseDTO{
 	private int id;
 	private String name;
-	   private List<StorageLocation> storageLocations;
+	   private List<StorageLocationDTO> storageLocations;
 
     /**
      * @return the id
@@ -49,14 +49,14 @@ public class Storage  extends BaseDTO{
     /**
      * @return the storageLocations
      */
-    public List<StorageLocation> getStorageLocations() {
+    public List<StorageLocationDTO> getStorageLocations() {
         return storageLocations;
     }
 
     /**
      * @param storageLocations the storageLocations to set
      */
-    public void setStorageLocations(List<StorageLocation> storageLocations) {
+    public void setStorageLocations(List<StorageLocationDTO> storageLocations) {
         this.storageLocations = storageLocations;
     }
 }

@@ -20,7 +20,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
  
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponse;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponseDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
@@ -45,10 +45,10 @@ public class UserManagementService {
     @POST
     @Path("login")
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonResponse login(@FormParam("email") String email, @FormParam("password") String password,
+    public JsonResponseDTO login(@FormParam("email") String email, @FormParam("password") String password,
             @Context HttpServletRequest req) {
          
-        JsonResponse json = new JsonResponse();
+        JsonResponseDTO json = new JsonResponseDTO();
          
         //only login if not already logged in...
         if(req.getUserPrincipal() == null){
@@ -82,9 +82,9 @@ public class UserManagementService {
     @GET
     @Path("logout")
     @Produces(MediaType.APPLICATION_JSON)
-    public JsonResponse logout(@Context HttpServletRequest req) {
+    public JsonResponseDTO logout(@Context HttpServletRequest req) {
  
-        JsonResponse json = new JsonResponse();
+        JsonResponseDTO json = new JsonResponseDTO();
  
         try {
             req.logout();
@@ -103,9 +103,9 @@ public class UserManagementService {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public JsonResponse register(UserDTO newUser, @Context HttpServletRequest req) {
+    public JsonResponseDTO register(UserDTO newUser, @Context HttpServletRequest req) {
  
-        JsonResponse json = new JsonResponse();
+        JsonResponseDTO json = new JsonResponseDTO();
         json.setData(newUser); //just return the date we received
  
         //do some validation (in reality you would do some more validation...)
