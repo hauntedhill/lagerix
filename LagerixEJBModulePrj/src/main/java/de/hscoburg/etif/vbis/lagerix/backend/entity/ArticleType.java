@@ -7,14 +7,9 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -22,23 +17,21 @@ import javax.persistence.OneToMany;
  *
  * @author zuch1000
  */
-@Entity(name="USERS_GROUPS")
-public class Groups {
+@Entity
+public class ArticleType {
+   
     @Id
     @GeneratedValue
     private Integer id;
     
-    @Column(name = "groupname")
-    @Enumerated(EnumType.STRING)
-    private Group groups;
+    private String name;
     
     
-    @ManyToOne(targetEntity = User.class)
-    @JoinColumn(name = "email")
-    private User user;
+    @OneToMany(targetEntity = Article.class,mappedBy = "articleType")
+    private List<Article> articles;
     
-    @OneToMany(targetEntity = Storage.class,mappedBy = "group")
-    private List<Storage> storage;
+    @ManyToOne(targetEntity = Storage.class)
+    private Storage storage;
 
     /**
      * @return the id
@@ -55,44 +48,45 @@ public class Groups {
     }
 
     /**
-     * @return the group
+     * @return the name
      */
-    public Group getGroups() {
-        return groups;
+    public String getName() {
+        return name;
     }
 
     /**
-     * @param group the group to set
+     * @param name the name to set
      */
-    public void setGroups(Group groups) {
-        this.groups = groups;
+    public void setName(String name) {
+        this.name = name;
     }
 
     /**
-     * @return the user
+     * @return the articles
      */
-    public User getUser() {
-        return user;
+    public List<Article> getArticles() {
+        return articles;
     }
 
     /**
-     * @param user the user to set
+     * @param articles the articles to set
      */
-    public void setUser(User user) {
-        this.user = user;
+    public void setArticles(List<Article> articles) {
+        this.articles = articles;
     }
 
     /**
      * @return the storage
      */
-    public List<Storage> getStorage() {
+    public Storage getStorage() {
         return storage;
     }
 
     /**
      * @param storage the storage to set
      */
-    public void setStorage(List<Storage> storage) {
+    public void setStorage(Storage storage) {
         this.storage = storage;
     }
+    
 }
