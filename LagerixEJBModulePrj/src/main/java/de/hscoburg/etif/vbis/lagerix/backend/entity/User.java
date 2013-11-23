@@ -21,6 +21,10 @@ import javax.persistence.UniqueConstraint;
 
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
+import java.util.ArrayList;
+import javax.persistence.CascadeType;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
  /**
   * 
   * @author zuch1000
@@ -52,13 +56,15 @@ public class User implements Serializable {
     @Column(nullable=false)
     private Date registeredOn;
           
-    @ElementCollection(targetClass = Group.class)
-    @CollectionTable(name = "USERS_GROUPS", 
-                    joinColumns       = @JoinColumn(name = "email", nullable=false), 
-                    uniqueConstraints = { @UniqueConstraint(columnNames={"email","groupname"}) } )
-    @Enumerated(EnumType.STRING)
-    @Column(name="groupname", length=64, nullable=false)
-    private List<Group> groups;
+    //@ElementCollection(targetClass = Group.class)
+    //@CollectionTable(name = "USERS_GROUPS", 
+    //                joinColumns       = @JoinColumn(name = "email", nullable=false), 
+    //                uniqueConstraints = { @UniqueConstraint(columnNames={"email","groupname"}) } )
+    //@Enumerated(EnumType.STRING)
+    //@Column(name="groupname", length=64, nullable=false)
+    
+    @OneToMany(targetEntity = Groups.class,mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Groups> groups;
      
    
      
@@ -107,11 +113,21 @@ public class User implements Serializable {
         this.registeredOn = registeredOn;
     }
  
-    public List<Group> getGroups() {
+    public List<Groups> getGroups() {
         return groups;
     }
  
-    public void setGroups(List<Group> groups) {
+    public void addGroup(Groups group) {
+        group.setUser(this);
+        if(groups == null)
+        {
+            groups = new ArrayList<Groups>();
+        }
+        groups.add(group);
+    }
+    
+    
+    public void setGroups(List<Groups> groups) {
         this.groups = groups;
     }
  

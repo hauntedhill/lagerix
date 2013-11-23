@@ -8,6 +8,7 @@ package de.hscoburg.etif.vbis.lagerix.backend.services;
 
 import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
@@ -58,13 +59,20 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         u.setLastName( user.getLname());   
         
         
-        List<Group> groups = new ArrayList<Group>();
+        List<Groups> groups = new ArrayList<Groups>();
         
-        groups.add(Group.BENUTZER);
-        groups.add(Group.ADMINISTRATOR);
-        groups.add(Group.EINKAEUFER);
-        groups.add(Group.LAGERARBEITER);
-        groups.add(Group.LAGERVERWALTER);
+        
+        Groups  g1 = new Groups();
+        g1.setGroups(Group.BENUTZER);
+        
+        u.addGroup(g1);
+        userDAO.save(g1);
+        g1 = new Groups();
+        g1.setGroups(Group.ADMINISTRATOR);
+        userDAO.save(g1);
+        u.addGroup(g1);
+        
+        
         
         u.setGroups(groups);
         try

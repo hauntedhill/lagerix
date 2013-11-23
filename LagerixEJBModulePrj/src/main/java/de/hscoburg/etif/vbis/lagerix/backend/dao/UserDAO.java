@@ -1,5 +1,7 @@
 package de.hscoburg.etif.vbis.lagerix.backend.dao;
   
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -23,6 +25,10 @@ public class UserDAO {
   
     public void save(User user) {
         em.persist(user);
+    }
+    
+    public void save(Groups group) {
+        em.persist(group);
     }
   
     public void update(User user) {
