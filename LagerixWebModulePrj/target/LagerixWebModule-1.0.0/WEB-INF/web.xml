@@ -63,10 +63,16 @@
     <role-name>ADMINISTRATOR</role-name>
   </security-role>
   <security-role>
-    <role-name>USER</role-name>
+    <role-name>BENUTZER</role-name>
   </security-role>
   <security-role>
-    <role-name>DEFAULT</role-name>
+    <role-name>LAGERARBEITER</role-name>
+  </security-role>
+  <security-role>
+    <role-name>EINKAEUFER</role-name>
+  </security-role>
+  <security-role>
+    <role-name>LAGERVERWALTER</role-name>
   </security-role>
    
   <session-config>

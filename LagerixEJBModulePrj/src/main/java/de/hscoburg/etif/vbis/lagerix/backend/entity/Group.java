@@ -6,6 +6,6 @@ package de.hscoburg.etif.vbis.lagerix.backend.entity;
  */
 public enum Group {
      
-    ADMINISTRATOR, USER, DEFAULT;
+    ADMINISTRATOR, BENUTZER,LAGERARBEITER,EINKAEUFER,LAGERVERWALTER;
      
 }

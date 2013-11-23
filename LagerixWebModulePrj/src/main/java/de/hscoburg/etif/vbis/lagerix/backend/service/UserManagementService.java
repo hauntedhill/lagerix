@@ -1,5 +1,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.service;
  
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
 import java.util.ArrayList;
 import java.util.List;
  
@@ -20,6 +21,7 @@ import javax.ws.rs.core.MediaType;
 
  
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponse;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 //import de.hscoburg.etif.vbis.lagerix.backend.dao.UserBean;
@@ -31,8 +33,8 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.JsonResponse;
 @Stateless
 public class UserManagementService {
  
-    //@EJB
-    //private UserBean userBean;
+    @EJB
+    private UserManagerEJBRemoteInterface userBean;
  
     @GET
     @Path("ping")
@@ -66,9 +68,9 @@ public class UserManagementService {
         //read the user data from db and return to caller
         json.setStatus("SUCCESS");
          
-       // User user = userBean.find(email);
+        UserDTO user = userBean.find(email);
         req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
-        //json.setData(user);
+        json.setData(user);
          
         //we don't want to send the hashed password out in the json response
         //userBean.detach(user);
@@ -96,7 +98,7 @@ public class UserManagementService {
         return json;
     }
  
-    /*@POST
+    @POST
     @Path("register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -114,17 +116,17 @@ public class UserManagementService {
             return json;
         }
  
-        User user = new User(newUser);
+        //User user = new User(newUser);
  
-        List<Group> groups = new ArrayList<Group>();
-        groups.add(Group.ADMINISTRATOR);
-        groups.add(Group.USER);
-        groups.add(Group.DEFAULT);
-        user.setGroups(groups);
+        //List<Group> groups = new ArrayList<Group>();
+        //groups.add(Group.ADMINISTRATOR);
+        //groups.add(Group.USER);
+        //groups.add(Group.DEFAULT);
+        //user.setGroups(groups);
  
         //this could cause a runtime exception, i.e. in case the user already exists
         //such exceptions will be caught by our ExceptionMapper, i.e. javax.transaction.RollbackException
-        userBean.save(user); // this would use the clients transaction which is committed after save() has finished
+        userBean.register(newUser); // this would use the clients transaction which is committed after save() has finished
         req.getServletContext().log("successfully registered new user: '" + newUser.getEmail() + "':'" + newUser.getPassword1() + "'");
  
         req.getServletContext().log("execute login now: '" + newUser.getEmail() + "':'" + newUser.getPassword1() + "'");
@@ -138,6 +140,6 @@ public class UserManagementService {
         }
          
         return json;
-    }*/
+    }
  
 }

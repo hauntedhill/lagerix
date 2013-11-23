@@ -3,15 +3,27 @@
 <glassfish-web-app error-url="">
   <context-root>Lagerix</context-root>
  
+ 
+
+ 
   <!-- role mapping --> 
+    <security-role-mapping>
+    <role-name>EINKAEUFER</role-name>
+    <group-name>EINKAEUFER</group-name>
+  </security-role-mapping>
+  
+    <security-role-mapping>
+    <role-name>LAGERVERWALTER</role-name>
+    <group-name>LAGERVERWALTER</group-name>
+  </security-role-mapping>
   <security-role-mapping>
-    <role-name>USER</role-name>
-    <group-name>USER</group-name>
+    <role-name>BENUTZER</role-name>
+    <group-name>BENUTZER</group-name>
   </security-role-mapping>
    
   <security-role-mapping>
-    <role-name>DEFAULT</role-name>
-    <group-name>DEFAULT</group-name>
+    <role-name>LAGERARBEITER</role-name>
+    <group-name>LAGERARBEITER</group-name>
   </security-role-mapping>
    
   <security-role-mapping>

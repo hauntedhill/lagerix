@@ -11,7 +11,7 @@ import javax.persistence.TypedQuery;
    * @author zuch1000
    */
 @Stateless
-public class UserBean {
+public class UserDAO {
   
     @PersistenceContext
     private EntityManager em;

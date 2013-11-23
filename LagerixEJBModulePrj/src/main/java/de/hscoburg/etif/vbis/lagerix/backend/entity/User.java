@@ -60,31 +60,9 @@ public class User implements Serializable {
     @Column(name="groupname", length=64, nullable=false)
     private List<Group> groups;
      
-    public User(){
-         
-    }
+   
      
-    public User(UserDTO user){
-         
-        if (user.getPassword1() == null || user.getPassword1().length() == 0
-                || !user.getPassword1().equals(user.getPassword2()) )
-            throw new RuntimeException("Password 1 and Password 2 have to be equal (typo?)");
-         
-        this.email        = user.getEmail();
-        this.firstName    = user.getFname();
-        this.lastName     = user.getLname();   
-        
-        
-        try
-        {
-        this.password     = SHA512.SHA512(user.getPassword1() );
-        }
-        catch(Exception e)
-        {
-            e.printStackTrace();
-        }
-        this.registeredOn = new Date();
-    }
+    
  
     public String getFirstName() {
         return firstName;
