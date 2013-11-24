@@ -3,35 +3,16 @@ $(document).ready(function() {
     "use strict";
 
     $(document.forms['simpleSearchForm']).submit(function(event) {
-//        var data = {
-//            id: this.ipIdSimpleSearch.value
-//        };
         var destinationUrl = this.action;
 
         $.ajax({
             url: destinationUrl,
-            type: "POST",
-//                    data: data,
-//            data: JSON.stringify(data),
+            type: "GET",
             data: $("#simpleSearchForm").serialize(),
-//            contentType: "application/json",
             cache: false,
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
                 displayArticleType(data, textStatus, jqXHR);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("error - HTTP STATUS: " + jqXHR.status + "\ntextStatus: " + textStatus + "\nerrorThrown: " + errorThrown + "\nData: " + jqXHR.responseText);
-
-            },
-            complete: function(jqXHR, textStatus) {
-//                alert("complete");
-                //i.e. hide loading spinner
-            },
-            statusCode: {
-                404: function() {
-                    alert("page not found");
-                },
             }
         });
         //event.preventDefault();
@@ -47,28 +28,12 @@ $(document).ready(function() {
 
         $.ajax({
             url: destinationUrl,
-            type: "POST",
-//                    data: data,
-//            data: JSON.stringify(data),
+            type: "GET",
             data: $("#advancedSearchForm").serialize(),
-//            contentType: "application/json",
             cache: false,
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
                 displayArticleTypes(data, textStatus, jqXHR);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("error - HTTP STATUS: " + jqXHR.status + "\ntextStatus: " + textStatus + "\nerrorThrown: " + errorThrown + "\nData: " + jqXHR.responseText);
-
-            },
-            complete: function(jqXHR, textStatus) {
-//                alert("complete");
-                //i.e. hide loading spinner
-            },
-            statusCode: {
-                404: function() {
-                    alert("page not found");
-                },
             }
         });
         //event.preventDefault();
@@ -90,9 +55,9 @@ function displayArticleType(data, textStatus, jqXHR) {
 
 function displayArticleTypes(data, textStatus, jqXHR) {
     var arr = jQuery.parseJSON(jqXHR.responseText);
-    var options= "";
+    var options = "";
     for (var i = 0; i < arr.length; i++) {
-        options+= "<option>"+arr[i].itemId+" | "+arr[i].name+"</option>";
+        options += "<option>" + arr[i].itemId + " | " + arr[i].name + "</option>";
     }
     $("#selectSearchResults").html(options);
 ////                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
