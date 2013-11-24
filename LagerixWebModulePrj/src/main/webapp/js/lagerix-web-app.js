@@ -20,55 +20,55 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function() {
-    "use strict";
-    $(document.forms['advancedSearchForm']).submit(function(event) {
-
-        var destinationUrl = this.action;
-
-        $.ajax({
-            url: destinationUrl,
-            type: "GET",
-            data: $("#advancedSearchForm").serialize(),
-            cache: false,
-            dataType: "json",
-            success: function(data, textStatus, jqXHR) {
-                displayArticleTypes(data, textStatus, jqXHR);
-            }
-        });
-        //event.preventDefault();
-        return false;
-    });
-
-});
+//$(document).ready(function() {
+//    "use strict";
+//    $(document.forms['advancedSearchForm']).submit(function(event) {
+//
+//        var destinationUrl = this.action;
+//
+//        $.ajax({
+//            url: destinationUrl,
+//            type: "GET",
+//            data: $("#advancedSearchForm").serialize(),
+//            cache: false,
+//            dataType: "json",
+//            success: function(data, textStatus, jqXHR) {
+//                displayArticleTypes(data, textStatus, jqXHR);
+//            }
+//        });
+//        //event.preventDefault();
+//        return false;
+//    });
+//
+//});
 
 function displayArticleType(data, textStatus, jqXHR) {
     var obj = jQuery.parseJSON(jqXHR.responseText);
 //                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
-    $("#ipArticleTypeIdArticleTypeDescription").val(obj.itemId);
+    $("#ipArticleTypeIdArticleTypeDescription").val(obj.id);
     $("#ipNameArticleTypeDescription").val(obj.name);
-    $("#textareaNoteArticleTypeDescription").val(obj.note);
-    $("#ipMinimumStockArticleTypeDescription").val(obj.minimumHolding);
+    $("#textareaNoteArticleTypeDescription").val(obj.description);
+    $("#ipMinimumStockArticleTypeDescription").val(obj.minimumStock);
     var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
 }
 
-function displayArticleTypes(data, textStatus, jqXHR) {
-    var arr = jQuery.parseJSON(jqXHR.responseText);
-    var options = "";
-    for (var i = 0; i < arr.length; i++) {
-        options += "<option>" + arr[i].itemId + " | " + arr[i].name + "</option>";
-    }
-    $("#selectSearchResults").html(options);
-////                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
-//    $("#ipItemIdItemDescription").val(obj.itemId);
-//    $("#ipNameItemDescription").val(obj.name);
-//    $("#textareaNoteItemDescription").val(obj.note);
-//    $("#ipMinimumStockItemDescription").val(obj.minimumHolding);
-//    var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
-//    $("#panelTitelItemDescription").html(title);
-    $("#stockTrend").val(jqXHR.responseText);
-}
+//function displayArticleTypes(data, textStatus, jqXHR) {
+//    var arr = jQuery.parseJSON(jqXHR.responseText);
+//    var options = "";
+//    for (var i = 0; i < arr.length; i++) {
+//        options += "<option>" + arr[i].itemId + " | " + arr[i].name + "</option>";
+//    }
+//    $("#selectSearchResults").html(options);
+//////                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
+////    $("#ipItemIdItemDescription").val(obj.itemId);
+////    $("#ipNameItemDescription").val(obj.name);
+////    $("#textareaNoteItemDescription").val(obj.note);
+////    $("#ipMinimumStockItemDescription").val(obj.minimumHolding);
+////    var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
+////    $("#panelTitelItemDescription").html(title);
+//    $("#stockTrend").val(jqXHR.responseText);
+//}
 
 
 
