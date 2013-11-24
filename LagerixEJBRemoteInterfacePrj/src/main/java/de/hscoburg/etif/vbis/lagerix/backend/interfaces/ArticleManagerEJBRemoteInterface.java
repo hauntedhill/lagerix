@@ -56,5 +56,19 @@ public List<StorageLocationDTO> getLocationsForArticleType(int articleTypeID);
  * @param storageID ID of the requested storage
  * @return List of all storage locations for the requested storage
  */
-public List<StorageLocationDTO> getAllStorageLocationsForStorage(int storageID);  
+public List<StorageLocationDTO> getAllStorageLocationsForStorage(int storageID); 
+
+/**
+ * Updates the minimumStock value of an ArticleType.
+ * @param articleTypeId ID of the ArticleType which is going to be updated
+ * @param newMinStock The new value of minimumStock.
+ * @return 0 if everything went fine otherwise an error code
+ */
+public int updateMinimumStock(int articleTypeId, int newMinStock);
+
+/**
+ * Returns all ArticleTypes with underrun minimumStock.
+ * @return A List of ArticleTypes with underrun minimumStock
+ */
+public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock();
 }

@@ -105,9 +105,19 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
    }
 
     public List<StorageLocationDTO> getLocationsForArticleType(int articleTypeID) {
-         List<StorageLocationDTO> entries = new ArrayList<StorageLocationDTO>();
+         
         
-        return entries;    }
+        Article a =  articleDAO.findById(Article.class, articleTypeID);
+        
+        List<StorageLocationDTO> result = new ArrayList<StorageLocationDTO>();
+        
+        //for(Yard y : a.)
+        //{
+            
+        //}
+        return result;
+        
+    }
 
     public List<StorageLocationDTO> getAllStorageLocationsForStorage(int storageID) {
          
@@ -127,6 +137,20 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         return result;
     
     
+    }
+
+    public int updateMinimumStock(int articleTypeId, int newMinStock) {
+        
+        ArticleType a = articleTypeDAO.findById(ArticleType.class, articleTypeId);
+        
+        a.setMinimumStock(newMinStock);
+        articleTypeDAO.merge(a);
+        
+        return 0;
+    }
+
+    public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock() {
+        return new ArrayList<ArticleTypeDTO>();
     }
     
 }
