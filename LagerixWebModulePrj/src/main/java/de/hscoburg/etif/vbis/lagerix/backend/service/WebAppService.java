@@ -17,7 +17,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
-import com.google.gson.Gson;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import javax.ejb.EJB;
 
@@ -30,8 +29,8 @@ import javax.ejb.EJB;
 public class WebAppService
 {
 
-//    @EJB
-//    ArticleManagerEJBRemoteInterface myBean;
+    @EJB
+    ArticleManagerEJBRemoteInterface myBean;
     @Context
     private UriInfo context;
 
@@ -47,23 +46,20 @@ public class WebAppService
     @Produces(MediaType.APPLICATION_JSON)
 //    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public String simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)//final ArticleId pArticleId)//, @Context HttpServletRequest req)
+    public ArticleTypeDTO simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)//final ArticleId pArticleId)//, @Context HttpServletRequest req)
     {
-        int i = 5;
         try
         {
-//            ArticleTypeDTO result = this.myBean.getArticleTypeByID(Integer.parseInt("1"));
-            ArticleTypeDTO result = new ArticleTypeDTO();
-            result.setId(1);
-            result.setName("Test Artikel");
-            result.setDescription("Test Beschreibung des Artikels");
-            result.setMinimumStock(12);
-            Gson gson = new Gson();
-            String json = gson.toJson(result);
-            return json;
+            ArticleTypeDTO result = this.myBean.getArticleTypeByID(Integer.parseInt(pId));
+//            ArticleTypeDTO result = new ArticleTypeDTO();
+//            result.setId(1);
+//            result.setName("Test Artikel");
+//            result.setDescription("Test Beschreibung des Artikels");
+//            result.setMinimumStock(12);
+            return result;
         } catch (Exception e)
         {
-            return "error";
+            return new ArticleTypeDTO();
         }
     }
 
