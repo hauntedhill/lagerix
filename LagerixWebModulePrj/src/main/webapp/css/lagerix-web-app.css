@@ -1,0 +1,66 @@
+/* 
+    Document   : DefaultCss
+    Created on : 17.10.2013, 16:47:59
+    Author     : Maraike
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+.margin5{
+	margin: 5px;
+}
+
+/*.lagerix-gradient-background{
+background-image: -webkit-linear-gradient(white 0%, #9FBFD2 100%);
+background-image: -moz-linear-gradient(white 0%, #9FBFD2 100%); 
+background-image: -o-linear-gradient(white 0%, #9FBFD2 100%); 
+background-image: linear-gradient(white 0%, #9FBFD2 100%);
+}*/
+
+/*
+html {
+    font: 300 100% "Source Sans Pro", sans-serif;
+}
+
+root { 
+    display: block;
+}
+
+form{
+    background-color: antiquewhite;
+    margin: 10px;
+    padding: 10px;
+    border-color: black;
+    border-style: solid;
+    text-align: right;
+}
+
+label{
+    vertical-align: top;
+}
+
+h3{
+    text-align: center;
+}
+
+div{
+    margin: 10px;
+    padding: 10px;
+}
+
+div.clickMe {
+    background: #D8B36E;
+    padding: 10px ;
+    text-align: center;
+    width: 405px;
+    display: block;
+    border: 2px solid #000;
+}
+div.frame {
+    background: #D8B36E;
+    padding: 0px ;
+    width: 380px;
+    height:  20px;
+    display: none;
+    border: 2px solid #000;
+}*/
