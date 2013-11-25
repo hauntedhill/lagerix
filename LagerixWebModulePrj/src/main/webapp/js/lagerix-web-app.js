@@ -49,7 +49,7 @@ function displayArticleType(data, textStatus, jqXHR) {
     $("#ipNameArticleTypeDescription").val(obj.name);
     $("#textareaNoteArticleTypeDescription").val(obj.description);
     $("#ipMinimumStockArticleTypeDescription").val(obj.minimumStock);
-    var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
+    var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
 }
 
