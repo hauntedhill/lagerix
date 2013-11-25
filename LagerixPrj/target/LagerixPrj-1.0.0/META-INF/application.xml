@@ -7,7 +7,7 @@
   <module>
     <web>
       <web-uri>LagerixWebModule-1.0.0.war</web-uri>
-      <context-root>/LagerixWebModule</context-root>
+      <context-root>/lagerix</context-root>
     </web>
   </module>
   <module>

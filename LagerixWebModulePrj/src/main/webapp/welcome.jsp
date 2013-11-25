@@ -1,4 +1,4 @@
-<%@page import="de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.BookEntry"%>
+<%@page import="de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.BookEntryDTO"%>
 <%@page import="de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface"%>
 <%@page import="javax.naming.InitialContext"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"
@@ -41,7 +41,7 @@ ejb_jndi_name
 ArticleManagerEJBRemoteInterface bean =
 (ArticleManagerEJBRemoteInterface) ctx.lookup(ejb_jndi_name);
 System.out.println("Resultat bean.help()=" +
-bean.saveBookEntry(new BookEntry()));
+bean.saveBookEntry(new BookEntryDTO()));
 
 
 } catch (Exception e) { System.out.println(e);

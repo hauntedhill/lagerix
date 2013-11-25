@@ -45,6 +45,7 @@
             <webModule>
               <groupId>de.hscoburg.etif.vbis</groupId>
               <artifactId>LagerixWebModule</artifactId>
+               <contextRoot>/lagerix</contextRoot>
             </webModule>
             <ejbModule>
               <groupId>de.hscoburg.etif.vbis</groupId>
