@@ -16,9 +16,10 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.*;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import javax.ejb.EJB;
+import java.util.List;
 
 /**
  * REST Web Service
@@ -63,6 +64,64 @@ public class WebAppService
         }
     }
 
+    @GET
+    @Path("/advancedsearch")
+    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public List<ArticleTypeDTO> advancedSearch(@QueryParam("ipNameAdvancedSearch") String pId, @QueryParam("ipNoteAdvancedSearch") String pNote, @QueryParam("ipMinimumStockAdvancedSearch") String pMinimumStock)
+    {
+        try
+        {
+            List<ArticleTypeDTO> result = new java.util.ArrayList<ArticleTypeDTO>();
+
+            int id = 1;
+            String name = "Artikelart ";
+            String description = "Beschreibung Artikelart ";
+            int minStock = 5;
+
+            for (int i = 0; i < 10; i++)
+            {
+                ArticleTypeDTO artTyp = new ArticleTypeDTO();
+                artTyp.setId(id);
+                artTyp.setName(name + id);
+                artTyp.setDescription(description + id);
+                artTyp.setMinimumStock(minStock);
+                result.add(artTyp);
+                id++;
+                minStock = +5;
+
+            }
+
+            return result;
+        } catch (Exception e)
+        {
+            return new java.util.ArrayList<ArticleTypeDTO>();
+        }
+    }
+
+//    @GET
+//    @Path("/storage")
+//    @Produces(MediaType.APPLICATION_JSON)
+////    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+//    @TransactionAttribute(TransactionAttributeType.NEVER)
+//    public StorageDTO getStrorage(@QueryParam("ipArticleTypeInStorage") String pStorageId)
+//    {
+//        try
+//        {
+//            ArticleTypeDTO result = this.myBean.getArticleTypeByID(Integer.parseInt(pId));
+////            ArticleTypeDTO result = new ArticleTypeDTO();
+////            result.setId(1);
+////            result.setName("Test Artikel");
+////            result.setDescription("Test Beschreibung des Artikels");
+////            result.setMinimumStock(12);
+//            return result;
+//        } catch (Exception e)
+//        {
+//            return new ArticleTypeDTO();
+//        }
+//    }
+    
     @GET
     @Path("/test")
 //    @Produces("application/xml")

@@ -131,7 +131,7 @@
                             </div>
                             <div id="collapseTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form class="form-horizontal" id="advancedSearchForm" name="advancedSearchForm"  method="get" action="<%=request.getContextPath() %>/StockWebPrj/webresources/generic/advancedsearch">
+                                    <form class="form-horizontal" id="advancedSearchForm" name="advancedSearchForm"  method="get" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/advancedsearch">
                                         <div class="row">
                                             <label for="ipNameAdvancedSearch" class="col-sm-3 control-label" >Name</label>
                                             <div class="col-sm-9">
@@ -161,6 +161,16 @@
                                     <!--Suchergebnisse-->
                                     <h4>Suchergebnisse</h4>
                                     <hr>
+                                    <table class="table table-condensed">
+                                        <thead>
+                                            <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
+                                        </thead>
+                                        <tbody id="tbodyAdvancedSearch">
+                                            <tr>
+                                                <td>test</td><td>test</td><td>test</td><td>test</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                     <select size="6" class="form-control" id="selectSearchResults" name="selectAdvancedSearchResults">
                                         <option>1</option>
                                         <option>2</option>

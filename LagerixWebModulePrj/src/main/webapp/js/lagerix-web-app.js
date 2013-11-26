@@ -20,55 +20,61 @@ $(document).ready(function() {
     });
 });
 
-//$(document).ready(function() {
-//    "use strict";
-//    $(document.forms['advancedSearchForm']).submit(function(event) {
-//
-//        var destinationUrl = this.action;
-//
-//        $.ajax({
-//            url: destinationUrl,
-//            type: "GET",
-//            data: $("#advancedSearchForm").serialize(),
-//            cache: false,
-//            dataType: "json",
-//            success: function(data, textStatus, jqXHR) {
-//                displayArticleTypes(data, textStatus, jqXHR);
-//            }
-//        });
-//        //event.preventDefault();
-//        return false;
-//    });
-//
-//});
+$(document).ready(function() {
+    "use strict";
+
+    $(document.forms['advancedSearchForm']).submit(function(event) {
+        var destinationUrl = this.action;
+
+        $.ajax({
+            url: destinationUrl,
+            type: "GET",
+            data: $("#advancedSearchForm").serialize(),
+            cache: false,
+            dataType: "json",
+            success: function(data, textStatus, jqXHR) {
+                displayArticleTypes(data, textStatus, jqXHR);
+            }
+        });
+        //event.preventDefault();
+        return false;
+    });
+});
+
+
+
 
 function displayArticleType(data, textStatus, jqXHR) {
-    var obj = jQuery.parseJSON(jqXHR.responseText);
-//                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
-    $("#ipArticleTypeIdArticleTypeDescription").val(obj.id);
-    $("#ipNameArticleTypeDescription").val(obj.name);
-    $("#textareaNoteArticleTypeDescription").val(obj.description);
-    $("#ipMinimumStockArticleTypeDescription").val(obj.minimumStock);
-    var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
+    $("#ipArticleTypeIdArticleTypeDescription").val(data.id);
+    $("#ipNameArticleTypeDescription").val(data.name);
+    $("#textareaNoteArticleTypeDescription").val(data.description);
+    $("#ipMinimumStockArticleTypeDescription").val(data.minimumStock);
+    var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
 }
 
-//function displayArticleTypes(data, textStatus, jqXHR) {
+function displayArticleTypes(data, textStatus, jqXHR) {
 //    var arr = jQuery.parseJSON(jqXHR.responseText);
-//    var options = "";
-//    for (var i = 0; i < arr.length; i++) {
-//        options += "<option>" + arr[i].itemId + " | " + arr[i].name + "</option>";
-//    }
-//    $("#selectSearchResults").html(options);
-//////                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
-////    $("#ipItemIdItemDescription").val(obj.itemId);
-////    $("#ipNameItemDescription").val(obj.name);
-////    $("#textareaNoteItemDescription").val(obj.note);
-////    $("#ipMinimumStockItemDescription").val(obj.minimumHolding);
-////    var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
-////    $("#panelTitelItemDescription").html(title);
+   
+    
+    
+    var options = "";
+    var rows ="";
+    for (var i = 0; i < data.length; i++) {
+        options += "<option>" + data[i].id + " | " + data[i].name + " | " + data[i].description + " | " + data[i].minimumStock + "</option>";
+        rows += "<tr><td>"+ data[i].id +"</td><td>"+ data[i].name + "</td><td>"+ data[i].description + "</td><td>"+ data[i].minimumStock+"</td></tr>";
+    }
+    $("#selectSearchResults").html(options);
+     $("#tbodyAdvancedSearch").html(rows);
+////                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
+//    $("#ipItemIdItemDescription").val(obj.itemId);
+//    $("#ipNameItemDescription").val(obj.name);
+//    $("#textareaNoteItemDescription").val(obj.note);
+//    $("#ipMinimumStockItemDescription").val(obj.minimumHolding);
+//    var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
+//    $("#panelTitelItemDescription").html(title);
 //    $("#stockTrend").val(jqXHR.responseText);
-//}
+}
 
 
 
