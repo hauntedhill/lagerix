@@ -50,11 +50,11 @@
                                 </div>
                                 <div class="row">
                                     <label for="ipMinimumStockArticleTypeDescription" class="col-sm-3 control-label">Mindestbestand</label>
-                                    <div class="col-sm-7">
+                                    <div class="col-sm-6">
                                         <input type="number" class="form-control input-sm " disabled id="ipMinimumStockArticleTypeDescription" name="ipMinimumStockArticleTypeDescription">
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0px 5px 0px 0px; width: auto">
-                                        <button type="submit" class="btn btn-default btn-sm" id="btnChangeMinimumStock" >Ändern</button>         
+                                    <div class="col-sm-3" style="padding: 0px 5px 0px 0px; width: auto">
+                                        <button type="submit" class="btn btn-default btn-sm" id="btnChangeMinimumStock" ><span class="glyphicon glyphicon-pencil" style="margin: 0px 10px 0px 0px"></span>Ändern</button>         
                                     </div>                        
                                 </div> 
                                 <div class="row">
@@ -166,23 +166,13 @@
                                             <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
                                         </thead>
                                         <tbody id="tbodyAdvancedSearch">
-                                            <tr>
-                                                <td>test</td><td>test</td><td>test</td><td>test</td>
-                                            </tr>
+                                            <tr></tr>
                                         </tbody>
-                                    </table>
-                                    <select size="6" class="form-control" id="selectSearchResults" name="selectAdvancedSearchResults">
-                                        <option>1</option>
-                                        <option>2</option>
-                                        <option>3</option>
-                                        <option>4</option>
-                                        <option>5</option>
-                                        <option>6</option>
-                                        <option>7</option>
-                                    </select>
+                                    </table>                                   
                                 </div>
                             </div>
                         </div>
+                        <!--Articles with underrun miniumum stock-->
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
@@ -193,7 +183,24 @@
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand Artikelarten mit unterschrittenem Mindestbestand 
+                                    <form id="formRefreshMinUnderrun" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/underrunminstocks">
+                                        <table>
+                                            <tr>
+                                                <td>Folgende in den Lagern befindliche Artikelarten haben den festgelegten Mindestbestand unterschritten:</td>
+                                                <td><button class="btn btn-default btn-sm" id="btnRefreshMinUnderrun"><span class="glyphicon glyphicon-refresh" style="margin: 0px 0px 10px 0px"></span><br/>Aktualisieren</button>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </form>
+                                    <hr>
+                                    <table class="table table-condensed table-striped table-bordered table-hover">
+                                        <thead>
+                                            <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
+                                        </thead>
+                                        <tbody id="tbodyUnderrunMinStock">
+                                            <tr></tr>
+                                        </tbody>
+                                    </table>      
                                 </div>
                             </div>
                         </div>

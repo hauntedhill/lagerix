@@ -1,7 +1,5 @@
 
 $(document).ready(function() {
-    "use strict";
-
     $(document.forms['simpleSearchForm']).submit(function(event) {
         var destinationUrl = this.action;
 
@@ -21,9 +19,7 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-    "use strict";
-
-    $(document.forms['advancedSearchForm']).submit(function(event) {
+    $(document.forms['advancedSearchForm']).submit(function() {
         var destinationUrl = this.action;
 
         $.ajax({
@@ -33,16 +29,41 @@ $(document).ready(function() {
             cache: false,
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
-                displayArticleTypes(data, textStatus, jqXHR);
+                $("#tbodyAdvancedSearch").html(displayArticleTypes(data, textStatus, jqXHR));
             }
         });
-        //event.preventDefault();
         return false;
     });
 });
 
+$(document).ready(function() {
+    $(document.forms['advancedSearchForm']).reset(function() {
+ 
+            $("#tbodyAdvancedSearch").html("");
+
+    });
+});
 
 
+$(document).ready(function() {
+    $("#btnRefreshMinUnderrun").click(function() {
+        getArticleTypesWithUnderrunMinStock();
+        return false;
+    });
+});
+
+function getArticleTypesWithUnderrunMinStock() {
+    var urli = $(document.forms['formRefreshMinUnderrun']).action;
+    $.ajax({
+        url: urli,
+        type: "GET",
+        cache: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+            $("#tbodyUnderrunMinStock").html(displayArticleTypes(data));
+        }
+    });
+}
 
 function displayArticleType(data, textStatus, jqXHR) {
     $("#ipArticleTypeIdArticleTypeDescription").val(data.id);
@@ -52,28 +73,17 @@ function displayArticleType(data, textStatus, jqXHR) {
     var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
 }
-
-function displayArticleTypes(data, textStatus, jqXHR) {
-//    var arr = jQuery.parseJSON(jqXHR.responseText);
-   
-    
-    
-    var options = "";
-    var rows ="";
+/**
+ * Returns html table content as <tr> tags 
+ * @param {type} data
+ * @returns {String}
+ */
+function displayArticleTypes(data) {
+    var rows = "";
     for (var i = 0; i < data.length; i++) {
-        options += "<option>" + data[i].id + " | " + data[i].name + " | " + data[i].description + " | " + data[i].minimumStock + "</option>";
-        rows += "<tr><td>"+ data[i].id +"</td><td>"+ data[i].name + "</td><td>"+ data[i].description + "</td><td>"+ data[i].minimumStock+"</td></tr>";
+        rows += "<tr><td>" + data[i].id + "</td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + data[i].minimumStock + "</td></tr>";
     }
-    $("#selectSearchResults").html(options);
-     $("#tbodyAdvancedSearch").html(rows);
-////                alert(obj.itemId + "\n" + obj.name + "\n" + obj.note + "\n" + obj.minimumHolding);
-//    $("#ipItemIdItemDescription").val(obj.itemId);
-//    $("#ipNameItemDescription").val(obj.name);
-//    $("#textareaNoteItemDescription").val(obj.note);
-//    $("#ipMinimumStockItemDescription").val(obj.minimumHolding);
-//    var title = "Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + obj.name + "</span>";
-//    $("#panelTitelItemDescription").html(title);
-//    $("#stockTrend").val(jqXHR.responseText);
+    return rows;
 }
 
 
