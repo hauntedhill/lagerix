@@ -19,8 +19,8 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.BookEntryDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageLocationDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -50,7 +50,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
     private StorageDAO storageDAO;
     
     
-    public int saveBookEntry(BookEntryDTO entry) {
+    public int saveBookEntry(MovementDTO entry) {
         Yard yard = yardDAO.findById(Yard.class, entry.getYardID());
         
         
@@ -77,9 +77,9 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
     }
 
-    public List<BookEntryDTO> getBookEntriesForArticleType(int articleTypeID) {
+    public List<MovementDTO> getBookEntriesForArticleType(int articleTypeID) {
         
-        List<BookEntryDTO> entries = new ArrayList<BookEntryDTO>();
+        List<MovementDTO> entries = new ArrayList<MovementDTO>();
         
         return entries;
     }
@@ -90,6 +90,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
         ArticleTypeDTO dto = new ArticleTypeDTO();
         
+        dto.setId(at.getId());
         dto.setDescription(at.getDescription());
         dto.setName(at.getName());
         dto.setYardID(at.getStorage().getId());
@@ -104,12 +105,12 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
        return null;
    }
 
-    public List<StorageLocationDTO> getLocationsForArticleType(int articleTypeID) {
+    public List<YardDTO> getLocationsForArticleType(int articleTypeID) {
          
         
         Article a =  articleDAO.findById(Article.class, articleTypeID);
         
-        List<StorageLocationDTO> result = new ArrayList<StorageLocationDTO>();
+        List<YardDTO> result = new ArrayList<YardDTO>();
         
         //for(Yard y : a.)
         //{
@@ -119,16 +120,16 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
     }
 
-    public List<StorageLocationDTO> getAllStorageLocationsForStorage(int storageID) {
+    public List<YardDTO> getAllStorageLocationsForStorage(int storageID) {
          
         
         Storage storage = storageDAO.findById(Storage.class, storageID);
         
-        List<StorageLocationDTO> result = new ArrayList<StorageLocationDTO>();
+        List<YardDTO> result = new ArrayList<YardDTO>();
         
         for(Yard y : storage.getYards())
         {
-            StorageLocationDTO e = new StorageLocationDTO();
+            YardDTO e = new YardDTO();
             
             e.setStorageID(y.getId());
             result.add(e);

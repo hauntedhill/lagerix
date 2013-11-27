@@ -7,7 +7,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
-import java.util.List;
 
 /**
  *
@@ -15,8 +14,7 @@ import java.util.List;
  */
 public class YardDTO  extends BaseDTO{
 	private int id;
-	private String name;
-	   private List<StorageLocationDTO> storageLocations;
+	private int storageID;			//ID of the corresponding storage
 
     /**
      * @return the id
@@ -33,30 +31,16 @@ public class YardDTO  extends BaseDTO{
     }
 
     /**
-     * @return the name
+     * @return the storageID
      */
-    public String getName() {
-        return name;
+    public int getStorageID() {
+        return storageID;
     }
 
     /**
-     * @param name the name to set
+     * @param storageID the storageID to set
      */
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    /**
-     * @return the storageLocations
-     */
-    public List<StorageLocationDTO> getStorageLocations() {
-        return storageLocations;
-    }
-
-    /**
-     * @param storageLocations the storageLocations to set
-     */
-    public void setStorageLocations(List<StorageLocationDTO> storageLocations) {
-        this.storageLocations = storageLocations;
+    public void setStorageID(int storageID) {
+        this.storageID = storageID;
     }
 }

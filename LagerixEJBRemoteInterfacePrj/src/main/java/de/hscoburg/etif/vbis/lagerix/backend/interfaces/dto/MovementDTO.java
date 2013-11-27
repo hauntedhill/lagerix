@@ -12,7 +12,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
  *
  * @author zuch1000
  */
-public class BookEntryDTO extends BaseDTO {
+public class MovementDTO extends BaseDTO {
 	private int articleID;			//ID of the scanned article
 	private int yardID;			//ID of the scanned storage location
 	private boolean bookedIn;		//true, if the article was booked int, false otherwise

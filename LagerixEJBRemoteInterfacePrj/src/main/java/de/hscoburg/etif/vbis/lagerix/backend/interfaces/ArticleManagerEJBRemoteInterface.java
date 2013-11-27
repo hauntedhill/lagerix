@@ -21,14 +21,14 @@ public interface ArticleManagerEJBRemoteInterface {
  * @param entry A book entry containing information about booking process such as the ID of the corresponding article and location 
  * @return 0 if everything went fine or an error code
  */
-public int saveBookEntry(BookEntryDTO entry);
+public int saveBookEntry(MovementDTO entry);
 
 /**
  * Returns all book entries for a specific article type
  * @param articleTypeID ID of the requested article type
  * @return List of book entries for the requested article type
  */
-public List<BookEntryDTO> getBookEntriesForArticleType(int articleTypeID);
+public List<MovementDTO> getBookEntriesForArticleType(int articleTypeID);
 
 /**
  * Returns an article type specified by it's ID
@@ -49,14 +49,14 @@ public List<ArticleTypeDTO> searchArticleType(String articleTypeName, String art
  * @param articleTypeID ID of the requested article type
  * @return List of storage locations
  */
-public List<StorageLocationDTO> getLocationsForArticleType(int articleTypeID);
+public List<YardDTO> getLocationsForArticleType(int articleTypeID);
 
 /**
  * Returns all storage locations for a specific storage
  * @param storageID ID of the requested storage
  * @return List of all storage locations for the requested storage
  */
-public List<StorageLocationDTO> getAllStorageLocationsForStorage(int storageID); 
+public List<YardDTO> getAllStorageLocationsForStorage(int storageID);
 
 /**
  * Updates the minimumStock value of an ArticleType.
