@@ -20,7 +20,7 @@
     <body>
         <div class="container">
             <div class="page-header" style="margin: 10px 0px">
-                <img src="images/lagerix-logo.png" alt="Lagerix">JSP-Seite <%=request.getServerName()%>:<%=request.getLocalPort()%>
+                <img src="images/lagerix-logo.png" alt="Lagerix">
                 <form><button type="submit" class="btn btn-default btn-sm" id="btnLogOut"><span class="glyphicon glyphicon-log-out" style="margin: 0px 15px 0px 0px"></span>Abmelden</button></form>
             </div>
             <div class="row">
@@ -161,7 +161,7 @@
                                     <!--Suchergebnisse-->
                                     <h4>Suchergebnisse</h4>
                                     <hr>
-                                    <table class="table table-condensed">
+                                    <table class="table table-condensed table-striped table-bordered table-hover">
                                         <thead>
                                             <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
                                         </thead>
