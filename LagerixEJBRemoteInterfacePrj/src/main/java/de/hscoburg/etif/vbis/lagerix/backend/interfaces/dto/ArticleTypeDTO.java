@@ -17,7 +17,7 @@ public class ArticleTypeDTO extends BaseDTO{
 	private String name;
 	private String description;
 	private int minimumStock;
-	private int yardID;			//where the article type is stored in
+	private int storageID;			//where the article type is stored in
 
     /**
      * @return the id
@@ -78,14 +78,14 @@ public class ArticleTypeDTO extends BaseDTO{
     /**
      * @return the storageID
      */
-    public int getYardID() {
-        return yardID;
+    public int getStorageID() {
+        return storageID;
     }
 
     /**
      * @param storageID the storageID to set
      */
-    public void setYardID(int yardID) {
-        this.yardID = yardID;
+    public void setStorageID(int yardID) {
+        this.storageID = yardID;
     }
 }

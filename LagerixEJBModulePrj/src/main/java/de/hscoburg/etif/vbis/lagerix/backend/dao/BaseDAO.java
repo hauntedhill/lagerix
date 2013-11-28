@@ -21,6 +21,7 @@ public class BaseDAO<T> {
     public void save(T obj)
     {
         em.persist(obj);
+        em.flush();
     }
     
     public T findById(Class<T> obj,Integer id)

@@ -18,8 +18,10 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import java.util.ArrayList;
 import java.util.Date;
@@ -93,7 +95,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         dto.setId(at.getId());
         dto.setDescription(at.getDescription());
         dto.setName(at.getName());
-        dto.setYardID(at.getStorage().getId());
+        dto.setStorageID(at.getStorage().getId());
         dto.setMinimumStock(at.getMinimumStock());
         return dto;
         
@@ -153,5 +155,175 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
     public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock() {
         return new ArrayList<ArticleTypeDTO>();
     }
+
+    public ArticleTypeDTO createNewArticleType(String name, String description) {
+        
+        ArticleType a = new ArticleType();
+        
+        a.setName(name);
+        a.setDescription(description);
+        a.setMinimumStock(0);
+        articleTypeDAO.save(a);
+        
+        ArticleTypeDTO result = new ArticleTypeDTO();
+        
+        result.setDescription(a.getDescription());
+        result.setName(a.getName());
+        result.setId(a.getId());
+        result.setMinimumStock(a.getMinimumStock());
+ 
+        
+        return result;
+        
+        
+    }
+
+    public List<ArticleTypeDTO> getAllArticleTypes(int storageID) {
+        
+        
+        Storage s = storageDAO.findById(Storage.class, storageID);
+        
+        List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
+        
+        for(ArticleType at : s.getArticleTypes())
+        {
+            ArticleTypeDTO dto = new ArticleTypeDTO();
+            
+            dto.setDescription(at.getDescription());
+            dto.setId(at.getId());
+            dto.setMinimumStock(at.getMinimumStock());
+            dto.setName(at.getName());
+            dto.setStorageID(at.getStorage().getId());
+            result.add(dto);
+            
+        }
+        
+        
+        return result;
+        
+    }
+
+    public ArticleDTO createNewArticle(int articleTypeID) {
+        
+        
+        Article a = new Article();
+        
+        a.setArticleType(articleTypeDAO.findById(ArticleType.class, articleTypeID));
+        articleDAO.save(a);
+        
+        
+        
+        ArticleDTO dto = new ArticleDTO();
+        
+        dto.setArticleTypeID(a.getArticleType().getId());
+        dto.setId(a.getId());
+        
+        
+        
+        return dto;
+        
+        
+    }
+
+    public YardDTO createNewYard(int storageID) {
+        Storage s = storageDAO.findById(Storage.class, storageID);
+        
+        
+        
+        Yard y = new Yard();
+        y.setStorage(s);
+        yardDAO.save(y);
+        
+        YardDTO dto = new YardDTO();
+        
+        dto.setId(y.getId());
+        dto.setStorageID(y.getStorage().getId());
+        
+        return dto;
+        
+        
+    }
+
+    public void deleteYard(int yardID) {
+        Yard y = yardDAO.findById(Yard.class, yardID);
+        yardDAO.remove(y);
+    }
+
+    public List<YardDTO> getAllYards(int storageID) {
+        Storage s = storageDAO.findById(Storage.class, storageID);
+        
+        List<YardDTO> result = new ArrayList<YardDTO>();
+        
+        
+        for(Yard y : s.getYards())
+        {
+           YardDTO dto = new YardDTO();
+           
+           dto.setId(y.getId());
+           dto.setStorageID(y.getStorage().getId());
+           result.add(dto);
+        }
+        
+        return result;
+        
+    }
+
+    public StorageDTO createNewStorage(String name) {
+        
+        Storage s = new Storage();
+        
+        s.setName(name);
+        
+        storageDAO.save(s);
+        
+        
+        
+        StorageDTO dto = new StorageDTO();
+        
+        dto.setName(s.getName());
+        dto.setId(s.getId());
+        
+        return dto;
+       
+        
+    }
+
+    public void deleteStorage(int storageID) {
+        storageDAO.remove(storageDAO.findById(Storage.class, storageID));
+    }
+
+    public StorageDTO getStorage() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public List<StorageDTO> getAllStorages() {
+        
+        List<StorageDTO> result = new ArrayList<StorageDTO>();
+        for(Storage s : storageDAO.getAllStorages())
+        {
+            
+            StorageDTO dto = new StorageDTO();
+            
+            dto.setId(s.getId());
+            dto.setName(s.getName());
+            List<YardDTO> yardResult = new ArrayList<YardDTO>();
+            for(Yard y : s.getYards())
+            {
+                YardDTO yardDTO = new YardDTO();
+                
+                yardDTO.setId(y.getId());
+                yardDTO.setStorageID(y.getStorage().getId());
+                yardResult.add(yardDTO);
+            }
+            dto.setYards(yardResult);
+            result.add(dto);
+            
+            
+        }
+        
+        return result;
+    }
+
+    
     
 }

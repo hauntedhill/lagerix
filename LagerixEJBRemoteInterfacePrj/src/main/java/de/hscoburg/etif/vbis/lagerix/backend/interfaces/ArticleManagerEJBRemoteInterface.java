@@ -71,4 +71,77 @@ public int updateMinimumStock(int articleTypeId, int newMinStock);
  * @return A List of ArticleTypes with underrun minimumStock
  */
 public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock();
+
+
+
+
+/**
+ * Creates a new ArticleType and return it
+ * @param name name of the new ArticleType
+ * @param description description of the new ArticleType 
+ * @return The newly created ArticleType
+*/
+public ArticleTypeDTO createNewArticleType(String name, String description);
+
+/**
+ * Return all Article Types within the storage
+ * @param storageID id of the storage 
+ * @return A List of all ArticleTypes in the storage
+*/
+public List<ArticleTypeDTO> getAllArticleTypes(int storageID);
+
+/**
+ * Creates a new Article
+ * @param articleTypeID articletype ID
+ * @return The newly created Article
+*/
+public ArticleDTO createNewArticle(int articleTypeID);
+
+/**
+ * Creates a new StorageLocation
+ * @param storageID id of the storage
+ * @return The newly created StorageLocation
+*/
+public YardDTO createNewYard(int storageID);
+
+/**
+ * Deletes a StorageLocation
+ * @param storageLocationID id of the storage location
+*/
+public void deleteYard(int yardID);
+
+/**
+ * Gets all StoragesLocations
+ * @param storageID id of the storage
+ * @return A List of all StorageLocations for the Storage
+*/
+public List<YardDTO> getAllYards(int storageID);
+
+/**
+ * Creates a new Storage
+ * @param name name of the storage
+ * @return The newly created Storage
+*/
+public StorageDTO createNewStorage(String name);
+
+/**
+ * Deletes a Storage
+ * @param storageID 
+*/
+public void deleteStorage(int storageID);
+
+/**
+ * Gets the associated Storage for the logged in User
+ * @return The Storage Object for which the user is in charge
+*/
+public StorageDTO getStorage();
+
+/**
+ * Gets all Storages
+ * @return Returns all available Storages
+*/
+public List<StorageDTO> getAllStorages();
+
+
+
 }
