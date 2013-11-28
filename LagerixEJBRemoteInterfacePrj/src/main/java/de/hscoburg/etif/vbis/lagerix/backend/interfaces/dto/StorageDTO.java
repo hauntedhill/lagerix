@@ -60,4 +60,9 @@ public class StorageDTO extends BaseDTO{
     public void setYards(List<YardDTO> yards) {
         this.yards = yards;
     }
+
+    @Override
+    public String toString() {
+        return "StorageDTO{" + "id=" + id + ", name=" + name + ", yards=" + yards + '}';
+    }
 }

@@ -88,4 +88,9 @@ public class MovementDTO extends BaseDTO {
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }
+
+    @Override
+    public String toString() {
+        return "MovementDTO{" + "articleID=" + articleID + ", yardID=" + yardID + ", bookedIn=" + bookedIn + ", userID=" + userID + ", timestamp=" + timestamp + '}';
+    }
 }

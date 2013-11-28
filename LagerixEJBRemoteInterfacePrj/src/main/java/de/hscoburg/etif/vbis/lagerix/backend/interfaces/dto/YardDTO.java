@@ -43,4 +43,9 @@ public class YardDTO  extends BaseDTO{
     public void setStorageID(int storageID) {
         this.storageID = storageID;
     }
+
+    @Override
+    public String toString() {
+        return "YardDTO{" + "id=" + id + ", storageID=" + storageID + '}';
+    }
 }

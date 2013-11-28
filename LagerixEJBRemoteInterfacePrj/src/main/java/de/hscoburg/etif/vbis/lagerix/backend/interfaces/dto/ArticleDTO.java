@@ -15,6 +15,11 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
 public class ArticleDTO extends BaseDTO{
     private int id;
 	private int articleTypeID;
+
+    @Override
+    public String toString() {
+        return "ArticleDTO{" + "id=" + id + ", articleTypeID=" + articleTypeID + ", yardID=" + yardID + '}';
+    }
 	private int yardID;			//where the article is stored in
 	//Image barcodeImage; wirklich?
 

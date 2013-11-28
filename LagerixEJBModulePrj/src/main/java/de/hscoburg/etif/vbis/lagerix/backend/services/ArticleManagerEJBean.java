@@ -21,8 +21,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -52,7 +51,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
     private StorageDAO storageDAO;
     
     
-    public int saveBookEntry(MovementDTO entry) {
+    public int saveMovementEntry(MovementDTO entry) {
         Yard yard = yardDAO.findById(Yard.class, entry.getYardID());
         
         
@@ -79,7 +78,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
     }
 
-    public List<MovementDTO> getBookEntriesForArticleType(int articleTypeID) {
+    public List<MovementDTO> getMovementEntriesForArticleType(int articleTypeID) {
         
         List<MovementDTO> entries = new ArrayList<MovementDTO>();
         

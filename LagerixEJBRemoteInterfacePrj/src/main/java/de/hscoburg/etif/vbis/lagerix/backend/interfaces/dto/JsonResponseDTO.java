@@ -62,5 +62,10 @@ public class JsonResponseDTO extends BaseDTO{
     public void setData(Object data) {
         this.data = data;
     }
+
+    @Override
+    public String toString() {
+        return "JsonResponseDTO{" + "status=" + status + ", errorMsg=" + errorMsg + ", fieldErrors=" + fieldErrors + ", data=" + data + '}';
+    }
      
 }

@@ -35,7 +35,8 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
 
     public UserDTO find(String email) {
         User u = userDAO.find(email);
-        
+        if(u!=null)
+        {
         UserDTO dto = new UserDTO();
         dto.setEmail(u.getEmail());
         dto.setFname(u.getFirstName());
@@ -43,6 +44,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
                 
                 
         return dto;
+        }
+        else
+        {
+            return null;
+        }
     }
 
     public void register(UserDTO user) {

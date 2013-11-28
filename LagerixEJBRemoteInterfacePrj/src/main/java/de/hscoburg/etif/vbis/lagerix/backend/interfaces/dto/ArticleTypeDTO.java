@@ -19,6 +19,11 @@ public class ArticleTypeDTO extends BaseDTO{
 	private int minimumStock;
 	private int storageID;			//where the article type is stored in
 
+    @Override
+    public String toString() {
+        return "ArticleTypeDTO{" + "id=" + id + ", name=" + name + ", description=" + description + ", minimumStock=" + minimumStock + ", storageID=" + storageID + '}';
+    }
+
     /**
      * @return the id
      */
