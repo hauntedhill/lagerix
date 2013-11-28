@@ -62,14 +62,16 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         if(entry.isBookedIn())
         {
             m.setMovement(Movements.INCORPORATE);
+            article.setYard(yard);
         }
         else
         {
             m.setMovement(Movements.RELEASE);
+            article.setYard(null);
         }
         m.setArticle(article);
         m.setTime(new Date());
-        article.setYard(yard);
+        
         
         movementDAO.save(m);
         articleDAO.merge(article);
@@ -119,7 +121,26 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
 
    public List<ArticleTypeDTO> searchArticleType(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock)
    {
-       return null;
+       
+       List<ArticleType> a = articleTypeDAO.getArticleTypesBy(articleTypeName, articleTypeDescription, articleTypeMinimumStock);
+       
+       List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
+        
+        for(ArticleType at : a)
+        {
+            ArticleTypeDTO dto = new ArticleTypeDTO();
+            
+            dto.setDescription(at.getDescription());
+            dto.setId(at.getId());
+            dto.setMinimumStock(at.getMinimumStock());
+            dto.setName(at.getName());
+            //dto.setStorageID(at.getStorage().getId());
+            result.add(dto);
+            
+        }
+        
+        
+        return result;
    }
 
     
@@ -135,7 +156,11 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
     }
 
     public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock() {
+        
+        
         return new ArrayList<ArticleTypeDTO>();
+        
+        
     }
 
     public ArticleTypeDTO createNewArticleType(String name, String description) {

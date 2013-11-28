@@ -43,6 +43,14 @@ ArticleManagerEJBRemoteInterface bean =
  out.print("createNewArticle:"+bean.createNewArticle(1).toString() +"</br>"); 
  
  
+ out.print("searchArticleType:"+bean.searchArticleType("te", "", "").toString() +"</br>"); 
+ 
+ out.print("searchArticleType:"+bean.searchArticleType("A", "", "").toString() +"</br>"); 
+ 
+ out.print("searchArticleType:"+bean.searchArticleType("", "", "50").toString() +"</br>"); 
+ 
+ out.print("searchArticleType:"+bean.searchArticleType("t", "test1", "0").toString() +"</br>"); 
+ 
  out.print("get Movements for ArticleTypes"+bean.getMovementEntriesForArticleType(1).toString() +"</br>"); 
 } catch (Exception e) { System.out.println(e);
 }
