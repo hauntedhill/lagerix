@@ -35,11 +35,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
     @EJB
     private ArticleDAO articleDAO;
     
-     @EJB
-    private MovementDAO movementDAO;
-     
-      @EJB
-    private ArticleTypeDAO articleTypeDAO;
+    
       
        @EJB
     private StorageDAO storageDAO;
