@@ -63,6 +63,7 @@ function getArticleTypesWithUnderrunMinStock() {
             $("#tbodyUnderrunMinStock").html(displayArticleTypes(data));
         }
     });
+    return false;
 }
 
 function displayArticleType(data, textStatus, jqXHR) {
