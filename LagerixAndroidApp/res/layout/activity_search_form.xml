@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    tools:context=".SearchFormActivity" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/label_searchIntro" />
+
+    <LinearLayout
+        android:id="@+id/layout_searchArticleID"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/label_searchArticleID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".40"
+            android:text="Artikel-ID:"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/field_searchArticleID"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".60" />
+            <requestFocus />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_searchArticleName"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/label_searchArticleName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".40"
+            android:text="Artikelname:"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/field_searchArticleName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".60" />
+            <requestFocus />
+    </LinearLayout>
+    
+    <Button
+        android:id="@+id/button_sendSearch"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:onClick="sendSearch"
+        android:text="Suche starten"
+        android:textColor="@android:color/black" />
+
+</LinearLayout>
