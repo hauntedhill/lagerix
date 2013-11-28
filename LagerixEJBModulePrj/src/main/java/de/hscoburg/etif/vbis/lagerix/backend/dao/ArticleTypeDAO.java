@@ -23,6 +23,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import javax.persistence.criteria.Subquery;
 
 /**
  *
@@ -86,8 +87,43 @@ public class ArticleTypeDAO extends BaseDAO<ArticleType>{
         
         return q.getResultList();
     }
+   
     
+    public List<ArticleType> getAllArticleTypes()
+    {
+       CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ArticleType> cq = cb.createQuery(ArticleType.class);
+        Root<ArticleType> pet = cq.from(ArticleType.class);
+        cq.select(pet);
+        TypedQuery<ArticleType> q = em.createQuery(cq);
+        
+        return q.getResultList(); 
+    }
     
- 
+ public long getArticleTypeStock(ArticleType articleType)
+    {
+        
+        
+        
+        
+        
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        
+        CriteriaQuery<Long> articleCriteria = cb.createQuery( Long.class );
+        Root<ArticleType> articleRoot = articleCriteria.from( ArticleType.class );
+        
+        Join<ArticleType,Article> articelRoot = articleRoot.join( ArticleType_.articles );
+       
+        articleCriteria.select(cb.count(articleRoot)).where(cb.equal(articleRoot.get(ArticleType_.id),articleType.getId())).groupBy(articleRoot.get(ArticleType_.id));
+
+        TypedQuery<Long> q = em.createQuery(articleCriteria);
+        
+        
+        
+        
+        return q.getResultList().size()==1?q.getResultList().get(0).longValue():0;
+        
+       
+    }
     
 }

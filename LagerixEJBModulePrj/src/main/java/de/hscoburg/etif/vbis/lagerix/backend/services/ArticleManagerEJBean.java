@@ -157,10 +157,25 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
 
     public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock() {
         
+        List<ArticleType> articleTypes = articleTypeDAO.getAllArticleTypes();
         
-        return new ArrayList<ArticleTypeDTO>();
+        List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
         
+        for(ArticleType at : articleTypes)
+        {
+           if(articleTypeDAO.getArticleTypeStock(at)<at.getMinimumStock())
+           {
+               ArticleTypeDTO dto = new ArticleTypeDTO();
         
+            dto.setDescription(at.getDescription());
+            dto.setName(at.getName());
+            dto.setId(at.getId());
+            dto.setMinimumStock(at.getMinimumStock());
+            result.add(dto);
+           }
+        }
+        
+        return result;
     }
 
     public ArticleTypeDTO createNewArticleType(String name, String description) {

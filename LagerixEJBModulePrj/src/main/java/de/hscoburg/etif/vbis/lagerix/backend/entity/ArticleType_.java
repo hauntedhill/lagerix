@@ -21,6 +21,10 @@ public class ArticleType_ {
     public static volatile SingularAttribute<ArticleType, String> description;
     public static volatile SingularAttribute<ArticleType, Integer> minimumStock;
     public static volatile ListAttribute<ArticleType, Movement> movements;
+    public static volatile ListAttribute<ArticleType, Article> articles;
+    
+    
+  
     
 
     

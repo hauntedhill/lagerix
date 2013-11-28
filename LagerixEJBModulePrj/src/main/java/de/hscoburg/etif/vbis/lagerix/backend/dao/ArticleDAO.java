@@ -28,28 +28,7 @@ import javax.persistence.criteria.Root;
 public class ArticleDAO extends BaseDAO<Article> {
     
     
-    public List<Article> getArticleUnderStock()
-    {
-        
-        
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        
-        CriteriaQuery<Article> articleCriteria = cb.createQuery( Article.class );
-        Root<Article> articleRoot = articleCriteria.from( Article.class );
-        // Person.address is an embedded attribute
-        Join<Article,ArticleType> articelRoot = articleRoot.join( Article_.articleType );
-        // Address.country is a ManyToOne
-        
-        
-        
-        
-        //articleCriteria.select(articleRoot).where(cb.lessThan(articleTypeRoot.get(ArticleType_.id), articleTypeId));
-        TypedQuery<Article> q = em.createQuery(articleCriteria);
-        
-        return q.getResultList();
-        
-       
-    }
+    
     
     
 }
