@@ -16,6 +16,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -92,6 +93,40 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         u.setRegisteredOn(new Date());
         
         userDAO.save(u);
+    }
+
+    public List<UserDTO> getAllUsers() {
+        List<User> users = userDAO.findAll();
+        
+        List<UserDTO> result = new ArrayList<UserDTO>();
+        
+        for(User u : users)
+        {
+            UserDTO dto = new UserDTO();
+            dto.setEmail(u.getEmail());
+            dto.setFname(u.getFirstName());
+            dto.setLname(u.getLastName());
+            result.add(dto);
+            
+        }
+        return result;
+    }
+
+    @RolesAllowed("ADMINISTRATOR")
+    public void deleteUser(String userName) {
+        
+        User u = userDAO.find(userName);
+        if(u!=null)
+        {
+        for(Groups g : u.getGroups())
+        {
+            userDAO.remove(g);
+        }
+        userDAO.remove(u);
+        }
+        
+        
+        
     }
         
         
