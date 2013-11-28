@@ -28,9 +28,9 @@ ArticleManagerEJBRemoteInterface bean =
  m.setYardID(1);
 
  
- out.print("Moving in Artikel1:"+bean.saveBookEntry(m)+"</br>");
+ out.print("Moving in Artikel1:"+bean.saveMovementEntry(m)+"</br>");
  m.setBookedIn(false);
- out.print("Moving out Artikel1:"+bean.saveBookEntry(m)+"</br>");
+ out.print("Moving out Artikel1:"+bean.saveMovementEntry(m)+"</br>");
  
  out.print("update minimumStock ArticleType:"+bean.updateMinimumStock(1, 100) +"</br>");
  out.print("fecth ArticleType:"+bean.getArticleTypeByID(1).toString() +"</br>");
@@ -41,6 +41,9 @@ ArticleManagerEJBRemoteInterface bean =
   out.print("get all articleTypes:"+bean.getAllArticleTypes(1).toString() +"</br>"); 
  
  out.print("createNewArticle:"+bean.createNewArticle(1).toString() +"</br>"); 
+ 
+ 
+ out.print("get Movements for ArticleTypes"+bean.getMovementEntriesForArticleType(1).toString() +"</br>"); 
 } catch (Exception e) { System.out.println(e);
 }
     

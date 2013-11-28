@@ -80,7 +80,23 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
 
     public List<MovementDTO> getMovementEntriesForArticleType(int articleTypeID) {
         
+        
+        List<Movement> list = articleTypeDAO.getMovementsForArticleTypeId(articleTypeID);
+        
+        
+        
         List<MovementDTO> entries = new ArrayList<MovementDTO>();
+        
+        
+        for(Movement m : list)
+        {
+           MovementDTO dto = new MovementDTO();
+           
+           dto.setArticleID(m.getArticle().getId());
+           dto.setTimestamp(m.getTime().getTime());
+           entries.add(dto);
+        }
+        
         
         return entries;
     }
