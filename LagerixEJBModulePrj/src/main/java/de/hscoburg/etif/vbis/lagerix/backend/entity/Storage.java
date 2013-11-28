@@ -11,6 +11,7 @@ import javax.annotation.Generated;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -33,8 +34,8 @@ public class Storage {
     @OneToMany(targetEntity = ArticleType.class,mappedBy = "storage")
     private List<ArticleType> articleTypes;
     
-  @ManyToOne(targetEntity = Groups.class)
-    private Groups group;
+  @ManyToMany(targetEntity = Groups.class)
+    private List<Groups> group;
 
     /**
      * @return the id
@@ -95,14 +96,14 @@ public class Storage {
     /**
      * @return the group
      */
-    public Groups getGroup() {
+    public List<Groups> getGroup() {
         return group;
     }
 
     /**
      * @param group the group to set
      */
-    public void setGroup(Groups group) {
+    public void setGroup(List<Groups> group) {
         this.group = group;
     }
 

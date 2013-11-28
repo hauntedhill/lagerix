@@ -15,6 +15,7 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
@@ -37,7 +38,7 @@ public class Groups {
     @JoinColumn(name = "email")
     private User user;
     
-    @OneToMany(targetEntity = Storage.class,mappedBy = "group")
+    @ManyToMany(targetEntity = Storage.class,mappedBy = "group")
     private List<Storage> storage;
 
     /**
