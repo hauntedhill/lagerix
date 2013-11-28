@@ -107,40 +107,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
        return null;
    }
 
-    public List<YardDTO> getLocationsForArticleType(int articleTypeID) {
-         
-        
-        Article a =  articleDAO.findById(Article.class, articleTypeID);
-        
-        List<YardDTO> result = new ArrayList<YardDTO>();
-        
-        //for(Yard y : a.)
-        //{
-            
-        //}
-        return result;
-        
-    }
-
-    public List<YardDTO> getAllStorageLocationsForStorage(int storageID) {
-         
-        
-        Storage storage = storageDAO.findById(Storage.class, storageID);
-        
-        List<YardDTO> result = new ArrayList<YardDTO>();
-        
-        for(Yard y : storage.getYards())
-        {
-            YardDTO e = new YardDTO();
-            
-            e.setStorageID(y.getId());
-            result.add(e);
-        }
-        
-        return result;
     
-    
-    }
 
     public int updateMinimumStock(int articleTypeId, int newMinStock) {
         
@@ -225,104 +192,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
     }
 
-    public YardDTO createNewYard(int storageID) {
-        Storage s = storageDAO.findById(Storage.class, storageID);
-        
-        
-        
-        Yard y = new Yard();
-        y.setStorage(s);
-        yardDAO.save(y);
-        
-        YardDTO dto = new YardDTO();
-        
-        dto.setId(y.getId());
-        dto.setStorageID(y.getStorage().getId());
-        
-        return dto;
-        
-        
-    }
-
-    public void deleteYard(int yardID) {
-        Yard y = yardDAO.findById(Yard.class, yardID);
-        yardDAO.remove(y);
-    }
-
-    public List<YardDTO> getAllYards(int storageID) {
-        Storage s = storageDAO.findById(Storage.class, storageID);
-        
-        List<YardDTO> result = new ArrayList<YardDTO>();
-        
-        
-        for(Yard y : s.getYards())
-        {
-           YardDTO dto = new YardDTO();
-           
-           dto.setId(y.getId());
-           dto.setStorageID(y.getStorage().getId());
-           result.add(dto);
-        }
-        
-        return result;
-        
-    }
-
-    public StorageDTO createNewStorage(String name) {
-        
-        Storage s = new Storage();
-        
-        s.setName(name);
-        
-        storageDAO.save(s);
-        
-        
-        
-        StorageDTO dto = new StorageDTO();
-        
-        dto.setName(s.getName());
-        dto.setId(s.getId());
-        
-        return dto;
-       
-        
-    }
-
-    public void deleteStorage(int storageID) {
-        storageDAO.remove(storageDAO.findById(Storage.class, storageID));
-    }
-
-    public StorageDTO getStorage() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public List<StorageDTO> getAllStorages() {
-        
-        List<StorageDTO> result = new ArrayList<StorageDTO>();
-        for(Storage s : storageDAO.getAllStorages())
-        {
-            
-            StorageDTO dto = new StorageDTO();
-            
-            dto.setId(s.getId());
-            dto.setName(s.getName());
-            List<YardDTO> yardResult = new ArrayList<YardDTO>();
-            for(Yard y : s.getYards())
-            {
-                YardDTO yardDTO = new YardDTO();
-                
-                yardDTO.setId(y.getId());
-                yardDTO.setStorageID(y.getStorage().getId());
-                yardResult.add(yardDTO);
-            }
-            dto.setYards(yardResult);
-            result.add(dto);
-            
-            
-        }
-        
-        return result;
-    }
+    
 
     
     

@@ -44,19 +44,9 @@ public ArticleTypeDTO getArticleTypeByID(int articleTypeID);
  */
 public List<ArticleTypeDTO> searchArticleType(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock);
 
-/**
- * Returns all storage locations where a specified article type if currently stored
- * @param articleTypeID ID of the requested article type
- * @return List of storage locations
- */
-public List<YardDTO> getLocationsForArticleType(int articleTypeID);
 
-/**
- * Returns all storage locations for a specific storage
- * @param storageID ID of the requested storage
- * @return List of all storage locations for the requested storage
- */
-public List<YardDTO> getAllStorageLocationsForStorage(int storageID);
+
+
 
 /**
  * Updates the minimumStock value of an ArticleType.
@@ -97,50 +87,7 @@ public List<ArticleTypeDTO> getAllArticleTypes(int storageID);
 */
 public ArticleDTO createNewArticle(int articleTypeID);
 
-/**
- * Creates a new StorageLocation
- * @param storageID id of the storage
- * @return The newly created StorageLocation
-*/
-public YardDTO createNewYard(int storageID);
 
-/**
- * Deletes a StorageLocation
- * @param storageLocationID id of the storage location
-*/
-public void deleteYard(int yardID);
-
-/**
- * Gets all StoragesLocations
- * @param storageID id of the storage
- * @return A List of all StorageLocations for the Storage
-*/
-public List<YardDTO> getAllYards(int storageID);
-
-/**
- * Creates a new Storage
- * @param name name of the storage
- * @return The newly created Storage
-*/
-public StorageDTO createNewStorage(String name);
-
-/**
- * Deletes a Storage
- * @param storageID 
-*/
-public void deleteStorage(int storageID);
-
-/**
- * Gets the associated Storage for the logged in User
- * @return The Storage Object for which the user is in charge
-*/
-public StorageDTO getStorage();
-
-/**
- * Gets all Storages
- * @return Returns all available Storages
-*/
-public List<StorageDTO> getAllStorages();
 
 
 
