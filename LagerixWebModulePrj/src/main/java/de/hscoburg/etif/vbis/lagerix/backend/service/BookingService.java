@@ -4,6 +4,9 @@
  */
 package de.hscoburg.etif.vbis.lagerix.backend.service;
 
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
@@ -22,6 +25,8 @@ import javax.ws.rs.core.MediaType;
 @Stateless
 public class BookingService {
     
+    @EJB
+    ArticleManagerEJBRemoteInterface articleManager;
     
     @Path("ping")
     @GET
@@ -33,13 +38,20 @@ public class BookingService {
     @POST
     @Consumes("application/x-www-form-urlencoded")
     public int saveBookEntry(@FormParam("articleID") int articleID, @FormParam("locationID") int locationID, @FormParam("bookedIn") boolean bookedIn, @FormParam("userID") int userID, @FormParam("timestamp") long timestamp) {
-        System.out.println("Received values:");
+        
+        System.out.println("Method saveBookEntry() called - Received values:");
         System.out.println("ArticleID: "+articleID);
         System.out.println("LocationID: "+locationID);
         System.out.println("BookedIn: "+bookedIn);
         System.out.println("UserID: "+userID);
         System.out.println("Timestamp: "+timestamp);
-        return 0;
+        
+        MovementDTO movementEntry = new MovementDTO();
+        movementEntry.setArticleID(articleID);
+        movementEntry.setBookedIn(bookedIn);
+        movementEntry.setTimestamp(timestamp);
+        
+        return articleManager.saveMovementEntry(movementEntry, locationID);
 
     }
     
