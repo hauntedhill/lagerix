@@ -8,15 +8,17 @@ package de.hscoburg.etif.vbis.lagerix.backend.services;
 
 import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleTypeDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.MovementDAO;
+
 import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.YardDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -33,11 +35,11 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
     private YardDAO yardDAO;
     
     @EJB
-    private ArticleDAO articleDAO;
+    private ArticleTypeDAO articleTypeDAO;
     
     
       
-       @EJB
+    @EJB
     private StorageDAO storageDAO;
        
        
@@ -50,15 +52,13 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
         
         
         Yard y = new Yard();
-        y.setStorage(s);
+        s.addYard(y);
         yardDAO.save(y);
+        storageDAO.merge(s);
         
-        YardDTO dto = new YardDTO();
         
-        dto.setId(y.getId());
-        dto.setStorageID(y.getStorage().getId());
         
-        return dto;
+        return DTOConverter.convert(y);
         
         
     }
@@ -71,19 +71,10 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
     public List<YardDTO> getAllYards(int storageID) {
         Storage s = storageDAO.findById(Storage.class, storageID);
         
-        List<YardDTO> result = new ArrayList<YardDTO>();
+       
         
         
-        for(Yard y : s.getYards())
-        {
-           YardDTO dto = new YardDTO();
-           
-           dto.setId(y.getId());
-           dto.setStorageID(y.getStorage().getId());
-           result.add(dto);
-        }
-        
-        return result;
+        return DTOConverter.convertYard(s.getYards());
         
     }
 
@@ -97,12 +88,9 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
         
         
         
-        StorageDTO dto = new StorageDTO();
+       
         
-        dto.setName(s.getName());
-        dto.setId(s.getId());
-        
-        return dto;
+        return DTOConverter.convert(s);
        
         
     }
@@ -112,68 +100,32 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
     }
 
     public StorageDTO getStorage() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return DTOConverter.convert(storageDAO.findById(Storage.class, 1));
     }
 
     public List<StorageDTO> getAllStorages() {
         
-        List<StorageDTO> result = new ArrayList<StorageDTO>();
-        for(Storage s : storageDAO.getAllStorages())
-        {
-            
-            StorageDTO dto = new StorageDTO();
-            
-            dto.setId(s.getId());
-            dto.setName(s.getName());
-            List<YardDTO> yardResult = new ArrayList<YardDTO>();
-            for(Yard y : s.getYards())
-            {
-                YardDTO yardDTO = new YardDTO();
-                
-                yardDTO.setId(y.getId());
-                yardDTO.setStorageID(y.getStorage().getId());
-                yardResult.add(yardDTO);
-            }
-            dto.setYards(yardResult);
-            result.add(dto);
-            
-            
-        }
+       
         
-        return result;
+        return DTOConverter.convertStorage(storageDAO.getAllStorages());
     } 
     
-    public List<YardDTO> getLocationsForArticleType(int articleTypeID) {
+    public List<YardDTO> getYardsForArticleType(int articleTypeID) {
          
         
-        Article a =  articleDAO.findById(Article.class, articleTypeID);
-        
-        List<YardDTO> result = new ArrayList<YardDTO>();
-        
-        //for(Yard y : a.)
-        //{
-            
-        //}
-        return result;
+       
+        return DTOConverter.convertYard(yardDAO.getYardsForArticleType(articleTypeID));
         
     }
 
-    public List<YardDTO> getAllStorageLocationsForStorage(int storageID) {
+    public List<YardDTO> getAllYardsForStorage(int storageID) {
          
         
         Storage storage = storageDAO.findById(Storage.class, storageID);
         
-        List<YardDTO> result = new ArrayList<YardDTO>();
+       
         
-        for(Yard y : storage.getYards())
-        {
-            YardDTO e = new YardDTO();
-            
-            e.setStorageID(y.getId());
-            result.add(e);
-        }
-        
-        return result;
+        return DTOConverter.convertYard(storage.getYards());
     
     
     }

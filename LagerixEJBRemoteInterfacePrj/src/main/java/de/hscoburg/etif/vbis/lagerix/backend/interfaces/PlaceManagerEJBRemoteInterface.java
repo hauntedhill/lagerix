@@ -67,11 +67,11 @@ public List<StorageDTO> getAllStorages();
  * @param storageID ID of the requested storage
  * @return List of all storage locations for the requested storage
  */
-public List<YardDTO> getAllStorageLocationsForStorage(int storageID);
+public List<YardDTO> getAllYardsForStorage(int storageID);
 /**
  * Returns all storage locations where a specified article type if currently stored
  * @param articleTypeID ID of the requested article type
  * @return List of storage locations
  */
-public List<YardDTO> getLocationsForArticleType(int articleTypeID);
+public List<YardDTO> getYardsForArticleType(int articleTypeID);
 }

@@ -52,6 +52,11 @@ public class ArticleTypeDAO extends BaseDAO<ArticleType>{
         
         return q.getResultList();
     }
+    
+    
+    
+    
+    
     public List<ArticleType> getArticleTypesBy(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock)
     {
         
@@ -114,7 +119,9 @@ public class ArticleTypeDAO extends BaseDAO<ArticleType>{
         
         Join<ArticleType,Article> articelRoot = articleRoot.join( ArticleType_.articles );
        
-        articleCriteria.select(cb.count(articleRoot)).where(cb.equal(articleRoot.get(ArticleType_.id),articleType.getId())).groupBy(articleRoot.get(ArticleType_.id));
+       
+        
+        articleCriteria.select(cb.count(articleRoot)).where(cb.and(cb.isNotNull(articelRoot.get(Article_.yard)),cb.equal(articleRoot.get(ArticleType_.id),articleType.getId()))).groupBy(articleRoot.get(ArticleType_.id));
 
         TypedQuery<Long> q = em.createQuery(articleCriteria);
         

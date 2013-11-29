@@ -4,9 +4,13 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movements;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +94,68 @@ public class DTOConverter {
         dto.setYardID(a.getYard()!=null?a.getYard().getId():0);
         
         return dto;
-    }
     
+    }
+        public static YardDTO convert(Yard y)
+        {
+            YardDTO dto = new YardDTO();
+        
+        dto.setId(y.getId());
+        dto.setStorageID(y.getStorage()!=null?y.getStorage().getId():0);
+        
+        
+        return dto;
+        }
+    public static List<YardDTO> convertYard(List<Yard> m)
+    {
+        List<YardDTO> result = new ArrayList<YardDTO>();
+        
+        if(m!=null)
+        {
+            for(Yard mm : m)
+            {
+                result.add(convert(mm));
+            }
+        }
+        
+        return result;
+    }
+        
+        public static StorageDTO convert(Storage s)
+        {
+            StorageDTO dto = new StorageDTO();
+            
+            dto.setId(s.getId());
+            dto.setName(s.getName());
+            List<YardDTO> yardResult = new ArrayList<YardDTO>();
+            for(Yard y : s.getYards()!=null?s.getYards():new ArrayList<Yard>())
+            {
+                YardDTO yardDTO = new YardDTO();
+                
+                yardDTO.setId(y.getId());
+                yardDTO.setStorageID(y.getStorage()!=null?y.getStorage().getId():0);
+                yardResult.add(yardDTO);
+            }
+            dto.setYards(yardResult);
+            return dto;
+        }
+        
+        
+        
+        public static List<StorageDTO> convertStorage(List<Storage> m)
+    {
+        List<StorageDTO> result = new ArrayList<StorageDTO>();
+        
+        if(m!=null)
+        {
+            for(Storage mm : m)
+            {
+                result.add(convert(mm));
+            }
+        }
+        
+        return result;
+    }
+        
+         
 }
