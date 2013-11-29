@@ -14,9 +14,9 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
  */
 public class MovementDTO extends BaseDTO {
 	private int articleID;			//ID of the scanned article
-	private int yardID;			//ID of the scanned storage location
+	//private int yardID;			//ID of the scanned storage location
 	private boolean bookedIn;		//true, if the article was booked int, false otherwise
-	private int userID;				//ID of the user account which was logged in on the device that sent the request
+	//private int userID;				//ID of the user account which was logged in on the device that sent the request
 	private long timestamp;			//Timestamp at which the booking request was sent
 
     /**
@@ -36,16 +36,16 @@ public class MovementDTO extends BaseDTO {
     /**
      * @return the locationID
      */
-    public int getYardID() {
-        return yardID;
-    }
+    //public int getYardID() {
+    //    return yardID;
+    //}
 
     /**
      * @param locationID the locationID to set
      */
-    public void setYardID(int locationID) {
-        this.yardID = locationID;
-    }
+    //public void setYardID(int locationID) {
+    //    this.yardID = locationID;
+    //}
 
     /**
      * @return the bookedIn
@@ -64,16 +64,16 @@ public class MovementDTO extends BaseDTO {
     /**
      * @return the userID
      */
-    public int getUserID() {
-        return userID;
-    }
+    //public int getUserID() {
+    //    return userID;
+    //}
 
     /**
      * @param userID the userID to set
      */
-    public void setUserID(int userID) {
-        this.userID = userID;
-    }
+    //public void setUserID(int userID) {
+    //    this.userID = userID;
+    //}
 
     /**
      * @return the timestamp
@@ -91,6 +91,6 @@ public class MovementDTO extends BaseDTO {
 
     @Override
     public String toString() {
-        return "MovementDTO{" + "articleID=" + articleID + ", yardID=" + yardID + ", bookedIn=" + bookedIn + ", userID=" + userID + ", timestamp=" + timestamp + '}';
+        return "MovementDTO{" + "articleID=" + articleID + ", bookedIn=" + bookedIn + ", timestamp=" + timestamp + " '}'";
     }
 }

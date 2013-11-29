@@ -21,6 +21,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,12 +52,17 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
     private StorageDAO storageDAO;
     
     
-    public int saveMovementEntry(MovementDTO entry) {
-        Yard yard = yardDAO.findById(Yard.class, entry.getYardID());
+    public int saveMovementEntry(MovementDTO entry, int yardID) {
+        Yard yard = yardDAO.findById(Yard.class, yardID);
         
         
         Article article = articleDAO.findById(Article.class, entry.getArticleID());
         
+        
+        if(yard == null || article == null)
+        {
+            return 1;
+        }
         
         Movement m = new Movement();
         if(entry.isBookedIn())
@@ -85,36 +91,16 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
         List<Movement> list = articleTypeDAO.getMovementsForArticleTypeId(articleTypeID);
         
-        
-        
-        List<MovementDTO> entries = new ArrayList<MovementDTO>();
-        
-        
-        for(Movement m : list)
-        {
-           MovementDTO dto = new MovementDTO();
-           
-           dto.setArticleID(m.getArticle().getId());
-           dto.setTimestamp(m.getTime().getTime());
-           entries.add(dto);
-        }
-        
-        
-        return entries;
+ 
+        return DTOConverter.convertMovement(list);
     }
 
     public ArticleTypeDTO getArticleTypeByID(int articleTypeID) {
         ArticleType at = articleTypeDAO.findById(ArticleType.class, articleTypeID);
         
         
-        ArticleTypeDTO dto = new ArticleTypeDTO();
-        
-        dto.setId(at.getId());
-        dto.setDescription(at.getDescription());
-        dto.setName(at.getName());
-        dto.setStorageID(at.getStorage().getId());
-        dto.setMinimumStock(at.getMinimumStock());
-        return dto;
+       
+        return DTOConverter.convert(at);
         
         
     }
@@ -124,23 +110,10 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
        
        List<ArticleType> a = articleTypeDAO.getArticleTypesBy(articleTypeName, articleTypeDescription, articleTypeMinimumStock);
        
-       List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
-        
-        for(ArticleType at : a)
-        {
-            ArticleTypeDTO dto = new ArticleTypeDTO();
-            
-            dto.setDescription(at.getDescription());
-            dto.setId(at.getId());
-            dto.setMinimumStock(at.getMinimumStock());
-            dto.setName(at.getName());
-            //dto.setStorageID(at.getStorage().getId());
-            result.add(dto);
-            
-        }
+       
         
         
-        return result;
+        return DTOConverter.convertArticleType(a);
    }
 
     
@@ -148,7 +121,10 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
     public int updateMinimumStock(int articleTypeId, int newMinStock) {
         
         ArticleType a = articleTypeDAO.findById(ArticleType.class, articleTypeId);
-        
+        if(a==null)
+        {
+            return 1;
+        }
         a.setMinimumStock(newMinStock);
         articleTypeDAO.merge(a);
         
@@ -165,13 +141,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         {
            if(articleTypeDAO.getArticleTypeStock(at)<at.getMinimumStock())
            {
-               ArticleTypeDTO dto = new ArticleTypeDTO();
-        
-            dto.setDescription(at.getDescription());
-            dto.setName(at.getName());
-            dto.setId(at.getId());
-            dto.setMinimumStock(at.getMinimumStock());
-            result.add(dto);
+            result.add(DTOConverter.convert(at));
            }
         }
         
@@ -187,15 +157,10 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         a.setMinimumStock(0);
         articleTypeDAO.save(a);
         
-        ArticleTypeDTO result = new ArticleTypeDTO();
         
-        result.setDescription(a.getDescription());
-        result.setName(a.getName());
-        result.setId(a.getId());
-        result.setMinimumStock(a.getMinimumStock());
  
         
-        return result;
+        return DTOConverter.convert(a);
         
         
     }
@@ -205,23 +170,10 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
         Storage s = storageDAO.findById(Storage.class, storageID);
         
-        List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
-        
-        for(ArticleType at : s.getArticleTypes())
-        {
-            ArticleTypeDTO dto = new ArticleTypeDTO();
-            
-            dto.setDescription(at.getDescription());
-            dto.setId(at.getId());
-            dto.setMinimumStock(at.getMinimumStock());
-            dto.setName(at.getName());
-            dto.setStorageID(at.getStorage().getId());
-            result.add(dto);
-            
-        }
+       
         
         
-        return result;
+        return DTOConverter.convertArticleType(s.getArticleTypes());
         
     }
 
@@ -232,17 +184,8 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
         a.setArticleType(articleTypeDAO.findById(ArticleType.class, articleTypeID));
         articleDAO.save(a);
-        
-        
-        
-        ArticleDTO dto = new ArticleDTO();
-        
-        dto.setArticleTypeID(a.getArticleType().getId());
-        dto.setId(a.getId());
-        
-        
-        
-        return dto;
+
+        return DTOConverter.convert(a);
         
         
     }
