@@ -192,15 +192,15 @@
                                             </tr>
                                         </table>
                                     </form>
-                                    <hr>
-                                    <table class="table table-condensed table-striped table-bordered table-hover">
+                                    <hr>                          
+                                    <table class="table table-condensed table-striped table-bordered table-hover tablesorter" id="tableUnderrunMinStock">
                                         <thead>
-                                            <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
+                                            <tr><th>ID</th><th>Name</th><th>Beschreibung</th><th>Min-Best.</th></tr>
                                         </thead>
                                         <tbody id="tbodyUnderrunMinStock">
                                             <tr></tr>
                                         </tbody>
-                                    </table>      
+                                    </table>                                     
                                 </div>
                             </div>
                         </div>

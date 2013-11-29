@@ -100,7 +100,7 @@ public class WebAppService
             String description = "Beschreibung Artikelart ";
             int minStock = 5;
 
-            for (int i = 1; i < 3; i++)
+            for (int i = 1; i < 11; i++)
             {
                 result.add(this.myBean.getArticleTypeByID(i));
             }

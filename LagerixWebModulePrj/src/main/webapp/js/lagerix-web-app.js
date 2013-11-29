@@ -46,105 +46,36 @@ function displayArticleTypes(data) {
 }
 
 
+$(document).ready(function() {
+    $(document.forms['simpleSearchForm']).submit(function(event) {
+        var destinationUrl = this.action;
+
+        $.ajax({
+            url: destinationUrl,
+            type: "GET",
+            data: $("#simpleSearchForm").serialize(),
+            cache: false,
+            dataType: "json",
+            success: function(data, textStatus, jqXHR) {
+                displayArticleType(data, textStatus, jqXHR);
+            }
+        });
+        //event.preventDefault();
+        return false;
+    });
+});
 
 
 
+function displayArticleType(data, textStatus, jqXHR) {
+    $("#ipArticleTypeIdArticleTypeDescription").val(data.id);
+    $("#ipNameArticleTypeDescription").val(data.name);
+    $("#textareaNoteArticleTypeDescription").val(data.description);
+    $("#ipMinimumStockArticleTypeDescription").val(data.minimumStock);
+    var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
+    $("#panelTitelArticleTypeDescription").html(title);
+}
 
-//-----------------------------------------------------------------------------------------------
-//$(document).ready(function() {
-//    $(document.forms['simpleSearchForm']).submit(function(event) {
-//        var destinationUrl = this.action;
-//
-//        $.ajax({
-//            url: destinationUrl,
-//            type: "GET",
-//            data: $("#simpleSearchForm").serialize(),
-//            cache: false,
-//            dataType: "json",
-//            success: function(data, textStatus, jqXHR) {
-//                displayArticleType(data, textStatus, jqXHR);
-//            }
-//        });
-//        //event.preventDefault();
-//        return false;
-//    });
-//});
-//
-//$(document).ready(function() {
-//    $(document.forms['advancedSearchForm']).submit(function() {
-//        var destinationUrl = this.action;
-//
-//        $.ajax({
-//            url: destinationUrl,
-//            type: "GET",
-//            data: $("#advancedSearchForm").serialize(),
-//            cache: false,
-//            dataType: "json",
-//            success: function(data, textStatus, jqXHR) {
-//                $("#tbodyAdvancedSearch").html(displayArticleTypes(data, textStatus, jqXHR));
-//            }
-//        });
-//        return false;
-//    });
-//});
-//
-//$(document).ready(function() {
-//    $(document.forms['advancedSearchForm']).reset(function() {
-// 
-//            $("#tbodyAdvancedSearch").html("");
-//
-//    });
-//});
-//
-//
-//$(document).ready(function() {
-//    $(document.forms['formRefreshMinUnderrun']).submit(function() {
-//        getArticleTypesWithUnderrunMinStock();
-//        return false;
-//    });
-//});
-//
-//function getArticleTypesWithUnderrunMinStock() {
-//    var urli = $(document.forms['formRefreshMinUnderrun']).action;
-//    $.ajax({
-//        url: urli,
-//        type: "GET",
-//        data: "",
-//        cache: false,
-//        dataType: "json",
-//        success: function(data, textStatus, jqXHR) {
-//            $("#tbodyUnderrunMinStock").html(displayArticleTypes(data));
-//        }
-//    });
-//    return false;
-//}
-//
-//function displayArticleType(data, textStatus, jqXHR) {
-//    $("#ipArticleTypeIdArticleTypeDescription").val(data.id);
-//    $("#ipNameArticleTypeDescription").val(data.name);
-//    $("#textareaNoteArticleTypeDescription").val(data.description);
-//    $("#ipMinimumStockArticleTypeDescription").val(data.minimumStock);
-//    var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
-//    $("#panelTitelArticleTypeDescription").html(title);
-//}
-//
-//
-///**
-// * Returns html table content as <tr> tags 
-// * @param {type} data
-// * @returns {String}
-// */
-//function displayArticleTypes(data) {
-//    var rows = "";
-//    for (var i = 0; i < data.length; i++) {
-//        rows += "<tr><td>" + data[i].id + "</td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + data[i].minimumStock + "</td></tr>";
-//    }
-//    return rows;
-//}
-//
-
-
-//--------------------------------------------------------------------------------------------------
 
 
 //function getEntry()

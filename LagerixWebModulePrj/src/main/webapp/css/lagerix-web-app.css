@@ -10,6 +10,15 @@
 	margin: 5px;
 }
 
+.scrollable {
+    overflow-y: auto;
+}
+
+.bodycontainer {
+    max-height: 250px !important;
+    width: 100%;
+}
+
 /*.lagerix-gradient-background{
 background-image: -webkit-linear-gradient(white 0%, #9FBFD2 100%);
 background-image: -moz-linear-gradient(white 0%, #9FBFD2 100%); 
