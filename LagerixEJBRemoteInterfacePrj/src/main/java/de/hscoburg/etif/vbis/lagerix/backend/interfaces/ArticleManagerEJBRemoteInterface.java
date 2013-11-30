@@ -69,9 +69,10 @@ public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock();
  * Creates a new ArticleType and return it
  * @param name name of the new ArticleType
  * @param description description of the new ArticleType 
+ * @param storageId id of the storage
  * @return The newly created ArticleType
 */
-public ArticleTypeDTO createNewArticleType(String name, String description);
+public ArticleTypeDTO createNewArticleType(String name, String description, int storageId);
 
 /**
  * Return all Article Types within the storage

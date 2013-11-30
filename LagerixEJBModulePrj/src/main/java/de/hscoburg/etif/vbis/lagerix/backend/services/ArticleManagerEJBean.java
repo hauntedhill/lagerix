@@ -138,7 +138,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         return new ArrayList<ArticleTypeDTO>();
     }
 
-    public ArticleTypeDTO createNewArticleType(String name, String description) {
+    public ArticleTypeDTO createNewArticleType(String name, String description, int storageId) {
         
         ArticleType a = new ArticleType();
         
