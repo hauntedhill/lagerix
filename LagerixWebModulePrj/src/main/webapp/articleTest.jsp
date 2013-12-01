@@ -37,7 +37,7 @@ ArticleManagerEJBRemoteInterface bean =
  out.print("update minimumStock ArticleType:"+bean.updateMinimumStock(1, 50) +"</br>");
  out.print("fecth ArticleType:"+bean.getArticleTypeByID(1).toString() +"</br>");
  
- out.print("createNewArticleType:"+bean.createNewArticleType("test", "test123").toString() +"</br>"); 
+ out.print("createNewArticleType:"+bean.createNewArticleType("test", "test123",1).toString() +"</br>"); 
   out.print("</br></br>");
   out.print("get all articleTypes:"+bean.getAllArticleTypes(1).toString() +"</br>"); 
   out.print("</br></br>");

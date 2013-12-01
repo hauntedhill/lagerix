@@ -12,6 +12,7 @@
 		<module>LagerixPrj</module>
 		<module>LagerixAndroidApp</module>
 		<module>LagerixEJBRemoteInterfacePrj</module>
+	 <module>LagerixJavaClient</module>
 	</modules>
 
 	<dependencies>

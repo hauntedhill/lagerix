@@ -31,7 +31,6 @@ import javax.persistence.OneToMany;
   */
 @Entity
 @Table(name="USERS")
-@Cacheable(false)
 public class User implements Serializable {
           
     @Id
