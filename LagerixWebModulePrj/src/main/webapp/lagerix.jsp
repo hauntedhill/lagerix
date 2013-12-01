@@ -30,31 +30,43 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-info-sign" style="margin: 0px 15px 0px 0px"></span>Informationen zu Artikelart </h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription">
+                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/">
                                 <div class="row" >
-                                    <label class="control-label col-sm-3 "  for="ipArticleTypeIdArticleTypeDescription">Artikel-ID</label>  
+                                    <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm" disabled id="ipArticleTypeIdArticleTypeDescription" name="ipArticleTypeIdArticleTypeDescription"> </div>
+                                        <input type="text" class="form-control input-sm" disabled id="ipArticleTypeId" name="ipArticleTypeId"> </div>
                                 </div>
                                 <div class="row">
-                                    <label for="ipNameArticleTypeDescription" class="col-sm-3 control-label" >Name</label>
+                                    <label for="ipName" class="col-sm-3 control-label" >Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm " disabled id="ipNameArticleTypeDescription" name="ipNameArticleTypeDescription">
+                                        <input type="text" class="form-control input-sm " disabled id="ipName" name="ipName">
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label for="textareaNoteArticleTypeDescription" class="col-sm-3 control-label">Beschreibung</label>
+                                    <label for="textareaDescription" class="col-sm-3 control-label">Beschreibung</label>
                                     <div class="col-sm-9">
-                                        <textarea rows="3" class="form-control input-sm " disabled id="textareaNoteArticleTypeDescription" name="textareaNoteArticleTypeDescription"></textarea>
+                                        <textarea rows="3" class="form-control input-sm " disabled id="textareaDescription" name="textareaDescription"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <label for="ipMinimumStockArticleTypeDescription" class="col-sm-3 control-label">Mindestbestand</label>
-                                    <div class="col-sm-6">
-                                        <input type="number" class="form-control input-sm " disabled id="ipMinimumStockArticleTypeDescription" name="ipMinimumStockArticleTypeDescription">
+                                    <label for="ipMinimumStock" class="col-sm-3 control-label">Mindestbestand</label>
+                                    <div class="col-sm-2">
+                                        <input type="number" class="form-control input-sm " disabled id="ipMinimumStock" name="ipMinimumStock">
                                     </div>
-                                    <div class="col-sm-3" style="padding: 0px 5px 0px 0px; width: auto">
-                                        <button type="submit" class="btn btn-default btn-sm" id="btnChangeMinimumStock" ><span class="glyphicon glyphicon-pencil" style="margin: 0px 10px 0px 0px"></span>Ändern</button>         
+                                    <div class="col-sm-3" style="padding: 0px 2px 0px 0px; width: auto">
+                                        <button class="btn btn-default btn-sm" id="btnChangeMinimumStock" name="btnChangeMinimumStock"><span class="glyphicon glyphicon-pencil" style="margin: 0px 5px 0px 0px"></span>Ändern</button>        
+                                    </div>
+                                    <div class="col-sm-2" style="padding: 0px; width: auto">
+                                        <button class="btn btn-default btn-sm" id="btnChangeMinimumStockConfirm" name="btnChangeMinimumStockConfirm" style="visibility: hidden"><span class="glyphicon glyphicon-floppy-disk" style="margin: 0px 5px 0px 0px"></span>Speichern</button>         
+                                    </div>
+                                    <div class="col-sm-2"  style="padding: 0px; width: auto">
+                                        <button class="btn btn-default btn-sm" id="btnChangeMinimumStockAbort" name="btnChangeMinimumStockAbort" style="visibility: hidden"><span class="glyphicon glyphicon-remove" style="margin: 0px 5px 0px 0px"></span>Abbrechen</button>         
+                                    </div>                        
+                                </div> 
+                                <div class="row">
+                                    <label for="ipCurrentStock" class="col-sm-3 control-label">Bestand</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control input-sm " disabled id="ipCurrentStock" name="ipCurrentStock">
                                     </div>                        
                                 </div> 
                                 <div class="row">
@@ -65,10 +77,9 @@
                                 </div>  
                                 <hr>
                                 <div class="row">
-                                    <label for="ipArticleTypeInStorage" class="col-sm-3 control-label">Artikel in Lager</label>
+                                    <label for="ipStorage" class="col-sm-3 control-label">Artikel in Lager</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm " disabled id="ipArticleTypeInStorage" name="ipArticleTypeInStorage">
-
+                                        <input type="text" class="form-control input-sm " disabled id="ipStorage" name="ipStorage">
                                     </div>                        
                                 </div> 
                                 <div class="row" style="padding: 10px">
@@ -161,14 +172,15 @@
                                     <!--Suchergebnisse-->
                                     <h4>Suchergebnisse</h4>
                                     <hr>
-                                    <table class="table table-condensed table-striped table-bordered table-hover">
-                                        <thead>
-                                            <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
-                                        </thead>
-                                        <tbody id="tbodyAdvancedSearch">
-                                            <tr></tr>
-                                        </tbody>
-                                    </table>                                   
+                                    <div class="lagerix-scrollable lagerix-bodycontainer">
+                                        <table class="table table-condensed table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr><th>ID</th><th>Name</th><th>Beschreibung</th><th>Min-Best.</th></tr>
+                                            </thead>
+                                            <tbody id="tbodyAdvancedSearch">
+                                            </tbody>
+                                        </table>  
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -192,21 +204,21 @@
                                             </tr>
                                         </table>
                                     </form>
-                                    <hr>                          
-                                    <table class="table table-condensed table-striped table-bordered table-hover tablesorter" id="tableUnderrunMinStock">
-                                        <thead>
-                                            <tr><th>ID</th><th>Name</th><th>Beschreibung</th><th>Min-Best.</th></tr>
-                                        </thead>
-                                        <tbody id="tbodyUnderrunMinStock">
-                                            <tr></tr>
-                                        </tbody>
-                                    </table>                                     
+                                    <hr>  
+                                    <div class="lagerix-scrollable lagerix-bodycontainer">
+                                        <table class="table table-condensed table-striped table-bordered table-hover tablesorter" id="tableUnderrunMinStock">
+                                            <thead>
+                                                <tr><th>ID</th><th>Name</th><th>Beschreibung</th><th>Min-Best.</th></tr>
+                                            </thead>
+                                            <tbody id="tbodyUnderrunMinStock">                                   
+                                            </tbody>
+                                        </table>                                     
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>       
+            </div>       
     </body>
 </html>

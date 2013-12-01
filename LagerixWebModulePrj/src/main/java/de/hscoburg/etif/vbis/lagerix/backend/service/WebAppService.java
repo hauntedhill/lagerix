@@ -18,6 +18,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.*;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import javax.ejb.EJB;
 import java.util.List;
 
@@ -31,7 +32,9 @@ public class WebAppService
 {
 
     @EJB
-    ArticleManagerEJBRemoteInterface myBean;
+    private ArticleManagerEJBRemoteInterface myArticleBean;
+    @EJB
+    private PlaceManagerEJBRemoteInterface myPlaceBean;
     @Context
     private UriInfo context;
 
@@ -46,13 +49,15 @@ public class WebAppService
     @Path("/simplesearch")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public ArticleTypeDTO simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)//final ArticleId pArticleId)//, @Context HttpServletRequest req)
+    public ArticleTypeDTO simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)
     {
         try
         {
-            ArticleTypeDTO result = this.myBean.getArticleTypeByID(Integer.parseInt(pId));
+            int id = Integer.parseInt(pId);
+            ArticleTypeDTO result = this.myArticleBean.getArticleTypeByID(id);
             return result;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return new ArticleTypeDTO();
         }
@@ -62,24 +67,14 @@ public class WebAppService
     @Path("/advancedsearch")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public List<ArticleTypeDTO> advancedSearch(@QueryParam("ipNameAdvancedSearch") String pId, @QueryParam("ipNoteAdvancedSearch") String pNote, @QueryParam("ipMinimumStockAdvancedSearch") String pMinimumStock)
+    public List<ArticleTypeDTO> advancedSearch(@QueryParam("ipNameAdvancedSearch") String pName, @QueryParam("ipNoteAdvancedSearch") String pDescription, @QueryParam("ipMinimumStockAdvancedSearch") String pMinimumStock)
     {
         try
         {
-            List<ArticleTypeDTO> result = new java.util.ArrayList<ArticleTypeDTO>();
-
-            int id = 1;
-            String name = "Artikelart ";
-            String description = "Beschreibung Artikelart ";
-            int minStock = 5;
-
-            for (int i = 1; i < 11; i++)
-            {
-                result.add(this.myBean.getArticleTypeByID(i));
-            }
-
+            List<ArticleTypeDTO> result = this.myArticleBean.searchArticleType(pName, pDescription, pMinimumStock);
             return result;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return new java.util.ArrayList<ArticleTypeDTO>();
         }
@@ -91,24 +86,32 @@ public class WebAppService
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<ArticleTypeDTO> getArticleTypesWithUnderrunMinStock()
     {
-       try
+        try
         {
-            List<ArticleTypeDTO> result = new java.util.ArrayList<ArticleTypeDTO>();
-
-            int id = 1;
-            String name = "Artikelart ";
-            String description = "Beschreibung Artikelart ";
-            int minStock = 5;
-
-            for (int i = 1; i < 11; i++)
-            {
-                result.add(this.myBean.getArticleTypeByID(i));
-            }
-
+            List<ArticleTypeDTO> result = this.myArticleBean.getAllArticleTypesWithUnderrunMinStock();
             return result;
-        } catch (Exception e)
+        }
+        catch (Exception e)
         {
             return new java.util.ArrayList<ArticleTypeDTO>();
+        }
+    }
+
+    @GET
+    @Path("/currentstock")
+    @Produces(MediaType.TEXT_PLAIN)
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public int currentStock(@QueryParam("id") String pId)
+    {
+        try
+        {
+            int id = Integer.parseInt(pId);
+            List<YardDTO> result = this.myPlaceBean.getYardsForArticleType(id);
+            return result.size();
+        }
+        catch (Exception e)
+        {
+            return 0;
         }
     }
 
@@ -121,7 +124,7 @@ public class WebAppService
 //    {
 //        try
 //        {
-//            ArticleTypeDTO result = this.myBean.getArticleTypeByID(Integer.parseInt(pId));
+//            ArticleTypeDTO result = this.myArticleBean.getArticleTypeByID(Integer.parseInt(pId));
 ////            ArticleTypeDTO result = new ArticleTypeDTO();
 ////            result.setId(1);
 ////            result.setName("Test Artikel");

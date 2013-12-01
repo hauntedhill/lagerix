@@ -6,17 +6,16 @@
         Purpose of the stylesheet follows.
 */
 
-.margin5{
+.lagerix-margin5{
 	margin: 5px;
 }
 
-.scrollable {
+.lagerix-scrollable {
     overflow-y: auto;
 }
 
-.bodycontainer {
+.lagerix-bodycontainer {
     max-height: 250px !important;
-    width: 100%;
 }
 
 /*.lagerix-gradient-background{

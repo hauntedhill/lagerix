@@ -1,9 +1,72 @@
+//$(document).on("change", "#ipArticleTypeId", function() {
+//    alert("Artikel ID hat sich geändert!!!");
+//});
+
+
+
+//$( "input[type='text']" ).change(function() {
+//// Check input( $( this ).val() ) for validity here
+//});
+
+var urlGlobal = "";
+
+$(document).ready(function() {
+    urlGlobal = $(document.forms["formArticleTypeDescription"]).attr("action");
+    $("input[name='ipMinimumStock']").attr('disabled','disabled');
+});
+
+
+
+$(document).on("click", ".articleTypeRow", function() {
+    var articleTypeId = $(this).children(".articleTypeId").html();
+    $.ajax({
+        url: urlGlobal+"simplesearch",
+        type: "GET",
+        data: "ipIdSimpleSearch=" + articleTypeId,
+        cache: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+            displayArticleType(data, textStatus, jqXHR);
+        }
+    });
+});
+
+$(document).on("click","#btnChangeMinimumStock",function(){
+
+    var disabled = ($('input[name=ipMinimumStock]').is(':disabled'));
+
+    if (disabled) {
+        $("input[name='ipMinimumStock']").removeAttr('disabled');
+        $("button[name='btnChangeMinimumStockAbort']").css('visibility','visible');
+        $("button[name='btnChangeMinimumStockConfirm']").css('visibility','visible');
+    }
+    else {
+        $("input[name='ipMinimumStock']").attr('disabled','disabled');
+        $("button[name='btnChangeMinimumStockAbort']").css('visibility','hidden');
+        $("button[name='btnChangeMinimumStockConfirm']").css('visibility','hidden');
+   }
+   return false;
+});
+
+
+
+
+
+
+$(document).on("mouseenter", ".articleTypeRow", function() {
+    $(this).css('cursor', 'pointer');
+});
+
+
+$(document).on("mouseleave", ".articleTypeRow", function() {
+    $(this).css('cursor', 'auto');
+});
+
+
 $(document).ready(function() {
     $(document.forms['advancedSearchForm']).submit(function() {
-        var destinationUrl = this.action;
-
         $.ajax({
-            url: destinationUrl,
+            url: urlGlobal+"advancedsearch",
             type: "GET",
             data: $("#advancedSearchForm").serialize(),
             cache: false,
@@ -20,9 +83,8 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $(document.forms['formRefreshMinUnderrun']).submit(function() {
-        var urli = this.action;
         $.ajax({
-            url: urli,
+            url: urlGlobal+"underrunminstocks",
             type: "GET",
             data: "",
             cache: false,
@@ -40,7 +102,7 @@ $(document).ready(function() {
 function displayArticleTypes(data) {
     var rows = "";
     for (var i = 0; i < data.length; i++) {
-        rows += "<tr><td>" + data[i].id + "</td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + data[i].minimumStock + "</td></tr>";
+        rows += "<tr class=\"articleTypeRow\"><td class=\"articleTypeId\">" + data[i].id + "</td><td>" + data[i].name + "</td><td>" + data[i].description + "</td><td>" + data[i].minimumStock + "</td></tr>";
     }
     return rows;
 }
@@ -48,17 +110,20 @@ function displayArticleTypes(data) {
 
 $(document).ready(function() {
     $(document.forms['simpleSearchForm']).submit(function(event) {
-        var destinationUrl = this.action;
-
+        var url = urlGlobal + "simplesearch";
         $.ajax({
-            url: destinationUrl,
+            url: url,
             type: "GET",
             data: $("#simpleSearchForm").serialize(),
             cache: false,
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
                 displayArticleType(data, textStatus, jqXHR);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("ERROR!\ntextStatus: " + textStatus + "\nerrorThrown: " + errorThrown + "\njqXHR.responseText: " + jqXHR.responseText);
             }
+//            ,complete: function (){alert("Complete");}
         });
         //event.preventDefault();
         return false;
@@ -68,140 +133,30 @@ $(document).ready(function() {
 
 
 function displayArticleType(data, textStatus, jqXHR) {
-    $("#ipArticleTypeIdArticleTypeDescription").val(data.id);
-    $("#ipNameArticleTypeDescription").val(data.name);
-    $("#textareaNoteArticleTypeDescription").val(data.description);
-    $("#ipMinimumStockArticleTypeDescription").val(data.minimumStock);
+    $("#ipArticleTypeId").val(data.id);
+    $("#ipName").val(data.name);
+    $("#textareaDescription").val(data.description);
+    $("#ipMinimumStock").val(data.minimumStock);
+    $("#ipStorage").val(data.storageID);
+    $("#ipCurrentStock").val(data.currentStock);
     var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
+    
+    /*get current stock*/
+    var url = urlGlobal + "currentstock";
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: "id=" + data.id,
+            cache: false,
+            dataType: "text",
+            success: function(data2, textStatus2, jqXHR2) {
+                $("#ipCurrentStock").val(data2);
+            },
+            error: function(jqXHR2, textStatus2, errorThrown2) {
+                alert("ERROR!\ntextStatus: " + textStatus2 + "\nerrorThrown: " + errorThrown2 + "\njqXHR.responseText: " + jqXHR2.responseText);
+            }
+        });
+
 }
 
-
-
-//function getEntry()
-//{
-
-//    xmlHttpReq = new XMLHttpRequest();
-//    if (xmlHttpReq)
-//    {
-//        var elem = document.getElementById("SqlQueryText");
-//        var url = "http://localhost:8080/StockWebPrj/webresources/generic/entries/" + elem.value;
-////        alert(url);
-//        xmlHttpReq.open('GET', url, true);
-//        xmlHttpReq.onreadystatechange = getEntryResponseHandler;
-//        xmlHttpReq.send(null);
-////        var label = document.getElementById("infoLabel");
-////        label.value = url;
-//    }
-//    else
-//    {
-//        alert("Cannot create XMLHttpRequest!!!");
-//    }
-//}
-
-
-
-//function getEntryResponseHandler()
-//{
-//    var localReadyState = xmlHttpReq.readyState;
-//    if (localReadyState === 4)
-//    {
-//        var elem = document.getElementById("SqlQueryResult");
-//        elem.value = xmlHttpReq.responseText;
-////        alert("Response Text: " + xmlHttpReq.responseText + "\nelem.innerHTML: " + elem.innerHTML);
-//    }
-//}
-
-
-
-//
-//
-//
-//
-////
-//$(document).ready(function() {
-//
-//    $("#SqlQuerySubmit").click(function() {
-//        alert("HALLO");
-//        var url = "http://localhost:8080/StockWebPrj/webresources/generic/entries/" + $("#SqlQueryText").value;
-//        $.ajax({
-//            "url": url,
-//            "type": "get",
-////            "dataType": "json",
-//            "success": function(data) {
-//                $("#SqlQueryResult").value = data;
-//            }
-//        });
-//    });
-//});
-
-
-/* 
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-
-//$(function(){
-//    $(".clickMe").mouseenter(function(){
-//        $(this).children(".frame").slideToggle("slow");
-//    });
-//});
-//
-//$(function(){
-//    $(".clickMe").mouseleave(function(){
-//        $(this).children(".frame").slideToggle("slow");
-//    });
-//});
-//
-//function listEntriesAsList()
-//{
-//    xmlHttpReq = new XMLHttpRequest();
-//    if (xmlHttpReq)
-//    {
-//        var url = "http://localhost:8080/TestGuestbookJaxrs/webresources/testguestbook/entries/";
-////        alert(s);
-//        xmlHttpReq.open('GET', url, true);
-//        xmlHttpReq.setRequestHeader("Accept", "text/html");
-//        xmlHttpReq.onreadystatechange = getEntryResponseHandler;
-//        xmlHttpReq.send(null);
-//        var label = document.getElementById("infoLabel");
-//        label.value = url;
-//    }
-//    else
-//    {
-//        alert("Cannot create XMLHttpRequest!!!");
-//    }
-//
-//}
-//
-//
-//function createEntry()
-//{
-//    xmlHttpReq = new XMLHttpRequest();
-//    if (xmlHttpReq)
-//    {
-//        var url = "http://localhost:8080/TestGuestbookJaxrs/webresources/testguestbook/entries/";
-//        xmlHttpReq.open('POST', url, true);
-//        xmlHttpReq.setRequestHeader("Accept", "text/html");
-//        xmlHttpReq.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
-//        xmlHttpReq.onreadystatechange = getEntryResponseHandler;
-//        var payload = "Name=" + document.getElementById("inNameCreate").value + "&";
-//        payload = payload + "Note=" + document.getElementById("txtareaMsgCreate").value;
-////        alert(payload);
-//        xmlHttpReq.send(payload);
-//        var label = document.getElementById("infoLabel");
-//        label.value = url;
-//    }
-//}
-//
-//function getEntryResponseHandler()
-//{
-//    var localReadyState = xmlHttpReq.readyState;
-//    if (localReadyState === 4)
-//    {
-//        var elem = document.getElementById("result");
-//        elem.value = xmlHttpReq.responseText;
-//        //alert("Response Text: " + xmlHttpReq.responseText + "\nelem.innerHTML: " + elem.innerHTML);
-//    }
-//}
