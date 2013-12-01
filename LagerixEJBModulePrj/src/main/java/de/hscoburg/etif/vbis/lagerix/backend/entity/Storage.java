@@ -6,6 +6,7 @@
 
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Generated;
 import javax.persistence.Entity;
@@ -107,6 +108,14 @@ public class Storage {
         this.group = group;
     }
 
-   
+   public void addYard(Yard y)
+   {
+       if(yards==null)
+       {
+           yards = new ArrayList<Yard>();
+       }
+       y.setStorage(this);
+       yards.add(y);
+   }
     
 }

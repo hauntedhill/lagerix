@@ -21,7 +21,7 @@ public interface ArticleManagerEJBRemoteInterface {
  * @param entry A book entry containing information about booking process such as the ID of the corresponding article and location 
  * @return 0 if everything went fine or an error code
  */
-public int saveMovementEntry(MovementDTO entry);
+public int saveMovementEntry(MovementDTO entry, int yardID);
 
 /**
  * Returns all book entries for a specific article type

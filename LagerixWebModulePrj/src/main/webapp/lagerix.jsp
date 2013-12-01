@@ -183,24 +183,24 @@
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form id="formRefreshMinUnderrun" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/underrunminstocks">
+                                    <form id="formRefreshMinUnderrun" name="formRefreshMinUnderrun" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/underrunminstocks" method="get">
                                         <table>
                                             <tr>
                                                 <td>Folgende in den Lagern befindliche Artikelarten haben den festgelegten Mindestbestand unterschritten:</td>
-                                                <td><button class="btn btn-default btn-sm" id="btnRefreshMinUnderrun"><span class="glyphicon glyphicon-refresh" style="margin: 0px 0px 10px 0px"></span><br/>Aktualisieren</button>
+                                                <td><button type="submit" class="btn btn-default btn-sm" id="btnRefreshMinUnderrun"><span class="glyphicon glyphicon-refresh" style="margin: 0px 0px 10px 0px"></span><br/>Aktualisieren</button>
                                                 </td>
                                             </tr>
                                         </table>
                                     </form>
-                                    <hr>
-                                    <table class="table table-condensed table-striped table-bordered table-hover">
+                                    <hr>                          
+                                    <table class="table table-condensed table-striped table-bordered table-hover tablesorter" id="tableUnderrunMinStock">
                                         <thead>
-                                            <tr><th>ID</th><th>Name</th><th>Min-Best.</th><th>Beschreibung</th></tr>
+                                            <tr><th>ID</th><th>Name</th><th>Beschreibung</th><th>Min-Best.</th></tr>
                                         </thead>
                                         <tbody id="tbodyUnderrunMinStock">
                                             <tr></tr>
                                         </tbody>
-                                    </table>      
+                                    </table>                                     
                                 </div>
                             </div>
                         </div>

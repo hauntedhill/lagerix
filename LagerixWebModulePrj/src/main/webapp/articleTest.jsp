@@ -25,25 +25,39 @@ ArticleManagerEJBRemoteInterface bean =
  MovementDTO m = new MovementDTO();
  m.setArticleID(1);
  m.setBookedIn(true);
- m.setYardID(1);
+ 
 
  
- out.print("Moving in Artikel1:"+bean.saveMovementEntry(m)+"</br>");
+ out.print("Moving in Artikel1:"+bean.saveMovementEntry(m,1)+"</br>");
  m.setBookedIn(false);
- out.print("Moving out Artikel1:"+bean.saveMovementEntry(m)+"</br>");
- 
+ out.print("Moving out Artikel1:"+bean.saveMovementEntry(m,1)+"</br>");
+  out.print("</br></br>");
  out.print("update minimumStock ArticleType:"+bean.updateMinimumStock(1, 100) +"</br>");
  out.print("fecth ArticleType:"+bean.getArticleTypeByID(1).toString() +"</br>");
  out.print("update minimumStock ArticleType:"+bean.updateMinimumStock(1, 50) +"</br>");
  out.print("fecth ArticleType:"+bean.getArticleTypeByID(1).toString() +"</br>");
  
  out.print("createNewArticleType:"+bean.createNewArticleType("test", "test123").toString() +"</br>"); 
+  out.print("</br></br>");
   out.print("get all articleTypes:"+bean.getAllArticleTypes(1).toString() +"</br>"); 
- 
+  out.print("</br></br>");
  out.print("createNewArticle:"+bean.createNewArticle(1).toString() +"</br>"); 
  
- 
+  out.print("</br></br>");
+ out.print("searchArticleType:"+bean.searchArticleType("te", "", "").toString() +"</br>"); 
+  out.print("</br></br>");
+ out.print("searchArticleType:"+bean.searchArticleType("A", "", "").toString() +"</br>"); 
+  out.print("</br></br>");
+ out.print("searchArticleType:"+bean.searchArticleType("", "", "50").toString() +"</br>"); 
+  out.print("</br></br>");
+ out.print("searchArticleType:"+bean.searchArticleType("t", "test1", "0").toString() +"</br>"); 
+  out.print("</br></br>");
  out.print("get Movements for ArticleTypes"+bean.getMovementEntriesForArticleType(1).toString() +"</br>"); 
+ 
+ out.print("</br></br>");
+ 
+ out.print("articleTypes under stock"+bean.getAllArticleTypesWithUnderrunMinStock().toString() +"</br>"); 
+ 
 } catch (Exception e) { System.out.println(e);
 }
     

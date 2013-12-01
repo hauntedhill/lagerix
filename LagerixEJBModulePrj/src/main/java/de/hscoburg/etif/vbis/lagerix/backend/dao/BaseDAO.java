@@ -26,6 +26,7 @@ public class BaseDAO<T> {
     
     public T findById(Class<T> obj,Integer id)
     {
+        
         return em.find(obj, id);
     }
     

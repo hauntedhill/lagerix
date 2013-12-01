@@ -51,11 +51,6 @@ public class WebAppService
         try
         {
             ArticleTypeDTO result = this.myBean.getArticleTypeByID(Integer.parseInt(pId));
-//            ArticleTypeDTO result = new ArticleTypeDTO();
-//            result.setId(1);
-//            result.setName("Test Artikel");
-//            result.setDescription("Test Beschreibung des Artikels");
-//            result.setMinimumStock(12);
             return result;
         } catch (Exception e)
         {
@@ -78,17 +73,9 @@ public class WebAppService
             String description = "Beschreibung Artikelart ";
             int minStock = 5;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i < 11; i++)
             {
-                ArticleTypeDTO artTyp = new ArticleTypeDTO();
-                artTyp.setId(id);
-                artTyp.setName(name + id);
-                artTyp.setDescription(description + id);
-                artTyp.setMinimumStock(minStock);
-                result.add(artTyp);
-                id++;
-                minStock = +5;
-
+                result.add(this.myBean.getArticleTypeByID(i));
             }
 
             return result;
@@ -104,7 +91,7 @@ public class WebAppService
     @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<ArticleTypeDTO> getArticleTypesWithUnderrunMinStock()
     {
-        try
+       try
         {
             List<ArticleTypeDTO> result = new java.util.ArrayList<ArticleTypeDTO>();
 
@@ -113,17 +100,9 @@ public class WebAppService
             String description = "Beschreibung Artikelart ";
             int minStock = 5;
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 1; i < 11; i++)
             {
-                ArticleTypeDTO artTyp = new ArticleTypeDTO();
-                artTyp.setId(id);
-                artTyp.setName(name + id);
-                artTyp.setDescription(description + id);
-                artTyp.setMinimumStock(minStock);
-                result.add(artTyp);
-                id++;
-                minStock = +5;
-
+                result.add(this.myBean.getArticleTypeByID(i));
             }
 
             return result;
