@@ -117,5 +117,15 @@ public class Storage {
        y.setStorage(this);
        yards.add(y);
    }
+   
+   public void addArticleType(ArticleType y)
+   {
+       if(articleTypes==null)
+       {
+           articleTypes = new ArrayList<ArticleType>();
+       }
+       y.setStorage(this);
+       articleTypes.add(y);
+   }
     
 }

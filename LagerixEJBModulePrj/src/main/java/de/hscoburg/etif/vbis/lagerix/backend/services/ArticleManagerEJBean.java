@@ -152,13 +152,18 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface{
         
         ArticleType a = new ArticleType();
         
+        Storage s = storageDAO.findById(Storage.class, storageId);
         
-        a.setStorage(storageDAO.findById(Storage.class, storageId));
+        
+        s.addArticleType(a);
+        
+        a.setStorage(s);
         
         a.setName(name);
         a.setDescription(description);
         a.setMinimumStock(0);
         articleTypeDAO.save(a);
+        storageDAO.merge(s);
         
         
  
