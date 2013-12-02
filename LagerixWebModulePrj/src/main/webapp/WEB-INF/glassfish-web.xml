@@ -7,29 +7,7 @@
 
  
   <!-- role mapping --> 
-    <security-role-mapping>
-    <role-name>EINKAEUFER</role-name>
-    <group-name>EINKAEUFER</group-name>
-  </security-role-mapping>
-  
-    <security-role-mapping>
-    <role-name>LAGERVERWALTER</role-name>
-    <group-name>LAGERVERWALTER</group-name>
-  </security-role-mapping>
-  <security-role-mapping>
-    <role-name>BENUTZER</role-name>
-    <group-name>BENUTZER</group-name>
-  </security-role-mapping>
-   
-  <security-role-mapping>
-    <role-name>LAGERARBEITER</role-name>
-    <group-name>LAGERARBEITER</group-name>
-  </security-role-mapping>
-   
-  <security-role-mapping>
-    <role-name>ADMINISTRATOR</role-name>
-    <group-name>ADMINISTRATOR</group-name>
-  </security-role-mapping>
+    
  
   <!-- default --> 
   <class-loader delegate="true"/>

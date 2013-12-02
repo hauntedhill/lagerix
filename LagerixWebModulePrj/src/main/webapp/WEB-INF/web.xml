@@ -19,7 +19,7 @@
   
     <login-config>
         <auth-method>FORM</auth-method>
-        <realm-name>userMgmtJdbcRealm</realm-name>
+        
         <form-login-config>
             <form-login-page>/WEB-INF/login.jsp</form-login-page>
             <form-error-page>/WEB-INF/login.jsp?auth-error=1</form-error-page>
