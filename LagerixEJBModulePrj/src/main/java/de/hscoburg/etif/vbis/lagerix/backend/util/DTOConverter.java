@@ -2,15 +2,20 @@ package de.hscoburg.etif.vbis.lagerix.backend.util;
 
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -157,5 +162,45 @@ public class DTOConverter {
         return result;
     }
         
-         
+       
+        
+        
+        public static UserDTO convert(User u)
+        {
+            UserDTO dto = new UserDTO();
+            
+            
+        dto.setEmail(u.getEmail());
+        dto.setFname(u.getFirstName());
+        dto.setLname(u.getLastName());
+            for(Groups g : u.getGroups()!=null?u.getGroups():new ArrayList<Groups>())
+        {
+            GroupDTO gDto = new GroupDTO();
+            //gDto.setLagerId(g.get);
+            gDto.setGroup(GroupType.valueOf(g.getGroups().name()));
+            for(Storage s : g.getStorage()!=null?g.getStorage():new ArrayList<Storage>())
+            {
+                gDto.getStorageId().add(s.getId());
+            }
+            
+            dto.getGroups().add(gDto);
+        }
+            return dto;
+        }
+        
+        
+         public static List<UserDTO> convertUser(List<User> m)
+    {
+        List<UserDTO> result = new ArrayList<UserDTO>();
+        
+        if(m!=null)
+        {
+            for(User mm : m)
+            {
+                result.add(convert(mm));
+            }
+        }
+        
+        return result;
+    }
 }

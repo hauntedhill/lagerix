@@ -16,6 +16,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInte
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
+import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,7 +44,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         User u = userDAO.find(email);
         if(u!=null)
         {
-        UserDTO dto = new UserDTO();
+        /*UserDTO dto = new UserDTO();
         dto.setEmail(u.getEmail());
         dto.setFname(u.getFirstName());
         dto.setLname(u.getLastName());
@@ -59,10 +60,10 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
             }
             
             dto.getGroups().add(gDto);
-        }
+        }*/
         
                 
-        return dto;
+        return DTOConverter.convert(u);
         }
         else
         {
@@ -140,7 +141,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
     public List<UserDTO> getAllUsers() {
         List<User> users = userDAO.findAll();
         
-        List<UserDTO> result = new ArrayList<UserDTO>();
+       /* List<UserDTO> result = new ArrayList<UserDTO>();
         
         for(User u : users)
         {
@@ -150,8 +151,8 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
             dto.setLname(u.getLastName());
             result.add(dto);
             
-        }
-        return result;
+        }*/
+        return DTOConverter.convertUser(users);
     }
 
     @RolesAllowed("ADMINISTRATOR")
