@@ -6,6 +6,7 @@
 
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
@@ -95,5 +96,15 @@ public class Groups {
      */
     public void setStorage(List<Storage> storage) {
         this.storage = storage;
+    }
+    
+     public void addStorage(Storage g )
+    {
+        if(storage==null)
+       {
+           storage = new ArrayList<Storage>();
+       }
+       
+       storage.add(g); 
     }
 }

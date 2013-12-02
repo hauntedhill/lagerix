@@ -108,6 +108,19 @@ public class Storage {
         this.group = group;
     }
 
+    
+    
+    public void addGroup(Groups g )
+    {
+        if(group==null)
+       {
+           group = new ArrayList<Groups>();
+       }
+       
+       group.add(g); 
+    }
+    
+    
    public void addYard(Yard y)
    {
        if(yards==null)

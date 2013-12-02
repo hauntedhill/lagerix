@@ -6,6 +6,7 @@
 
 package de.hscoburg.etif.vbis.lagerix.backend.services;
 
+import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
@@ -33,6 +34,9 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
     
     @EJB
     private UserDAO userDAO;
+    
+    @EJB
+    private StorageDAO storageDAO;
 
     public UserDTO find(String email) {
         User u = userDAO.find(email);
@@ -79,22 +83,46 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         u.setLastName( user.getLname());   
         
         
-        List<Groups> groups = new ArrayList<Groups>();
-        
-        
-        Groups  g1 = new Groups();
-        g1.setGroups(Group.BENUTZER);
-        
-        u.addGroup(g1);
-        userDAO.save(g1);
-        g1 = new Groups();
-        g1.setGroups(Group.ADMINISTRATOR);
-        userDAO.save(g1);
-        u.addGroup(g1);
         
         
         
-        u.setGroups(groups);
+        if(user.getGroups() != null)
+        {
+            for(GroupDTO g : user.getGroups())
+            {
+                Groups group = new Groups();
+                group.setGroups(Group.valueOf(g.getGroup()));
+                if(g.getStorageId()!=null)
+                {
+                    
+                    for(Integer storageId:g.getStorageId())
+                    {
+                       Storage s = storageDAO.findById(Storage.class, storageId) ;
+                       s.addGroup(group);
+                       group.addStorage(s);
+                       userDAO.save(group);
+                       storageDAO.merge(s);
+                    }
+                    
+                
+                 }
+              u.addGroup(group);
+            }
+        }
+        
+        //Groups  g1 = new Groups();
+        //g1.setGroups(Group.BENUTZER);
+        
+        //u.addGroup(g1);
+        //userDAO.save(g1);
+        //g1 = new Groups();
+        //g1.setGroups(Group.ADMINISTRATOR);
+        //userDAO.save(g1);
+        //u.addGroup(g1);
+        
+        
+        
+        
         try
         {
         u.setPassword( SHA512.SHA512(user.getPassword1() ));
