@@ -1,6 +1,8 @@
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
  
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
@@ -13,7 +15,17 @@ public class UserDTO extends BaseDTO{
     private String lname;
     private String password1;
     private String password2;
+    
+    private List<GroupDTO> groups;
+
+    public UserDTO() {
+        groups = new ArrayList<GroupDTO>();
+    }
      
+    
+    
+    
+    
     public String getFname() {
         return fname;
     }
@@ -56,8 +68,22 @@ public class UserDTO extends BaseDTO{
       
     @Override
     public String toString() {
-        return "User [email=" + email + ", fName=" + fname
-                + ", lName=" + lname + ", password1=" + password1 +", password2=" + password2 + "]";
+        return "User [email=" + getEmail() + ", fName=" + getFname()
+                + ", lName=" + getLname() + ", password1=" + getPassword1() +", password2=" + getPassword2() + "]";
+    }
+
+    /**
+     * @return the groups
+     */
+    public List<GroupDTO> getGroups() {
+        return groups;
+    }
+
+    /**
+     * @param groups the groups to set
+     */
+    public void setGroups(List<GroupDTO> groups) {
+        this.groups = groups;
     }
      
 }

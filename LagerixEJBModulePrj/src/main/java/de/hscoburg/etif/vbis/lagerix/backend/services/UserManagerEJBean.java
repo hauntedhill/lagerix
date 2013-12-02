@@ -9,8 +9,10 @@ package de.hscoburg.etif.vbis.lagerix.backend.services;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.util.ArrayList;
@@ -40,7 +42,20 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         dto.setEmail(u.getEmail());
         dto.setFname(u.getFirstName());
         dto.setLname(u.getLastName());
-                
+        
+        for(Groups g : u.getGroups()!=null?u.getGroups():new ArrayList<Groups>())
+        {
+            GroupDTO gDto = new GroupDTO();
+            //gDto.setLagerId(g.get);
+            gDto.setGroup(g.getGroups().name());
+            for(Storage s : g.getStorage()!=null?g.getStorage():new ArrayList<Storage>())
+            {
+                gDto.getStorageId().add(s.getId());
+            }
+            
+            dto.getGroups().add(gDto);
+        }
+        
                 
         return dto;
         }
