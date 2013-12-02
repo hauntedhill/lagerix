@@ -7,6 +7,7 @@
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
  */
 public class GroupDTO extends BaseDTO{
     
-    private String group;
+    private GroupType group;
     
     private List<Integer> storageId;
 
@@ -45,14 +46,14 @@ public class GroupDTO extends BaseDTO{
     /**
      * @return the group
      */
-    public String getGroup() {
+    public GroupType getGroup() {
         return group;
     }
 
     /**
      * @param group the group to set
      */
-    public void setGroup(String group) {
+    public void setGroup(GroupType group) {
         this.group = group;
     }
 }

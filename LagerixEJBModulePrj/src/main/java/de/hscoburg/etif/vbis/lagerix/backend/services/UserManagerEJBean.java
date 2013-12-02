@@ -15,6 +15,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,7 +52,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         {
             GroupDTO gDto = new GroupDTO();
             //gDto.setLagerId(g.get);
-            gDto.setGroup(g.getGroups().name());
+            gDto.setGroup(GroupType.valueOf(g.getGroups().name()));
             for(Storage s : g.getStorage()!=null?g.getStorage():new ArrayList<Storage>())
             {
                 gDto.getStorageId().add(s.getId());
@@ -91,7 +92,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
             for(GroupDTO g : user.getGroups())
             {
                 Groups group = new Groups();
-                group.setGroups(Group.valueOf(g.getGroup()));
+                group.setGroups(Group.valueOf(g.getGroup().name()));
                 if(g.getStorageId()!=null)
                 {
                     
