@@ -30,7 +30,7 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-info-sign" style="margin: 0px 15px 0px 0px"></span>Informationen zu Artikelart </h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/">
+                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/" autocomplete="off">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
@@ -116,7 +116,7 @@
                             </div>
                             <div id="collapseOne" class="panel-collapse collapse in">
                                 <div class="panel-body">
-                                    <form class="form-horizontal" id="simpleSearchForm" name="simpleSearchForm" method="get" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/simplesearch">
+                                    <form class="form-horizontal" id="simpleSearchForm" name="simpleSearchForm" method="get" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/simplesearch" autocomplete="off">
                                         <div class="row" >
                                             <label class="control-label col-sm-3 " for="ipIdSimpleSearch">Artikelart-ID</label>  
                                             <div class="col-sm-5">
@@ -142,7 +142,7 @@
                             </div>
                             <div id="collapseTwo" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form class="form-horizontal" id="advancedSearchForm" name="advancedSearchForm"  method="get" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/advancedsearch">
+                                    <form class="form-horizontal" id="advancedSearchForm" name="advancedSearchForm"  method="get" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/advancedsearch" autocomplete="off">
                                         <div class="row">
                                             <label for="ipNameAdvancedSearch" class="col-sm-3 control-label" >Name</label>
                                             <div class="col-sm-9">
@@ -195,7 +195,7 @@
                             </div>
                             <div id="collapseThree" class="panel-collapse collapse">
                                 <div class="panel-body">
-                                    <form id="formRefreshMinUnderrun" name="formRefreshMinUnderrun" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/underrunminstocks" method="get">
+                                    <form id="formRefreshMinUnderrun" name="formRefreshMinUnderrun" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/underrunminstocks" method="get" autocomplete="off">
                                         <table>
                                             <tr>
                                                 <td>Folgende in den Lagern befindliche Artikelarten haben den festgelegten Mindestbestand unterschritten:</td>

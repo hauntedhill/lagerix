@@ -11,6 +11,7 @@ import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
@@ -115,6 +116,25 @@ public class WebAppService
         }
     }
 
+    @POST
+    @Path("/minimumstock")
+    @Produces(MediaType.TEXT_PLAIN)
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public int changeMinimumStock(@QueryParam("id") String pId,  @QueryParam("ipMinimumStock") String pMinStock)
+    {
+        try
+        {
+            int id = Integer.parseInt(pId);
+            int minStock = Integer.parseInt(pMinStock);
+            int result = this.myArticleBean.updateMinimumStock(id, minStock);
+            return result;
+        }
+        catch (Exception e)
+        {
+            return 0;
+        }
+    }
+    
 //    @GET
 //    @Path("/storage")
 //    @Produces(MediaType.APPLICATION_JSON)
