@@ -2,6 +2,7 @@ package de.hscoburg.etif.vbis.lagerixjavaclient;
 
 import de.hscoburg.etif.vbis.lagerix.appclient.windows.MainWindow;
 
+
 /**
  * Enterprise Application Client main class.
  *

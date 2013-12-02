@@ -25,6 +25,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.InitialContext;
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -39,6 +42,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingWorker;
 
 /**
  *
@@ -55,49 +59,38 @@ public class MainWindow extends javax.swing.JFrame {
      * Creates new form MainWindow
      */
     public MainWindow() {
-        System.out.println( "window const" );
         initComponents();        
-        System.out.println( "window const2" ); 
         initDone = true;
-        System.out.println( "window const3" );
-        try
-        {            
-            Properties environment = new Properties();
-            environment.put("org.omg.CORBA.ORBInitialHost", "localhost");
-            environment.put("org.omg.CORBA.ORBInitialPort", "3700");		
-            
-            InitialContext ctx = new InitialContext(environment);
-          
-             articleManager = (ArticleManagerEJBRemoteInterface) 
-                     ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/ArticleManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface");
-             placeManager = (PlaceManagerEJBRemoteInterface)
-                     ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/PlaceManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface");
-             
-             try
-             {
-                System.setProperty("java.security.auth.login.config", "auth.conf");
-
-                ProgrammaticLogin pl = new ProgrammaticLogin();
-                pl.login("test@test.de", "test".toCharArray(), "userMgmtJdbcRealm", true);
-                
-                 userManager = (UserManagerEJBRemoteInterface) 
-                    ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/UserManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface");
-               ///pl.logout();
-             }
-             catch(Exception es)
-             {
-                 es.printStackTrace();
-             }
-        } catch (Exception e)
-        {
-            e.printStackTrace();
-            articleManager = null;
-            userManager = null;
-            placeManager = null;
-        }
-        System.out.println( "window const 3" );
     }
 
+    final Integer busyLock = 1;
+    Integer busyCounter = 0;
+    
+    private void setBusy()
+    {
+        synchronized (busyLock) {
+            if(busyCounter == 0)
+            {
+                CardLayout cl = (CardLayout)(this.getContentPane().getLayout());
+                cl.show(this.getContentPane(), "BusyCard");
+            }
+
+            busyCounter++;
+        }
+    }
+    
+    private void clearBusy()
+    {
+        synchronized (busyLock) {
+            busyCounter--;
+            if(busyCounter == 0)
+            {
+                CardLayout cl = (CardLayout)(this.getContentPane().getLayout());
+                cl.show(this.getContentPane(), "ControlCard");
+            }
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -112,6 +105,7 @@ public class MainWindow extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jPanelControls = new javax.swing.JPanel();
         JPanelLogin = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
@@ -144,10 +138,24 @@ public class MainWindow extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         jTextAreaArticleTypeDescription = new javax.swing.JTextArea();
         jButtonCreateArticletype = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jList1 = new javax.swing.JList();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        jTextField1 = new javax.swing.JTextField();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTextArea1 = new javax.swing.JTextArea();
+        jButton1 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jComboBoxStockManStorages = new javax.swing.JComboBox();
         jLabel6 = new javax.swing.JLabel();
         jButtonUpdateStorages = new javax.swing.JButton();
+        jPanelBusyIndicator = new javax.swing.JPanel();
+        jProgressBar1 = new javax.swing.JProgressBar();
 
         jDialog1.setAlwaysOnTop(true);
         jDialog1.setMinimumSize(new java.awt.Dimension(269, 170));
@@ -227,6 +235,8 @@ public class MainWindow extends javax.swing.JFrame {
         });
         getContentPane().setLayout(new java.awt.CardLayout());
 
+        jPanelControls.setLayout(new java.awt.CardLayout());
+
         JPanelLogin.setName("LogInCard"); // NOI18N
 
         jLabel3.setIcon(new javax.swing.ImageIcon("C:\\Users\\mti578\\Documents\\NetBeansProjects\\lagerix\\LagerixJavaClient\\src\\main\\resources\\META-INF\\lagerix-logo.png")); // NOI18N
@@ -288,7 +298,7 @@ public class MainWindow extends javax.swing.JFrame {
             JPanelLoginLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelLoginLayout.createSequentialGroup()
-                .addContainerGap(311, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(196, 196, 196))
         );
@@ -301,7 +311,7 @@ public class MainWindow extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(JPanelLogin, "LogInCard");
+        jPanelControls.add(JPanelLogin, "LogInCard");
 
         jPanelAdministrator.setPreferredSize(new java.awt.Dimension(626, 315));
 
@@ -322,11 +332,11 @@ public class MainWindow extends javax.swing.JFrame {
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPaneAdminUserManagment, javax.swing.GroupLayout.DEFAULT_SIZE, 741, Short.MAX_VALUE)
+            .addComponent(jScrollPaneAdminUserManagment, javax.swing.GroupLayout.DEFAULT_SIZE, 727, Short.MAX_VALUE)
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPaneAdminUserManagment, javax.swing.GroupLayout.DEFAULT_SIZE, 443, Short.MAX_VALUE)
+            .addComponent(jScrollPaneAdminUserManagment, javax.swing.GroupLayout.DEFAULT_SIZE, 261, Short.MAX_VALUE)
         );
 
         jTabbedPaneAdministrator.addTab("Benutzerverwaltung", jPanel4);
@@ -353,7 +363,7 @@ public class MainWindow extends javax.swing.JFrame {
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextFieldAdminNewStorageName, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 221, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -365,7 +375,7 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jTextFieldAdminNewStorageName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButtonAdminNewStorage)
-                .addContainerGap(352, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
 
         jTabbedPaneAdministrator.addTab("Lagerverwaltung", jPanel5);
@@ -377,19 +387,19 @@ public class MainWindow extends javax.swing.JFrame {
             .addGroup(jPanelAdministratorLayout.createSequentialGroup()
                 .addComponent(jButton5)
                 .addGap(0, 0, Short.MAX_VALUE))
-            .addComponent(jTabbedPaneAdministrator)
+            .addComponent(jTabbedPaneAdministrator, javax.swing.GroupLayout.DEFAULT_SIZE, 732, Short.MAX_VALUE)
         );
         jPanelAdministratorLayout.setVerticalGroup(
             jPanelAdministratorLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelAdministratorLayout.createSequentialGroup()
                 .addComponent(jButton5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPaneAdministrator))
+                .addComponent(jTabbedPaneAdministrator, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
         );
 
         jTabbedPaneAdministrator.getAccessibleContext().setAccessibleName("");
 
-        getContentPane().add(jPanelAdministrator, "AdminCard");
+        jPanelControls.add(jPanelAdministrator, "AdminCard");
 
         JPanelStockManOverview.setEnabled(false);
 
@@ -416,13 +426,13 @@ public class MainWindow extends javax.swing.JFrame {
                 .addComponent(jScrollPaneStockManYards, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButtonCreateYard)
-                .addContainerGap(235, Short.MAX_VALUE))
+                .addContainerGap(258, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jButtonCreateYard)
-                .addGap(0, 415, Short.MAX_VALUE))
+                .addGap(0, 233, Short.MAX_VALUE))
             .addComponent(jScrollPaneStockManYards)
         );
 
@@ -463,7 +473,7 @@ public class MainWindow extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jButtonCreateArticletype))
-                .addGap(0, 67, Short.MAX_VALUE))
+                .addGap(0, 90, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -479,10 +489,87 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(15, 15, 15)
                 .addComponent(jButtonCreateArticletype)
-                .addContainerGap(255, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         jTabbedPaneStockMan.addTab("Artikelverwaltung", jPanel2);
+
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jList1.setToolTipText("");
+        jScrollPane3.setViewportView(jList1);
+
+        jLabel9.setText("Artikeltypname:");
+
+        jLabel10.setText("Artikeltypbeschreibung:");
+
+        jTextArea1.setColumns(20);
+        jTextArea1.setRows(5);
+        jScrollPane1.setViewportView(jTextArea1);
+
+        jButton1.setText("Bearbeiten");
+
+        jButton6.setText("Loeschen");
+
+        jButton7.setText("Neuen Artikel hinzufuegen");
+
+        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
+        jPanel7.setLayout(jPanel7Layout);
+        jPanel7Layout.setHorizontalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel9))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField1)
+                            .addComponent(jScrollPane1)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton1)))
+                .addContainerGap())
+        );
+        jPanel7Layout.setVerticalGroup(
+            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel7Layout.createSequentialGroup()
+                .addGap(44, 44, 44)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel10)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton1)
+                    .addComponent(jButton6)
+                    .addComponent(jButton7))
+                .addContainerGap(56, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3)
+            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+        );
+
+        jTabbedPaneStockMan.addTab("tab3", jPanel6);
 
         jButton4.setText("Benuzter abmelden");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -531,73 +618,152 @@ public class MainWindow extends javax.swing.JFrame {
                     .addComponent(jLabel6)
                     .addComponent(jButtonUpdateStorages))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPaneStockMan))
+                .addComponent(jTabbedPaneStockMan, javax.swing.GroupLayout.DEFAULT_SIZE, 284, Short.MAX_VALUE))
         );
 
-        getContentPane().add(JPanelStockManOverview, "UserCard");
+        jPanelControls.add(JPanelStockManOverview, "UserCard");
+
+        getContentPane().add(jPanelControls, "ControlCard");
+
+        jPanelBusyIndicator.setLayout(new java.awt.GridBagLayout());
+
+        jProgressBar1.setIndeterminate(true);
+        jPanelBusyIndicator.add(jProgressBar1, new java.awt.GridBagConstraints());
+
+        getContentPane().add(jPanelBusyIndicator, "BusyCard");
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     
-    int storageId = -1;
+    Integer storageId = null;
     private void createListStorages()
     {
         if(!initDone)
             return;
         
-        jComboBoxStockManStorages.removeAllItems();
-        List<StorageDTO> storages = placeManager.getAllStorages();
+        setBusy();
         
-        for(StorageDTO storage : storages)
-        {
-            jComboBoxStockManStorages.addItem(new Item(storage.getId(), storage.getName()));
-        }
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                return placeManager.getAllStorages();
+            }
+            
+            @Override
+            public void done() {
+                try {
+                    List<StorageDTO> storages = (List<StorageDTO>) get();
+                    jComboBoxStockManStorages.removeAllItems();
         
-        jComboBoxStockManStorages.validate();
+                    for(StorageDTO storage : storages)
+                    {
+                        jComboBoxStockManStorages.addItem(new Item(storage.getId(), storage.getName()));
+                    }
+
+                    jComboBoxStockManStorages.validate();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                
+                clearBusy();
+            }
+        };
+        
+        worker.execute();
     }
     
     private void jButtonLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogInActionPerformed
-        String usrName = jTextFieldUserName.getText();
-        String password = new String(jPasswordFieldPassword.getPassword());
+        setBusy();
+        final String usrName = jTextFieldUserName.getText();
+        final String password = new String(jPasswordFieldPassword.getPassword());
         boolean loggedIn = false;
+        
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() throws Exception {
+                try
+                {            
+                    Properties environment = new Properties();
+                    environment.put("org.omg.CORBA.ORBInitialHost", "localhost");
+                    environment.put("org.omg.CORBA.ORBInitialPort", "3700");		
 
-        //userManager.register(loggedInUsr);
-        try
-        {
-            loggedInUsr = userManager.find(usrName);
-        } catch (Exception ex)
-        {
-        
-        }
-        
-        if(usrName.equals("usr") && password.equals("usr"))
-        {
-            createListStorages();
-            createListViewStockYards();
-            createListViewStockArticletypes();
-            CardLayout cl = (CardLayout)(this.rootPane.getContentPane().getLayout());
-            cl.show(this.rootPane.getContentPane(), "UserCard");
-            loggedIn = true;       
-        } else if(usrName.equals("admin") && password.equals("admin"))
-        {
-            createListViewAdminUser();
-            CardLayout cl = (CardLayout)(this.rootPane.getContentPane().getLayout());
-            cl.show(this.rootPane.getContentPane(), "AdminCard");            
-            loggedIn = true;
-        } 
-        
-        if(loggedIn)
-        {
-            jTextFieldUserName.setText("");
-            jPasswordFieldPassword.setText("");
+                    InitialContext ctx = new InitialContext(environment);
+
+                     articleManager = (ArticleManagerEJBRemoteInterface) 
+                             ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/ArticleManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface");
+                     placeManager = (PlaceManagerEJBRemoteInterface)
+                             ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/PlaceManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface");
+
+                     try
+                     {
+                        System.setProperty("java.security.auth.login.config", "auth.conf");
+
+                        ProgrammaticLogin pl = new ProgrammaticLogin();
+                        pl.login(usrName, password.toCharArray(), "userMgmtJdbcRealm", true);
+
+                         userManager = (UserManagerEJBRemoteInterface) 
+                            ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/UserManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface");
+                         //if that works getUserRoles and return it...
+                       ///pl.logout();
+                     }
+                     catch(Exception es)
+                     {
+                         es.printStackTrace();
+                     }
+                } catch (Exception e)
+                {
+                    e.printStackTrace();
+                    articleManager = null;
+                    userManager = null;
+                    placeManager = null;
+                }               
+                return null;
+            }
             
-            jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br></html>");
-        }
-        else
-        {
-            jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br><font color='red'>Anmeldedaten ung&uuml;ltig</font></html>");
-        }
+            @Override
+            public void done() {
+                try {
+                    //get();
+                    boolean loggedIn = false;
+                    if(usrName.equals("usr") && password.equals("usr"))
+                    {
+                        createListStorages();
+                        createListViewStockYards();System.out.println("3");
+                        createListViewStockArticletypes();System.out.println("4");
+                        CardLayout cl = (CardLayout)(jPanelControls.getLayout());
+                        cl.show(jPanelControls, "UserCard");
+                        loggedIn = true;       
+                    } else if(usrName.equals("admin") && password.equals("admin"))
+                    {
+                        createListViewAdminUser();
+                        CardLayout cl = (CardLayout)(jPanelControls.getLayout());
+                        cl.show(jPanelControls, "AdminCard");            
+                        loggedIn = true;
+                    }   
+                      
+                    if(loggedIn)
+                    {
+                        jTextFieldUserName.setText("");
+                        jPasswordFieldPassword.setText("");
+
+                        jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br></html>");
+                    }
+                    else
+                    {
+                        jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br><font color='red'>Anmeldedaten ung&uuml;ltig</font></html>");
+                    }
+                    
+                } catch (Exception ex) {
+                   // ex.printStackTrace();
+                    System.out.println(ex.toString());
+                }
+                clearBusy();
+            }
+        };
+       
+       worker.execute();
     }//GEN-LAST:event_jButtonLogInActionPerformed
     
     private void deleteStorageEvent(java.awt.event.ActionEvent evt) {
@@ -686,8 +852,8 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void LogOutUser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutUser
-        CardLayout cl = (CardLayout)(this.rootPane.getContentPane().getLayout());
-        cl.show(this.rootPane.getContentPane(), "LogInCard");
+        CardLayout cl = (CardLayout)(jPanelControls.getLayout());
+        cl.show(jPanelControls, "LogInCard");
         
         
         loggedInUsr = null;
@@ -744,7 +910,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jButtonUpdateStoragesActionPerformed
 
     private void jButtonCreateYardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateYardActionPerformed
-        if(storageId != -1)
+        if(storageId != null)
         {
             placeManager.createNewYard(storageId);
             createListViewStockYards();
@@ -813,6 +979,9 @@ public class MainWindow extends javax.swing.JFrame {
     private void createListViewStockArticletypes()
     {
         if(!initDone)
+            return;
+        
+        if(storageId == null)
             return;
         
         List<ArticleTypeDTO> articleTypes = articleManager.getAllArticleTypes(storageId);
@@ -926,12 +1095,12 @@ public class MainWindow extends javax.swing.JFrame {
     {
         if(!initDone)
             return;
-        
-        System.out.println(storageId);
+                
+        if(storageId == null)
+            return;
         
         List<YardDTO> yards = placeManager.getAllYards(storageId);
         
-        System.out.println(yards.size());
         //JPanel panelView = new JPanel();
         //GridLayout layout = new GridLayout(storages.size(), 1);
         //panelView.setLayout(layout);
@@ -986,10 +1155,13 @@ public class MainWindow extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelLogin;
     private javax.swing.JPanel JPanelStockManOverview;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButtonAdminNewStorage;
     private javax.swing.JButton jButtonCreateArticletype;
     private javax.swing.JButton jButtonCreateYard;
@@ -999,6 +1171,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JComboBox jComboBoxStockManStorages;
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1006,22 +1179,33 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JLabel jLabelLogIn;
+    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanelAdministrator;
+    private javax.swing.JPanel jPanelBusyIndicator;
+    private javax.swing.JPanel jPanelControls;
     private javax.swing.JPasswordField jPasswordFieldPassword;
+    private javax.swing.JProgressBar jProgressBar1;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPaneAdminStorageManagment;
     private javax.swing.JScrollPane jScrollPaneAdminUserManagment;
     private javax.swing.JScrollPane jScrollPaneStockArticletypes;
     private javax.swing.JScrollPane jScrollPaneStockManYards;
     private javax.swing.JTabbedPane jTabbedPaneAdministrator;
     private javax.swing.JTabbedPane jTabbedPaneStockMan;
+    private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextAreaArticleTypeDescription;
+    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextFieldAdminNewStorageName;
     private javax.swing.JTextField jTextFieldArticletypeName;
     private javax.swing.JTextField jTextFieldUserName;
