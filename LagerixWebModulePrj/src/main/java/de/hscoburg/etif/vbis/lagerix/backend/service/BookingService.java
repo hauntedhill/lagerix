@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Felix
  */
-@Path("/book")
+@Path("/secure/book")
 @Produces(MediaType.TEXT_PLAIN)
 @Stateless
 public class BookingService {
