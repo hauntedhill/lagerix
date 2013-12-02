@@ -9,6 +9,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.FormParam;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
@@ -57,8 +58,7 @@ public class WebAppService
             int id = Integer.parseInt(pId);
             ArticleTypeDTO result = this.myArticleBean.getArticleTypeByID(id);
             return result;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             return new ArticleTypeDTO();
         }
@@ -74,8 +74,7 @@ public class WebAppService
         {
             List<ArticleTypeDTO> result = this.myArticleBean.searchArticleType(pName, pDescription, pMinimumStock);
             return result;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             return new java.util.ArrayList<ArticleTypeDTO>();
         }
@@ -91,8 +90,7 @@ public class WebAppService
         {
             List<ArticleTypeDTO> result = this.myArticleBean.getAllArticleTypesWithUnderrunMinStock();
             return result;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             return new java.util.ArrayList<ArticleTypeDTO>();
         }
@@ -109,8 +107,7 @@ public class WebAppService
             int id = Integer.parseInt(pId);
             List<YardDTO> result = this.myPlaceBean.getYardsForArticleType(id);
             return result.size();
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             return 0;
         }
@@ -118,9 +115,10 @@ public class WebAppService
 
     @POST
     @Path("/minimumstock")
+    @Consumes("application/x-www-form-urlencoded")
     @Produces(MediaType.TEXT_PLAIN)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public int changeMinimumStock(@QueryParam("id") String pId,  @QueryParam("ipMinimumStock") String pMinStock)
+    public int changeMinimumStock(@FormParam("id") String pId, @FormParam("ipMinimumStock") String pMinStock)
     {
         try
         {
@@ -128,13 +126,12 @@ public class WebAppService
             int minStock = Integer.parseInt(pMinStock);
             int result = this.myArticleBean.updateMinimumStock(id, minStock);
             return result;
-        }
-        catch (Exception e)
+        } catch (Exception e)
         {
             return 0;
         }
     }
-    
+
 //    @GET
 //    @Path("/storage")
 //    @Produces(MediaType.APPLICATION_JSON)

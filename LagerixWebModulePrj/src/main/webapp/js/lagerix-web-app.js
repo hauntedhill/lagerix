@@ -40,11 +40,24 @@ $(document).on("click", "#btnChangeMinimumStock", function() {
             $("input[name='ipMinimumStock']").removeAttr('disabled');
             $("button[name='btnChangeMinimumStockAbort']").css('visibility', 'visible');
             $("button[name='btnChangeMinimumStockConfirm']").css('visibility', 'visible');
+            $("button[name='btnChangeMinimumStock']").css('visibility', 'hidden');
         }
         else {
             $("input[name='ipMinimumStock']").attr('disabled', 'disabled');
             $("button[name='btnChangeMinimumStockAbort']").css('visibility', 'hidden');
             $("button[name='btnChangeMinimumStockConfirm']").css('visibility', 'hidden');
+            $("button[name='btnChangeMinimumStock']").css('visibility', 'visible');
+            var articleTypeId = $("#ipArticleTypeId").val();
+            $.ajax({
+                url: urlGlobal + "simplesearch",
+                type: "GET",
+                data: "ipIdSimpleSearch=" + articleTypeId,
+                cache: false,
+                dataType: "json",
+                success: function(data, textStatus, jqXHR) {
+                    displayArticleType(data, textStatus, jqXHR);
+                }
+            });
         }
     }
     return false;
@@ -52,25 +65,25 @@ $(document).on("click", "#btnChangeMinimumStock", function() {
 
 
 $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
-
-
+    var articleTypeId = $("#ipArticleTypeId").val();
+    var newMinStock = $("#ipMinimumStock").val();
+    $.ajax({
+        url: urlGlobal + "minimumstock",
+        type: "POST",
+        data: "id=" + articleTypeId + "&ipMinimumStock=" + newMinStock,
+        cache: false,
+        dataType: "text",
+        contentType: "application/x-www-form-urlencoded",
+        success: function(data, textStatus, jqXHR) {
+        }
+    });
+    $("#btnChangeMinimumStock").click();
     return false;
 });
 
 
 $(document).on("click", "#btnChangeMinimumStockAbort", function() {
     $("#btnChangeMinimumStock").click();
-    var articleTypeId = $("#ipArticleTypeId").val();
-    $.ajax({
-        url: urlGlobal + "simplesearch",
-        type: "GET",
-        data: "ipIdSimpleSearch=" + articleTypeId,
-        cache: false,
-        dataType: "json",
-        success: function(data, textStatus, jqXHR) {
-            displayArticleType(data, textStatus, jqXHR);
-        }
-    });
     return false;
 });
 
