@@ -1,14 +1,9 @@
-<enterprise-beans>
- <ejb>
-  <ejb-name>UserManaerEJBean</ejb-name> <!-- Bean Name -->
-  <ior-security-config>
-   <as-context>
-    <auth-method>USERNAME_PASSWORD</auth-method>
-    <realm>userMgmtJdbcRealm</realm> <!-- if not desired the default one -->
-    <required>true</required>
-   </as-context>
-  </ior-security-config>
- </ejb>
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE glassfish-application PUBLIC "-//GlassFish.org//DTD 
+GlassFish Application Server 3.1 Java EE Application 6.0//EN" 
+"http://glassfish.org/dtds/glassfish-application_6_0-1.dtd">
+<glassfish-application>
+
     <security-role-mapping>
     <role-name>EINKAEUFER</role-name>
     <group-name>EINKAEUFER</group-name>
@@ -32,4 +27,7 @@
     <role-name>ADMINISTRATOR</role-name>
     <group-name>ADMINISTRATOR</group-name>
   </security-role-mapping>
-</enterprise-beans>
+    
+    
+<realm>userMgmtJdbcRealm</realm>
+</glassfish-application>
