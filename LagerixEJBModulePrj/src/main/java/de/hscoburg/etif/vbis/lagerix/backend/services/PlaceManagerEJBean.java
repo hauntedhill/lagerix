@@ -10,10 +10,14 @@ import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleTypeDAO;
 
 import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
+import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.YardDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
@@ -21,7 +25,9 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.ejb.EJB;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 /**
@@ -37,13 +43,15 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
     @EJB
     private ArticleTypeDAO articleTypeDAO;
     
-    
+    @EJB
+    private UserDAO userDAO;
       
     @EJB
     private StorageDAO storageDAO;
        
        
-       
+     @Resource 
+     SessionContext scxt;  
        
        
    public YardDTO createNewYard(int storageID) {
@@ -99,8 +107,21 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface{
         storageDAO.remove(storageDAO.findById(Storage.class, storageID));
     }
 
-    public StorageDTO getStorage() {
-        return DTOConverter.convert(storageDAO.findById(Storage.class, 1));
+    public List<StorageDTO> getStorages() {
+        
+        User u = userDAO.find(scxt.getCallerPrincipal().getName());
+        
+        List<Storage> storages = new ArrayList<Storage>();
+        
+        if(u.getGroups()!=null)
+        {
+            for(Groups g : u.getGroups())
+            {
+                storages.addAll(g.getStorage());
+            }
+        }
+        
+        return DTOConverter.convertStorage(storages);
     }
 
     public List<StorageDTO> getAllStorages() {

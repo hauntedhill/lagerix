@@ -15,6 +15,8 @@
     
     
     try {
+        
+        request.login("test@test.de", "test");
 InitialContext ctx =new InitialContext();
 /* Nachfolgender JNDI-Name hat funktioniert
 bei Start des Clients in NetBeans 7.0.1 */
@@ -42,7 +44,7 @@ PlaceManagerEJBRemoteInterface bean =
  
  out.print("get locatopm for articleType"+ bean.getYardsForArticleType(1) +"</br></br>");
  
- out.print("get storage"+ bean.getStorage() +"</br></br>");
+ out.print("get storage"+ bean.getStorages() +"</br></br>");
  
  bean.deleteYard(y.getId());
  out.print("delte yard</br></br>");

@@ -54,7 +54,7 @@ public void deleteStorage(int storageID);
  * Gets the associated Storage for the logged in User
  * @return The Storage Object for which the user is in charge
 */
-public StorageDTO getStorage();
+public List<StorageDTO> getStorages();
 
 /**
  * Gets all Storages
