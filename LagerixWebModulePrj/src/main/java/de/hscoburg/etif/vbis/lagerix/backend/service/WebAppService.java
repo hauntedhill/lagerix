@@ -19,8 +19,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.*;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
+import java.io.Serializable;
 import javax.ejb.EJB;
 import java.util.List;
 
@@ -51,16 +54,36 @@ public class WebAppService
     @Path("/simplesearch")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public ArticleTypeDTO simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)
+    public ArticleTypeExtended simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)
     {
         try
         {
             int id = Integer.parseInt(pId);
-            ArticleTypeDTO result = this.myArticleBean.getArticleTypeByID(id);
-            return result;
+            ArticleTypeExtended tc = new ArticleTypeExtended();
+
+            ArticleTypeDTO atDTO = this.myArticleBean.getArticleTypeByID(id);
+            List<YardDTO> listy = this.myPlaceBean.getYardsForArticleType(id);
+            tc.setDescription(atDTO.getDescription());
+            tc.setId(atDTO.getId());
+            tc.setName(atDTO.getName());
+            tc.setStorageId(atDTO.getStorageID());
+            int currentStock = listy.size();
+            tc.setCurrentStock(currentStock);
+            StorageDTO myStorage = null;
+            List<StorageDTO> storages = this.myPlaceBean.getAllStorages();
+            for (StorageDTO storage : storages)
+            {
+                if (storage.getId() == tc.getStorageId())
+                {
+                    myStorage = storage;
+                    break;
+                }
+            }
+            tc.setStorageName(myStorage == null ? "kein Lagername" : myStorage.getName());
+            return tc;
         } catch (Exception e)
         {
-            return new ArticleTypeDTO();
+            return new ArticleTypeExtended();
         }
     }
 
@@ -160,5 +183,158 @@ public class WebAppService
     public String test()
     {
         return "Test OK";
+    }
+}
+
+@XmlRootElement
+class ArticleTypeExtended implements Serializable
+{
+
+    private int id;
+    private String name;
+    private String description;
+    private int minimumStock;
+    private int storageId;
+    private String storageName;
+    private int currentStock;
+
+    /**
+     * Get the value of currentStock
+     *
+     * @return the value of currentStock
+     */
+    public int getCurrentStock()
+    {
+        return currentStock;
+    }
+
+    /**
+     * Set the value of currentStock
+     *
+     * @param currentStock new value of currentStock
+     */
+    public void setCurrentStock(int currentStock)
+    {
+        this.currentStock = currentStock;
+    }
+
+    /**
+     * Get the value of storageName
+     *
+     * @return the value of storageName
+     */
+    public String getStorageName()
+    {
+        return storageName;
+    }
+
+    /**
+     * Set the value of storageName
+     *
+     * @param storageName new value of storageName
+     */
+    public void setStorageName(String storageName)
+    {
+        this.storageName = storageName;
+    }
+
+    /**
+     * Get the value of storageId
+     *
+     * @return the value of storageId
+     */
+    public int getStorageId()
+    {
+        return storageId;
+    }
+
+    /**
+     * Set the value of storageId
+     *
+     * @param storageId new value of storageId
+     */
+    public void setStorageId(int storageId)
+    {
+        this.storageId = storageId;
+    }
+
+    /**
+     * Get the value of minimumStock
+     *
+     * @return the value of minimumStock
+     */
+    public int getMinimumStock()
+    {
+        return minimumStock;
+    }
+
+    /**
+     * Set the value of minimumStock
+     *
+     * @param minimumStock new value of minimumStock
+     */
+    public void setMinimumStock(int minimumStock)
+    {
+        this.minimumStock = minimumStock;
+    }
+
+    /**
+     * Get the value of description
+     *
+     * @return the value of description
+     */
+    public String getDescription()
+    {
+        return description;
+    }
+
+    /**
+     * Set the value of description
+     *
+     * @param description new value of description
+     */
+    public void setDescription(String description)
+    {
+        this.description = description;
+    }
+
+    /**
+     * Get the value of name
+     *
+     * @return the value of name
+     */
+    public String getName()
+    {
+        return name;
+    }
+
+    /**
+     * Set the value of name
+     *
+     * @param name new value of name
+     */
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    /**
+     * Get the value of id
+     *
+     * @return the value of id
+     */
+    public int getId()
+    {
+        return id;
+    }
+
+    /**
+     * Set the value of id
+     *
+     * @param id new value of id
+     */
+    public void setId(int id)
+    {
+        this.id = id;
     }
 }
