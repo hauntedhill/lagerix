@@ -32,5 +32,5 @@ public List<UserDTO> getAllUsers();
  * @param userName The user to be deleted
 */
 public void deleteUser(String userName);
-    
+  public void editUserGroups(UserDTO user);  
 }

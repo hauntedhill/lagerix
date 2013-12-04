@@ -71,6 +71,62 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
         }
     }
 
+    
+    
+    
+    public void editUserGroups(UserDTO user)
+    {
+       User u = userDAO.find(user.getEmail());
+       
+       if(u.getGroups()!=null)
+       {
+           for(Groups g : u.getGroups())
+           {
+               if(g.getStorage()!=null)
+               {
+                   for(Storage s : g.getStorage())
+                   {
+                       if(s.getGroup()!=null)
+                       {
+                           s.getGroup().remove(g);
+                           storageDAO.merge(s);
+                       }
+                   }
+                   
+                   
+               }
+               g.getStorage().remove(g);
+               userDAO.remove(g);
+           }
+       }
+       if(user.getGroups() != null)
+        {
+            for(GroupDTO g : user.getGroups())
+            {
+                Groups group = new Groups();
+                group.setGroups(Group.valueOf(g.getGroup().name()));
+                if(g.getStorageId()!=null)
+                {
+                    
+                    for(Integer storageId:g.getStorageId())
+                    {
+                       Storage s = storageDAO.findById(Storage.class, storageId) ;
+                       s.addGroup(group);
+                       group.addStorage(s);
+                       userDAO.save(group);
+                       storageDAO.merge(s);
+                    }
+                    
+                
+                 }
+              u.addGroup(group);
+            }
+        }
+
+        userDAO.merge(u);
+    }
+    
+    
     public void register(UserDTO user) {
         
         
@@ -112,15 +168,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface{
             }
         }
         
-        //Groups  g1 = new Groups();
-        //g1.setGroups(Group.BENUTZER);
         
-        //u.addGroup(g1);
-        //userDAO.save(g1);
-        //g1 = new Groups();
-        //g1.setGroups(Group.ADMINISTRATOR);
-        //userDAO.save(g1);
-        //u.addGroup(g1);
         
         
         
