@@ -22,7 +22,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="scanBarcode"
-        android:text="Barcode scannen"
+        android:text="@string/scan_barcode"
         android:textColor="@android:color/black" />
 
     <LinearLayout
@@ -36,7 +36,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".70"
-            android:text="Erkannter Artikel:"
+            android:text="@string/identified_barcode_article"
             android:textColor="@android:color/black" />
 
         <TextView
@@ -58,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".70"
-            android:text="Erkannter Lagerort:"
+            android:text="@string/identified_barcode_storage"
             android:textColor="@android:color/black" />
 
         <TextView
@@ -80,7 +80,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Einbuchung"
+            android:text="@string/book_in"
             android:checked="true"
             android:textColor="@android:color/black" />
 
@@ -90,7 +90,7 @@
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
             android:gravity="center"
-            android:text="Ausbuchung"
+            android:text="@string/book_out"
             android:textColor="@android:color/black" />
     </RadioGroup>
 
@@ -99,7 +99,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:onClick="sendEntry"
-        android:text="Daten absenden"
+        android:text="@string/send_data"
         android:textColor="@android:color/black" />
 
     <TextView

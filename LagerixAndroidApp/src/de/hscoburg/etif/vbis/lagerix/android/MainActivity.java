@@ -101,7 +101,7 @@ public class MainActivity extends Activity {
 				params.put("bookedIn", "false");
 			params.put("userID", userID);
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
-			LagerixRestClient.post("book/saveEntry", params, new TextHttpResponseHandler() {
+			LagerixRestClient.post("services/secure/book/saveEntry", params, new TextHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 					restResult.setText("Erfolg!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody);
