@@ -47,6 +47,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
@@ -157,6 +158,8 @@ public class MainWindow extends javax.swing.JFrame {
         jComboBoxAdminUserGroup = new javax.swing.JComboBox();
         jButtonAdminUserEditAndSave = new javax.swing.JButton();
         jButtonAdminUserDeleteAndDiscard = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jPasswordFieldAdminUserPassword2 = new javax.swing.JPasswordField();
         jButtonAdminUserNewUser = new javax.swing.JButton();
         jPanelAdminStorages = new javax.swing.JPanel();
         jScrollPaneAdminStorageManagment = new javax.swing.JScrollPane();
@@ -415,6 +418,7 @@ public class MainWindow extends javax.swing.JFrame {
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel8.add(jLabel13, gridBagConstraints);
 
+        jTextFieldAdminUserName.setColumns(20);
         jTextFieldAdminUserName.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
@@ -465,28 +469,28 @@ public class MainWindow extends javax.swing.JFrame {
         jLabel15.setText("Benutzergruppe:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel8.add(jLabel15, gridBagConstraints);
 
         jComboBoxAdminUserStorage.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel8.add(jComboBoxAdminUserStorage, gridBagConstraints);
 
         jLabelAdminUserStorage.setText("Zustaendig fuer Lager:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
+        gridBagConstraints.gridy = 6;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel8.add(jLabelAdminUserStorage, gridBagConstraints);
 
         jComboBoxAdminUserGroup.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
+        gridBagConstraints.gridy = 5;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         jPanel8.add(jComboBoxAdminUserGroup, gridBagConstraints);
 
@@ -497,27 +501,54 @@ public class MainWindow extends javax.swing.JFrame {
             }
         });
         gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel8.add(jButtonAdminUserEditAndSave, gridBagConstraints);
 
         jButtonAdminUserDeleteAndDiscard.setText("Löschen");
+        jButtonAdminUserDeleteAndDiscard.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdminUserDeleteAndDiscardActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 7;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel8.add(jButtonAdminUserDeleteAndDiscard, gridBagConstraints);
+
+        jLabel3.setText("Passwort Wiederholung:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        jPanel8.add(jLabel3, gridBagConstraints);
+
+        jPasswordFieldAdminUserPassword2.setEnabled(false);
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        jPanel8.add(jButtonAdminUserDeleteAndDiscard, gridBagConstraints);
+        gridBagConstraints.gridy = 4;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        jPanel8.add(jPasswordFieldAdminUserPassword2, gridBagConstraints);
+
+        jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
+        jButtonAdminUserNewUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonAdminUserNewUserActionPerformed(evt);
+            }
+        });
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 8;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel8.add(jButtonAdminUserNewUser, gridBagConstraints);
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel4.add(jPanel8, gridBagConstraints);
-
-        jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        jPanel4.add(jButtonAdminUserNewUser, gridBagConstraints);
 
         jPanelAdminUsers.add(jPanel4, new java.awt.GridBagConstraints());
 
@@ -1012,7 +1043,8 @@ public class MainWindow extends javax.swing.JFrame {
                 jTextFieldAdminUserFirstName.setText(selectedUser.getFname());
                 jTextFieldAdminUserLastName.setText(selectedUser.getLname());
                 jTextFieldAdminUserName.setText(selectedUser.getEmail());
-
+                jPasswordFieldAdminUserPassword.setText("");
+                jPasswordFieldAdminUserPassword2.setText("");
                 List<GroupDTO> groups = selectedUser.getGroups();
                 if(groups.isEmpty()) //User doesn't belong to a Group, not possible make him sth...
                 {
@@ -1025,14 +1057,22 @@ public class MainWindow extends javax.swing.JFrame {
                 }
 
                 DefaultComboBoxModel modelGroups = new DefaultComboBoxModel();
-
+                Item selectedGroup = null;
                 for(GroupType type : GroupType.values())
                 {
-                    modelGroups.addElement(new Item(type, type.toString()));
+                    Item itmGroup = new Item(type, type.toString());
+                    if(groups.get(0).getGroup().equals(type))
+                    {
+                        selectedGroup = itmGroup;
+                    }
+                    modelGroups.addElement(itmGroup);
                 }
 
                 jComboBoxAdminUserGroup.setModel(modelGroups);
-                jComboBoxAdminUserGroup.setSelectedItem(groups.get(0).getGroup());
+                if(selectedGroup != null)
+                {
+                    jComboBoxAdminUserGroup.setSelectedItem(selectedGroup);
+                }
 
                 DefaultComboBoxModel modelStorages = new DefaultComboBoxModel();
 
@@ -1041,14 +1081,14 @@ public class MainWindow extends javax.swing.JFrame {
                 Item selectedItem = null;
                 for(StorageDTO storage : placeManager.getAllStorages())
                 {
+                    Item itm = new Item(storage, storage.getName());
+                    modelStorages.addElement(itm);
                     if(!listStorages.isEmpty())
-                    {
-                        Item itm = new Item(storage, storage.getName());
+                    {              
                         if(listStorages.get(0) == storage.getId())
                         {
                             selectedItem = itm;
                         }
-                        modelStorages.addElement(itm);
                     }
                 }
 
@@ -1072,6 +1112,8 @@ public class MainWindow extends javax.swing.JFrame {
                 jTextFieldAdminUserFirstName.setText("");
                 jTextFieldAdminUserLastName.setText("");
                 jTextFieldAdminUserName.setText("");
+                jPasswordFieldAdminUserPassword.setText("");
+                jPasswordFieldAdminUserPassword2.setText("");
                 jComboBoxAdminUserGroup.setModel(new DefaultComboBoxModel());
                 jComboBoxAdminUserStorage.setModel(new DefaultComboBoxModel());
             }
@@ -1210,11 +1252,21 @@ public class MainWindow extends javax.swing.JFrame {
     private void jButtonAdminUserEditAndSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserEditAndSaveActionPerformed
         if(!jButtonAdminUserEditAndSave.getText().equals("Speichern"))
         {
-            jButtonAdminUserEditAndSave.setText("Speichern");
-            jButtonAdminUserDeleteAndDiscard.setText("Abbrechen");
-            jTableAdminUsers.setEnabled(false);
-            jComboBoxAdminUserGroup.setEnabled(true);
-            jComboBoxAdminUserStorage.setEnabled(true);
+            if(((String)jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0))
+                        .equals(loggedInUsr.getEmail()))
+            {
+                    JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
+                            + "kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {
+                jButtonAdminUserEditAndSave.setText("Speichern");
+                jButtonAdminUserDeleteAndDiscard.setText("Abbrechen");
+                jTableAdminUsers.setEnabled(false);
+                jComboBoxAdminUserGroup.setEnabled(true);
+                jComboBoxAdminUserStorage.setEnabled(true);
+                jButtonAdminUserNewUser.setEnabled(false);
+            }
         }
         else
         {
@@ -1226,7 +1278,7 @@ public class MainWindow extends javax.swing.JFrame {
             if(storage.getObj() != null)
             {
                 List storagesUser = new ArrayList<Integer>();
-                storagesUser.add(storage.getObj());
+                storagesUser.add(((StorageDTO)storage.getObj()).getId());
                 group.setStorageId(storagesUser);
             }
             List<GroupDTO> groups = new ArrayList<GroupDTO>();
@@ -1238,9 +1290,151 @@ public class MainWindow extends javax.swing.JFrame {
             jButtonAdminUserDeleteAndDiscard.setText("Löschen");
             jComboBoxAdminUserGroup.setEnabled(false);
             jComboBoxAdminUserStorage.setEnabled(false);
+            jButtonAdminUserNewUser.setEnabled(true);
             jTableAdminUsers.setEnabled(true);
+            createListViewAdminUser();
         }
     }//GEN-LAST:event_jButtonAdminUserEditAndSaveActionPerformed
+
+    private void jButtonAdminUserNewUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserNewUserActionPerformed
+        if(!jButtonAdminUserNewUser.getText().equals("Speichern"))
+        {
+            jButtonAdminUserEditAndSave.setEnabled(false);
+            jButtonAdminUserNewUser.setText("Speichern");
+            
+            jTextFieldAdminUserFirstName.setEnabled(true);
+            jTextFieldAdminUserLastName.setEnabled(true);
+            jTextFieldAdminUserName.setEnabled(true);
+            jPasswordFieldAdminUserPassword.setEnabled(true);
+            jPasswordFieldAdminUserPassword2.setEnabled(true);
+            jComboBoxAdminUserGroup.setEnabled(true);
+            jComboBoxAdminUserStorage.setEnabled(true);
+            
+            jButtonAdminUserDeleteAndDiscard.setText("Abbrechen");
+            jButtonAdminUserDeleteAndDiscard.setEnabled(true);
+            jTableAdminUsers.setEnabled(false);
+            
+                DefaultComboBoxModel modelGroups = new DefaultComboBoxModel();
+                for(GroupType type : GroupType.values())
+                {
+                    modelGroups.addElement(new Item(type, type.toString()));
+                }
+                jComboBoxAdminUserGroup.setModel(modelGroups);
+
+                DefaultComboBoxModel modelStorages = new DefaultComboBoxModel();
+                modelStorages.addElement(new Item(null, ""));
+                for(StorageDTO storage : placeManager.getAllStorages())
+                {
+                        Item itm = new Item(storage, storage.getName());
+                        modelStorages.addElement(itm);
+                }
+                jComboBoxAdminUserStorage.setModel(modelStorages);
+                
+            jTextFieldAdminUserFirstName.setText("");
+            jTextFieldAdminUserLastName.setText("");
+            jTextFieldAdminUserName.setText("");
+            jPasswordFieldAdminUserPassword.setText("");
+            jPasswordFieldAdminUserPassword2.setText("");
+        }
+        else
+        {
+            String passwd1 = new String(jPasswordFieldAdminUserPassword.getPassword());
+            String passwd2 = new String(jPasswordFieldAdminUserPassword2.getPassword());
+            if(!passwd1.equals(passwd2))
+            {
+                JOptionPane.showMessageDialog(this, "Die Passwort-Felder sind nicht identisch.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+            else
+            {                 
+                UserDTO user = new UserDTO();
+                user.setEmail(jTextFieldAdminUserName.getText());
+                user.setFname(jTextFieldAdminUserFirstName.getText());
+                user.setLname(jTextFieldAdminUserLastName.getText());
+                user.setPassword1(passwd1);
+                user.setPassword2(passwd2);
+                
+                GroupDTO group = new GroupDTO();
+                group.setGroup((GroupType)((Item)jComboBoxAdminUserGroup.getSelectedItem()).getObj());
+
+                Item storage = (Item)jComboBoxAdminUserStorage.getSelectedItem();
+                if(storage.getObj() != null && group.getGroup() != GroupType.ADMINISTRATOR 
+                        && group.getGroup() != GroupType.EINKAEUFER)
+                {
+                    List storagesUser = new ArrayList<Integer>();
+                    storagesUser.add((Integer)((StorageDTO)storage.getObj()).getId());
+                    group.setStorageId(storagesUser);
+                }
+                List<GroupDTO> groups = new ArrayList<GroupDTO>();
+                groups.add(group);
+                user.setGroups(groups);
+                
+                try
+                {
+                    userManager.register(user);
+
+                    jTextFieldAdminUserFirstName.setEnabled(false);
+                    jTextFieldAdminUserLastName.setEnabled(false);
+                    jTextFieldAdminUserName.setEnabled(false);
+                    jPasswordFieldAdminUserPassword.setEnabled(false);
+                    jPasswordFieldAdminUserPassword2.setEnabled(false);
+                    jComboBoxAdminUserGroup.setEnabled(false);
+                    jComboBoxAdminUserStorage.setEnabled(false);
+                    jButtonAdminUserDeleteAndDiscard.setText("Löschen");
+                    jButtonAdminUserDeleteAndDiscard.setEnabled(false);
+                    jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
+                    jTableAdminUsers.setEnabled(true);
+                    createListViewAdminUser();
+                } catch(Exception es)
+                {
+                    JOptionPane.showMessageDialog(this, "Fehler beim Erstellen des Benutzer."
+                            + "(evtl. ist der Benutzername schon vergeben)", "Fehler", JOptionPane.ERROR_MESSAGE);                    
+                }
+            }
+        }
+    }//GEN-LAST:event_jButtonAdminUserNewUserActionPerformed
+
+    private void jButtonAdminUserDeleteAndDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserDeleteAndDiscardActionPerformed
+        if(jButtonAdminUserDeleteAndDiscard.getText().equals("Löschen"))
+        {
+            if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Benutzer: " + 
+                    jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0) +
+                    " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+                    == JOptionPane.YES_OPTION)
+            {
+                if(((String)jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0))
+                        .equals(loggedInUsr.getEmail()))
+                {
+                    JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
+                            + "kann nicht geloescht werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
+                else
+                {
+                    userManager.deleteUser((String)jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0));
+                    createListViewAdminUser();
+                }
+            }
+        }
+        else
+        {
+            jButtonAdminUserEditAndSave.setText("Bearbeiten");
+            jButtonAdminUserDeleteAndDiscard.setText("Löschen");
+            jComboBoxAdminUserGroup.setEnabled(false);
+            jComboBoxAdminUserStorage.setEnabled(false);
+            jButtonAdminUserNewUser.setEnabled(true);
+            jTextFieldAdminUserFirstName.setEnabled(false);
+            jTextFieldAdminUserLastName.setEnabled(false);
+            jTextFieldAdminUserName.setEnabled(false);
+            jPasswordFieldAdminUserPassword.setEnabled(false);
+            jPasswordFieldAdminUserPassword2.setEnabled(false);
+            jComboBoxAdminUserGroup.setEnabled(false);
+            jComboBoxAdminUserStorage.setEnabled(false);
+            jButtonAdminUserDeleteAndDiscard.setText("Löschen");
+            jButtonAdminUserDeleteAndDiscard.setEnabled(false);
+            jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
+            jTableAdminUsers.setEnabled(true);
+            createListViewAdminUser();
+        }
+    }//GEN-LAST:event_jButtonAdminUserDeleteAndDiscardActionPerformed
 
     private void deleteYardEvent(java.awt.event.ActionEvent evt) {
         String cmd = evt.getActionCommand();
@@ -1503,6 +1697,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -1528,6 +1723,7 @@ public class MainWindow extends javax.swing.JFrame {
     private javax.swing.JPanel jPanelControlsMain;
     private javax.swing.JPanel jPanelWindow;
     private javax.swing.JPasswordField jPasswordFieldAdminUserPassword;
+    private javax.swing.JPasswordField jPasswordFieldAdminUserPassword2;
     private javax.swing.JPasswordField jPasswordFieldPassword;
     private javax.swing.JProgressBar jProgressBar1;
     private javax.swing.JScrollPane jScrollPane1;
