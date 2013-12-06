@@ -13,10 +13,7 @@ GlassFish Application Server 3.1 Java EE Application 6.0//EN"
     <role-name>LAGERVERWALTER</role-name>
     <group-name>LAGERVERWALTER</group-name>
   </security-role-mapping>
-  <security-role-mapping>
-    <role-name>BENUTZER</role-name>
-    <group-name>BENUTZER</group-name>
-  </security-role-mapping>
+  
    
   <security-role-mapping>
     <role-name>LAGERARBEITER</role-name>
