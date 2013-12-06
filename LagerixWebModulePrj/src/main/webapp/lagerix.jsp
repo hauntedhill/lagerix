@@ -77,10 +77,14 @@
                                 </div>  
                                 <hr>
                                 <div class="row">
-                                    <label for="ipStorage" class="col-sm-3 control-label">Artikel in Lager</label>
-                                    <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm " disabled id="ipStorage" name="ipStorage">
-                                    </div>                        
+                                    <label for="ipStorageName" class="col-sm-3 control-label">Artikel in Lager</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" class="form-control input-sm " disabled id="ipStorageName" name="ipStorageName">
+                                    </div>      
+                                      <label for="ipStorageId" class="col-sm-2 control-label">Lager-ID</label>
+                                    <div class="col-sm-2">
+                                        <input type="text" class="form-control input-sm " disabled id="ipStorageId" name="ipStorageId">
+                                    </div>  
                                 </div> 
                                 <div class="row" style="padding: 10px">
                                     <div class="panel-group" id="accordionStorageOccupansy">

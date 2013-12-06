@@ -47,17 +47,7 @@ $(document).on("click", "#btnChangeMinimumStock", function() {
             $("button[name='btnChangeMinimumStockAbort']").css('visibility', 'hidden');
             $("button[name='btnChangeMinimumStockConfirm']").css('visibility', 'hidden');
             $("button[name='btnChangeMinimumStock']").css('visibility', 'visible');
-            var articleTypeId = $("#ipArticleTypeId").val();
-            $.ajax({
-                url: urlGlobal + "simplesearch",
-                type: "GET",
-                data: "ipIdSimpleSearch=" + articleTypeId,
-                cache: false,
-                dataType: "json",
-                success: function(data, textStatus, jqXHR) {
-                    displayArticleType(data, textStatus, jqXHR);
-                }
-            });
+            
         }
     }
     return false;
@@ -74,10 +64,9 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
         cache: false,
         dataType: "text",
         contentType: "application/x-www-form-urlencoded",
-        success: function(data, textStatus, jqXHR) {
-        }
+        success: function(){$("#btnChangeMinimumStock").click();}
     });
-    $("#btnChangeMinimumStock").click();
+    
     return false;
 });
 
@@ -170,7 +159,8 @@ function displayArticleType(data, textStatus, jqXHR) {
     $("#ipName").val(data.name);
     $("#textareaDescription").val(data.description);
     $("#ipMinimumStock").val(data.minimumStock);
-    $("#ipStorage").val(data.storageID);
+    $("#ipStorageId").val(data.storageId);
+    $("#ipStorageName").val(data.storageName);
     $("#ipCurrentStock").val(data.currentStock);
     var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
