@@ -4,7 +4,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"
 %><%@ taglib uri='http://java.sun.com/jsp/jstl/core' prefix='c' 
 %><c:if test="${pageContext.request.userPrincipal!=null}">
-    <c:redirect url="/secure/index.jsp"/>
+    <c:redirect url="/secure/lagerix.jsp"/>
     <!-- this will redirect if user is already logged in -->
 </c:if>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
@@ -61,7 +61,7 @@
                         //alert("success");
                         if (data.status == "SUCCESS" ){
                            //redirect to secured page
-                           window.location.replace("http://"+window.location.host+"<%=request.getContextPath() %>/secure/index.jsp");
+                           window.location.replace("http://"+window.location.host+"<%=request.getContextPath() %>/secure/lagerix.jsp");
                         }else{
                             alert("failed");
                         }
@@ -109,7 +109,7 @@
                         //alert("success");
                         if (data.status == "SUCCESS" ){
                             //redirect to secured page
-                            window.location.replace("http://"+window.location.host+"<%=request.getContextPath() %>/secure/index.jsp");
+                            window.location.replace("http://"+window.location.host+"<%=request.getContextPath() %>/secure/lagerix.jsp");
                         }else{
                             alert("failed");
                         }
@@ -134,7 +134,7 @@
   <body>
     
     <h1>Welcome to our secured Web Application</h1>
-    <a href="<%=request.getContextPath() %>/secure/index.jsp" >go to secured page</a>
+    <a href="<%=request.getContextPath() %>/secure/lagerix.jsp" >go to secured page</a>
     <br/><br/><br/>
       
     <div class="register">

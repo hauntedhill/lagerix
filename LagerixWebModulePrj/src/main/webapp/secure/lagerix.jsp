@@ -10,18 +10,19 @@
     <head>
         <title></title>
         <!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
-        <script src="js/jquery/jquery-1.10.2.min.js"></script> 
-        <link rel="stylesheet" type="text/css" href="css/lagerix-web-app.css">
-        <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-        <script src="js/bootstrap.js"></script>
-        <script src="js/json2.js"></script>         
-        <script src="js/lagerix-web-app.js"></script> 
+        <script src="../js/jquery/jquery-1.10.2.min.js"></script> 
+        <link rel="stylesheet" type="text/css" href="../css/lagerix-web-app.css">
+        <link href="../css/bootstrap.css" rel="stylesheet" media="screen">
+        <script src="../js/bootstrap.js"></script>
+        <script src="../js/json2.js"></script>         
+        <script src="../js/lagerix-web-app.js"></script> 
     </head>
     <body>
         <div class="container">
             <div class="page-header" style="margin: 10px 0px">
-                <img src="images/lagerix-logo.png" alt="Lagerix">
+                <img src="../images/lagerix-logo.png" alt="Lagerix">
                 <form><button type="submit" class="btn btn-default btn-sm" id="btnLogOut"><span class="glyphicon glyphicon-log-out" style="margin: 0px 15px 0px 0px"></span>Abmelden</button></form>
+                <a id="logoutLink" href="<%=request.getContextPath() %>/services/auth/logout" >logout</a>
             </div>
             <div class="row">
                 <div class="col-md-6">               
@@ -30,7 +31,7 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-info-sign" style="margin: 0px 15px 0px 0px"></span>Informationen zu Artikelart </h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="http://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/" autocomplete="off">
+                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="https://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/" autocomplete="off">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
