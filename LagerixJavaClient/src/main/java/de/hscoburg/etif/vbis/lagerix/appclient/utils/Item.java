@@ -12,18 +12,18 @@ package de.hscoburg.etif.vbis.lagerix.appclient.utils;
  */
  public class Item
  {
-        private int id;
+        private Object obj;
         private String description;
 
-        public Item(int id, String description)
+        public Item(Object obj, String description)
         {
-            this.id = id;
+            this.obj = obj;
             this.description = description;
         }
 
-        public int getId()
+        public Object getObj()
         {
-            return id;
+            return obj;
         }
 
         public String getDescription()
