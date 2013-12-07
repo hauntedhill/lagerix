@@ -30,5 +30,16 @@
     <string name="error_invalid_email">Die E-Mail-Adresse ist ungültig</string>
     <string name="error_incorrect_password">Das Passwort ist ungültig</string>
     <string name="error_field_required">Dieses Feld muss ausgefüllt werden</string>
+    
+    <!-- Strings related to logout -->
+    <string name="title_activity_logout">Abmelden</string>
+    <string name="action_logout">Abmelden</string>
+    <string name="logout_progress_signing_out">Abmelden&#8230;</string>
+
+    <!-- Strings related to settings -->
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="pref_header_general">Allgemein</string>
+    <string name="pref_ip_name">IP-Adresse</string>
+    <string name="pref_ip_defaultValue">https://10.185.45.1:8181</string>
 
 </resources>

@@ -2,6 +2,11 @@ package de.hscoburg.etif.vbis.lagerix.android;
 
 import java.security.KeyStore;
 
+import org.apache.http.client.params.ClientPNames;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;
@@ -9,7 +14,6 @@ import com.loopj.android.http.RequestParams;
 
 public class LagerixRestClient {
 
-	private static final String BASE_URL = "https://10.185.45.1:8181/lagerix/";
 	private static AsyncHttpClient client;
 	static {
 		client = new AsyncHttpClient();
@@ -22,14 +26,15 @@ public class LagerixRestClient {
 		    }
 		    catch (Exception e) {   
 		    }
+		client.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 	}
 
 	public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-		client.get(getAbsoluteUrl(url), params, responseHandler);
+		client.get(url, params, responseHandler);
 	}
 
 	public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-		client.post(getAbsoluteUrl(url), params, responseHandler);
+		client.post(url, params, responseHandler);
 	}
 
 	public static void addHeader(String header, String value) {
@@ -38,10 +43,6 @@ public class LagerixRestClient {
 
 	public static void removeHeader(String header) {
 		client.removeHeader(header);
-	}
-
-	private static String getAbsoluteUrl(String relativeUrl) {
-		return BASE_URL + relativeUrl;
 	}
 
 }

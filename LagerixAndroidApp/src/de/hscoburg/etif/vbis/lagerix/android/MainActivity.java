@@ -3,8 +3,11 @@ package de.hscoburg.etif.vbis.lagerix.android;
 import java.util.Calendar;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -22,6 +25,7 @@ public class MainActivity extends Activity {
 	RadioButton bookedIn;
 	String userID = "1111";
 	TextView restResult;
+	String baseURL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +38,9 @@ public class MainActivity extends Activity {
 		bookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
 		
 		restResult = (TextView) findViewById(R.id.label_restResult);
+		
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		baseURL = sharedPref.getString("server_ip", "localhost:8080");
 	}
 	
 	@Override
@@ -49,11 +56,14 @@ public class MainActivity extends Activity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_search:
-	        	Intent intent = new Intent(this, SearchFormActivity.class);
-	        	startActivity(intent);
+	        	Intent searchIntent = new Intent(this, SearchFormActivity.class);
+	        	startActivity(searchIntent);
 	            return true;
-	        case R.id.action_settings:
-	            return true;
+	        case R.id.action_logout:
+	        	Intent logoutIntent = new Intent(this, LogoutActivity.class);
+	        	startActivity(logoutIntent);
+	        	finish();
+	        	return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
@@ -101,7 +111,7 @@ public class MainActivity extends Activity {
 				params.put("bookedIn", "false");
 			params.put("userID", userID);
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
-			LagerixRestClient.post("services/secure/book/saveEntry", params, new TextHttpResponseHandler() {
+			LagerixRestClient.post(baseURL+"/lagerix/services/secure/book/saveEntry", params, new TextHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 					restResult.setText("Erfolg!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody);

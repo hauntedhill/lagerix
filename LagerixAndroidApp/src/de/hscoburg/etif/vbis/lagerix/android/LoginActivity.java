@@ -7,13 +7,17 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -42,12 +46,19 @@ public class LoginActivity extends Activity {
 	
 	//Result of login call
 	String loginResult = "";
+	
+	//IP address from settings
+	String baseURL;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_login);
+		
+		PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		baseURL = sharedPref.getString("server_ip", "localhost:8080");
 
 		// Set up the login form.
 		mEmailView = (EditText) findViewById(R.id.email);
@@ -84,6 +95,19 @@ public class LoginActivity extends Activity {
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_login_actions, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	        	Intent intent = new Intent(this, SettingsActivity.class);
+	        	startActivity(intent);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	/**
@@ -187,7 +211,7 @@ public class LoginActivity extends Activity {
 
 		// This first REST request checks if the supplied credentials are valid.
 		// It is required because the actual login request doesn't return a proper status.
-		LagerixRestClient.post("services/auth/login", restParams, new JsonHttpResponseHandler() {
+		LagerixRestClient.post(baseURL+"/lagerix/services/auth/login", restParams, new JsonHttpResponseHandler() {
 
 			// The first REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
@@ -203,18 +227,19 @@ public class LoginActivity extends Activity {
 	        			loginParams.put("j_password", mPassword);
 	        			
 	        			// This second REST request performs the actual login.
-	        			LagerixRestClient.post("secure/j_security_check", loginParams, new TextHttpResponseHandler() {
+	        			LagerixRestClient.post(baseURL+"/lagerix/secure/j_security_check", loginParams, new TextHttpResponseHandler() {
 	        				// The second REST request was successful. The first REST request already checked the user credentials, so we can forward to the main application.
 	        				@Override
 	        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 	        					showProgress(false);
 	        					Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 	        			    	startActivity(intent);
+	        			    	finish();
 	        				}
 	        				// The second REST request failed due to a server error.
 	        				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
-	        					Log.e("First REST-Request", "Error: "+responseBody);
-	        					Log.e("First REST-Request", "Statuscode: "+statusCode);
+	        					Log.e("Second REST-Request", "Error: "+responseBody);
+	        					Log.e("Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
 	        				}
 	        			});
@@ -235,8 +260,8 @@ public class LoginActivity extends Activity {
 			
 			//The first REST request failed due to a server error.
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
-				Log.e("Second REST-Request", "Error: "+responseBody);
-				Log.e("Second REST-Request", "Statuscode: "+statusCode);
+				Log.e("First REST-Request", "Error: "+responseBody);
+				Log.e("First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
 
 			}
