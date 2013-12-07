@@ -1,27 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    
-    <!--  Global strings -->
+    <!-- Global strings -->
     <string name="app_name">Lagerix</string>
-    
-    <!--  Action bar strings -->
+
+    <!-- Action bar strings -->
     <string name="action_settings">Settings</string>
     <string name="action_search">Search</string>
-    
-    <!--  Strings related to barcode scanning -->
+
+    <!-- Strings related to barcode scanning -->
     <string name="scan_barcode">Scan barcode</string>
     <string name="identified_barcode_article">Identified Article:</string>
     <string name="identified_barcode_storage">Identified Storage:</string>
     <string name="book_in">Book In</string>
     <string name="book_out">Book Out</string>
     <string name="send_data">Send data</string>
-    
-    <!--  Strings related to search -->
+
+    <!-- Strings related to search -->
     <string name="label_searchIntro">Enter a search key to search for articles:</string>
     <string name="title_activity_search_form">Article search</string>
     <string name="title_activity_search_result">Result</string>
-    
+
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -31,5 +30,16 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+
+    <!-- Strings related to logout -->
+    <string name="title_activity_logout">Sign out</string>
+    <string name="action_logout">Sign out</string>
+    <string name="logout_progress_signing_out">Signing out&#8230;</string>
+
+    <!-- Strings related to settings -->
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_header_general">General</string>
+    <string name="pref_ip_name">IP address</string>
+    <string name="pref_ip_defaultValue">https://10.185.45.1:8181</string>
 
 </resources>
