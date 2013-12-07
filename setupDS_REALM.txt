@@ -1,6 +1,6 @@
 Emailressource anlegen:
 
-asadmin create-javamail-resource --mailhost mail.gmx.net --mailuser lagerix@gmx.de --fromaddress lagerix@gmx.de --property mail.smtp.password=lagerix123:mail.smtp.auth=true mail/Email1
+asadmin create-javamail-resource --mailhost mail.gmx.net --mailuser lagerix@gmx.de --fromaddress lagerix@gmx.de --property mail.smtp.password=lagerix123:mail.smtp.auth=true mail/Email
 
 Realm anlegen:
 
