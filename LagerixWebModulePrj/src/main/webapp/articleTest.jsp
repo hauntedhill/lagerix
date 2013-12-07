@@ -15,6 +15,9 @@
 InitialContext ctx =new InitialContext();
 /* Nachfolgender JNDI-Name hat funktioniert
 bei Start des Clients in NetBeans 7.0.1 */
+
+request.login("test@test.de", "test");
+
 String
 ejb_jndi_name
 ="java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/ArticleManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface";

@@ -63,6 +63,9 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
     @RolesAllowed({"LAGERVERWALTER"})
     public void deleteYard(int yardID) {
         Yard y = yardDAO.findById(Yard.class, yardID);
+        if (y.getStorage() != null) {
+            y.getStorage().getYards().remove(y);
+        }
         yardDAO.remove(y);
     }
 
