@@ -35,6 +35,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
     @EJB
     private StorageDAO storageDAO;
 
+    @RolesAllowed({"ADMINISTRATOR"})
     public UserDTO find(String email) {
         User u = userDAO.find(email);
         if (u != null) {
@@ -62,6 +63,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         }
     }
 
+    @RolesAllowed({"ADMINISTRATOR"})
     public void editUserGroups(UserDTO user) {
         User u = userDAO.find(user.getEmail());
 
@@ -104,6 +106,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         userDAO.merge(u);
     }
 
+    @RolesAllowed({"ADMINISTRATOR"})
     public void register(UserDTO user) {
 
         User u = new User();
@@ -146,6 +149,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         userDAO.save(u);
     }
 
+    @RolesAllowed({"ADMINISTRATOR"})
     public List<UserDTO> getAllUsers() {
         List<User> users = userDAO.findAll();
 
@@ -163,7 +167,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         return DTOConverter.convertUser(users);
     }
 
-    @RolesAllowed("ADMINISTRATOR")
+    @RolesAllowed({"ADMINISTRATOR"})
     public void deleteUser(String userName) {
 
         User u = userDAO.find(userName);

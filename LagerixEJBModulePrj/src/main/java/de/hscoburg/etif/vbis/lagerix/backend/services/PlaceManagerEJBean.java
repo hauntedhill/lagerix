@@ -20,6 +20,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
@@ -46,6 +47,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
     @Resource
     SessionContext scxt;
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public YardDTO createNewYard(int storageID) {
         Storage s = storageDAO.findById(Storage.class, storageID);
 
@@ -58,11 +60,13 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public void deleteYard(int yardID) {
         Yard y = yardDAO.findById(Yard.class, yardID);
         yardDAO.remove(y);
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public List<YardDTO> getAllYards(int storageID) {
         Storage s = storageDAO.findById(Storage.class, storageID);
 
@@ -70,6 +74,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public StorageDTO createNewStorage(String name) {
 
         Storage s = new Storage();
@@ -82,10 +87,12 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public void deleteStorage(int storageID) {
         storageDAO.remove(storageDAO.findById(Storage.class, storageID));
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public List<StorageDTO> getStorages() {
 
         User u = userDAO.find(scxt.getCallerPrincipal().getName());
@@ -101,17 +108,20 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
         return DTOConverter.convertStorage(storages);
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public List<StorageDTO> getAllStorages() {
 
         return DTOConverter.convertStorage(storageDAO.getAllStorages());
     }
 
+    @RolesAllowed({"EINKAEUFER", "LAGERVERWALTER"})
     public List<YardDTO> getYardsForArticleType(int articleTypeID) {
 
         return DTOConverter.convertYard(yardDAO.getYardsForArticleType(articleTypeID));
 
     }
 
+    @RolesAllowed({"EINKAEUFER", "LAGERVERWALTER"})
     public List<YardDTO> getAllYardsForStorage(int storageID) {
 
         Storage storage = storageDAO.findById(Storage.class, storageID);
@@ -120,6 +130,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
+    @RolesAllowed({"LAGERVERWALTER"})
     public StorageDTO getStorage(int storageId) {
         return DTOConverter.convert(storageDAO.findById(Storage.class, storageId));
     }

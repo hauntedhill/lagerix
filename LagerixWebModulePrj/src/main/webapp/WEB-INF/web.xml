@@ -47,7 +47,8 @@
       
         <!-- only users with at least one of these roles are allowed to access the secured content -->
         <auth-constraint>
-            <role-name>ADMINISTRATOR</role-name>
+            <role-name>EINKAEUFER</role-name>
+            <role-name>LAGERARBEITER</role-name>
         </auth-constraint>
   
         <!-- we always want https! -->
