@@ -74,7 +74,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR"})
     public StorageDTO createNewStorage(String name) {
 
         Storage s = new Storage();
@@ -87,7 +87,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR"})
     public void deleteStorage(int storageID) {
         storageDAO.remove(storageDAO.findById(Storage.class, storageID));
     }
@@ -108,7 +108,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
         return DTOConverter.convertStorage(storages);
     }
 
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR"})
     public List<StorageDTO> getAllStorages() {
 
         return DTOConverter.convertStorage(storageDAO.getAllStorages());
@@ -130,7 +130,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
 
     }
 
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR"})
     public StorageDTO getStorage(int storageId) {
         return DTOConverter.convert(storageDAO.findById(Storage.class, storageId));
     }
