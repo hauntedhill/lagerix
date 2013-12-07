@@ -59,22 +59,7 @@
   
     </security-constraint>
   
-    <!-- declare the roles relevant for our webapp -->
-    <security-role>
-        <role-name>ADMINISTRATOR</role-name>
-    </security-role>
-    <security-role>
-        <role-name>BENUTZER</role-name>
-    </security-role>
-    <security-role>
-        <role-name>LAGERARBEITER</role-name>
-    </security-role>
-    <security-role>
-        <role-name>EINKAEUFER</role-name>
-    </security-role>
-    <security-role>
-        <role-name>LAGERVERWALTER</role-name>
-    </security-role>
+    
    
     <session-config>
         <!-- on productive systems you might have another value for the timeout -->
