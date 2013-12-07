@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
@@ -17,61 +16,74 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface PlaceManagerEJBRemoteInterface {
- /**
- * Creates a new StorageLocation
- * @param storageID id of the storage
- * @return The newly created StorageLocation
-*/
-public YardDTO createNewYard(int storageID);
 
-/**
- * Deletes a StorageLocation
- * @param storageLocationID id of the storage location
-*/
-public void deleteYard(int yardID);
+    /**
+     * Creates a new StorageLocation
+     *
+     * @param storageID id of the storage
+     * @return The newly created StorageLocation
+     */
+    public YardDTO createNewYard(int storageID);
 
-/**
- * Gets all StoragesLocations
- * @param storageID id of the storage
- * @return A List of all StorageLocations for the Storage
-*/
-public List<YardDTO> getAllYards(int storageID);
+    /**
+     * Deletes a StorageLocation
+     *
+     * @param storageLocationID id of the storage location
+     */
+    public void deleteYard(int yardID);
 
-/**
- * Creates a new Storage
- * @param name name of the storage
- * @return The newly created Storage
-*/
-public StorageDTO createNewStorage(String name);
+    /**
+     * Gets all StoragesLocations
+     *
+     * @param storageID id of the storage
+     * @return A List of all StorageLocations for the Storage
+     */
+    public List<YardDTO> getAllYards(int storageID);
 
-/**
- * Deletes a Storage
- * @param storageID 
-*/
-public void deleteStorage(int storageID);
+    /**
+     * Creates a new Storage
+     *
+     * @param name name of the storage
+     * @return The newly created Storage
+     */
+    public StorageDTO createNewStorage(String name);
 
-/**
- * Gets the associated Storage for the logged in User
- * @return The Storage Object for which the user is in charge
-*/
-public List<StorageDTO> getStorages();
+    /**
+     * Deletes a Storage
+     *
+     * @param storageID
+     */
+    public void deleteStorage(int storageID);
 
-/**
- * Gets all Storages
- * @return Returns all available Storages
-*/
-public List<StorageDTO> getAllStorages();
+    /**
+     * Gets the associated Storage for the logged in User
+     *
+     * @return The Storage Object for which the user is in charge
+     */
+    public List<StorageDTO> getStorages();
 
-/**
- * Returns all storage locations for a specific storage
- * @param storageID ID of the requested storage
- * @return List of all storage locations for the requested storage
- */
-public List<YardDTO> getAllYardsForStorage(int storageID);
-/**
- * Returns all storage locations where a specified article type if currently stored
- * @param articleTypeID ID of the requested article type
- * @return List of storage locations
- */
-public List<YardDTO> getYardsForArticleType(int articleTypeID);
+    public StorageDTO getStorage(int storageId);
+
+    /**
+     * Gets all Storages
+     *
+     * @return Returns all available Storages
+     */
+    public List<StorageDTO> getAllStorages();
+
+    /**
+     * Returns all storage locations for a specific storage
+     *
+     * @param storageID ID of the requested storage
+     * @return List of all storage locations for the requested storage
+     */
+    public List<YardDTO> getAllYardsForStorage(int storageID);
+
+    /**
+     * Returns all storage locations where a specified article type if currently stored
+     *
+     * @param articleTypeID ID of the requested article type
+     * @return List of storage locations
+     */
+    public List<YardDTO> getYardsForArticleType(int articleTypeID);
 }
