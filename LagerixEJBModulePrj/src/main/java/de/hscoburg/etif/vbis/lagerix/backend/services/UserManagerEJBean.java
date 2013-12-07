@@ -14,12 +14,15 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
+import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 /**
@@ -34,6 +37,9 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
 
     @EJB
     private StorageDAO storageDAO;
+
+    @Resource
+    private SessionContext sctx;
 
     @RolesAllowed({"ADMINISTRATOR"})
     public UserDTO find(String email) {
@@ -178,6 +184,10 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
             userDAO.remove(u);
         }
 
+    }
+
+    public boolean isInGroup(GroupType group) {
+        return sctx.isCallerInRole(group.name());
     }
 
 }
