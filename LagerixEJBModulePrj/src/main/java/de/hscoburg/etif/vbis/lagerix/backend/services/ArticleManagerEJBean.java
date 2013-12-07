@@ -9,12 +9,15 @@ import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleTypeDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.MovementDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
+import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.dao.YardDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
@@ -24,9 +27,16 @@ import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 
 /**
  *
@@ -50,8 +60,17 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
     @EJB
     private StorageDAO storageDAO;
 
+    @EJB
+    private UserDAO userDAO;
+
+    @Resource(name = "mail/Email")
+    private Session mailSession;
+
     @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
     public int saveMovementEntry(MovementDTO entry, int yardID) {
+
+        Message msg = new MimeMessage(mailSession);
+
         Yard yard = yardDAO.findById(Yard.class, yardID);
 
         Article article = articleDAO.findById(Article.class, entry.getArticleID());
@@ -67,6 +86,28 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
         } else {
             m.setMovement(Movements.RELEASE);
             article.setYard(null);
+
+            if (articleTypeDAO.getArticleTypeStock(article.getArticleType()) - 1 < article.getArticleType().getMinimumStock()) {
+                try {
+
+                    List<User> einkaeufer = userDAO.findAllByGroupAndStorage(Group.EINKAEUFER, article.getArticleType().getStorage());
+                    if (einkaeufer != null && einkaeufer.size() > 0) {
+                        msg.setSubject("Lagerbestand unterschritten für " + article.getArticleType().getName());
+
+                        for (User u : einkaeufer) {
+                            msg.setRecipient(Message.RecipientType.TO,
+                                    new InternetAddress(u.getEmail()));
+                        }
+
+                        //msg.setFrom(new InternetAddress("lagerix@gmx.de"));
+                        msg.setText("Sehr geehrter Einkäufer,\n\nder Meldebestand für " + article.getArticleType().getName() + " wurde unterschritten.\n\nMit freundlichen Grüßen\n\nIhr Lagerix");
+
+                        Transport.send(msg);
+                    }
+                } catch (MessagingException me) {
+                    me.printStackTrace();
+                }
+            }
         }
         m.setArticle(article);
         m.setTime(new Date());
