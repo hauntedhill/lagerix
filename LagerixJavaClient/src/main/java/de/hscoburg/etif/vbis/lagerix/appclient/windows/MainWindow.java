@@ -21,11 +21,16 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
+import static de.hscoburg.etif.vbis.lagerixjavaclient.Main.serverConfig;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileReader;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -58,26 +63,21 @@ import javax.swing.table.DefaultTableModel;
  * @author tima0900
  */
 public class MainWindow extends javax.swing.JFrame {
-
+    private JPanelStockManagerArticletypes jPanelStockManagerArticletypes = null;
     private ArticleManagerEJBRemoteInterface articleManager = null;
     private UserManagerEJBRemoteInterface userManager = null;
     private PlaceManagerEJBRemoteInterface placeManager = null;
-    private UserDTO loggedInUsr = null;
     private boolean initDone = false;
     private ProgrammaticLogin pl = new ProgrammaticLogin();
+    private MainWindow thisWindow = this;
+    private JPanelAdminUsers jPanelAdminUsers = null;
+    private JPanelAdminStorages jPanelAdminStorages = null;
+    private JPanelStockManagerYards jPanelStockManagerYards = null;
     /**
      * Creates new form MainWindow
      */
     public MainWindow() {
-        initComponents();    
-        
-        jTableAdminUsers.getSelectionModel().addListSelectionListener(
-    new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                JTableAdminUserValueChanged(e);
-            }
-    }
-);
+        initComponents();
         initDone = true;
     }
 
@@ -119,11 +119,6 @@ public class MainWindow extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jDialog1 = new javax.swing.JDialog();
-        jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
         jPanelWindow = new javax.swing.JPanel();
         jPanelControls = new javax.swing.JPanel();
         jLabelControlsHeader = new javax.swing.JLabel();
@@ -139,130 +134,11 @@ public class MainWindow extends javax.swing.JFrame {
         jPanelAdministrator = new javax.swing.JPanel();
         jButton5 = new javax.swing.JButton();
         jTabbedPaneAdministrator = new javax.swing.JTabbedPane();
-        jPanelAdminUsers = new javax.swing.JPanel();
-        jScrollPaneAdminUserManagment = new javax.swing.JScrollPane();
-        jTableAdminUsers = new javax.swing.JTable();
-        jPanel4 = new javax.swing.JPanel();
-        jPanel8 = new javax.swing.JPanel();
-        jTextFieldAdminUserFirstName = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jTextFieldAdminUserName = new javax.swing.JTextField();
-        jTextFieldAdminUserLastName = new javax.swing.JTextField();
-        jPasswordFieldAdminUserPassword = new javax.swing.JPasswordField();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jComboBoxAdminUserStorage = new javax.swing.JComboBox();
-        jLabelAdminUserStorage = new javax.swing.JLabel();
-        jComboBoxAdminUserGroup = new javax.swing.JComboBox();
-        jButtonAdminUserEditAndSave = new javax.swing.JButton();
-        jButtonAdminUserDeleteAndDiscard = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jPasswordFieldAdminUserPassword2 = new javax.swing.JPasswordField();
-        jButtonAdminUserNewUser = new javax.swing.JButton();
-        jPanelAdminStorages = new javax.swing.JPanel();
-        jScrollPaneAdminStorageManagment = new javax.swing.JScrollPane();
-        jButtonAdminNewStorage = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jTextFieldAdminNewStorageName = new javax.swing.JTextField();
         JPanelStockManOverview = new javax.swing.JPanel();
         jTabbedPaneStockMan = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
-        jButtonCreateYard = new javax.swing.JButton();
-        jScrollPaneStockManYards = new javax.swing.JScrollPane();
-        jPanel2 = new javax.swing.JPanel();
-        jScrollPaneStockArticletypes = new javax.swing.JScrollPane();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jTextFieldArticletypeName = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTextAreaArticleTypeDescription = new javax.swing.JTextArea();
-        jButtonCreateArticletype = new javax.swing.JButton();
-        jPanel6 = new javax.swing.JPanel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
-        jPanel7 = new javax.swing.JPanel();
-        jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jComboBoxStockManStorages = new javax.swing.JComboBox();
-        jLabel6 = new javax.swing.JLabel();
-        jButtonUpdateStorages = new javax.swing.JButton();
         jPanelBusyIndicator = new javax.swing.JPanel();
         jProgressBar1 = new javax.swing.JProgressBar();
-
-        jDialog1.setAlwaysOnTop(true);
-        jDialog1.setMinimumSize(new java.awt.Dimension(269, 170));
-        jDialog1.setModal(true);
-        jDialog1.setResizable(false);
-        jDialog1.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                jDialog1WindowActivated(evt);
-            }
-        });
-        jDialog1.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                jDialog1ComponentShown(evt);
-            }
-        });
-
-        jLabel5.setText("Bitte wählen Sie einen Drucker aus:");
-
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
-
-        jButton2.setText("Drucken");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
-
-        jButton3.setText("Abbruch");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
-        jDialog1.getContentPane().setLayout(jDialog1Layout);
-        jDialog1Layout.setHorizontalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jDialog1Layout.setVerticalGroup(
-            jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jDialog1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel5)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(29, 29, 29)
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
-                .addContainerGap(35, Short.MAX_VALUE))
-        );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Lagerix");
@@ -372,227 +248,6 @@ public class MainWindow extends javax.swing.JFrame {
                 jTabbedPaneAdministratorStateChanged(evt);
             }
         });
-
-        jPanelAdminUsers.setPreferredSize(new java.awt.Dimension(750, 300));
-        jPanelAdminUsers.setLayout(new java.awt.GridBagLayout());
-
-        jScrollPaneAdminUserManagment.setMaximumSize(null);
-        jScrollPaneAdminUserManagment.setMinimumSize(null);
-
-        jTableAdminUsers.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Title 1", "Title 2"
-            }
-        ));
-        jTableAdminUsers.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jTableAdminUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jScrollPaneAdminUserManagment.setViewportView(jTableAdminUsers);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        jPanelAdminUsers.add(jScrollPaneAdminUserManagment, gridBagConstraints);
-
-        jPanel4.setLayout(new java.awt.GridBagLayout());
-
-        jPanel8.setLayout(new java.awt.GridBagLayout());
-
-        jTextFieldAdminUserFirstName.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jTextFieldAdminUserFirstName, gridBagConstraints);
-
-        jLabel13.setText("Nachname:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jLabel13, gridBagConstraints);
-
-        jTextFieldAdminUserName.setColumns(20);
-        jTextFieldAdminUserName.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jTextFieldAdminUserName, gridBagConstraints);
-
-        jTextFieldAdminUserLastName.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jTextFieldAdminUserLastName, gridBagConstraints);
-
-        jPasswordFieldAdminUserPassword.setEnabled(false);
-        jPasswordFieldAdminUserPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordFieldAdminUserPasswordActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jPasswordFieldAdminUserPassword, gridBagConstraints);
-
-        jLabel14.setText("Passwort:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jLabel14, gridBagConstraints);
-
-        jLabel12.setText("Vorname:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jLabel12, gridBagConstraints);
-
-        jLabel11.setText("Benutzername:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jLabel11, gridBagConstraints);
-
-        jLabel15.setText("Benutzergruppe:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jLabel15, gridBagConstraints);
-
-        jComboBoxAdminUserStorage.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jComboBoxAdminUserStorage, gridBagConstraints);
-
-        jLabelAdminUserStorage.setText("Zustaendig fuer Lager:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 6;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jLabelAdminUserStorage, gridBagConstraints);
-
-        jComboBoxAdminUserGroup.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jComboBoxAdminUserGroup, gridBagConstraints);
-
-        jButtonAdminUserEditAndSave.setText("Bearbeiten");
-        jButtonAdminUserEditAndSave.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAdminUserEditAndSaveActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel8.add(jButtonAdminUserEditAndSave, gridBagConstraints);
-
-        jButtonAdminUserDeleteAndDiscard.setText("Löschen");
-        jButtonAdminUserDeleteAndDiscard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAdminUserDeleteAndDiscardActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 7;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel8.add(jButtonAdminUserDeleteAndDiscard, gridBagConstraints);
-
-        jLabel3.setText("Passwort Wiederholung:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        jPanel8.add(jLabel3, gridBagConstraints);
-
-        jPasswordFieldAdminUserPassword2.setEnabled(false);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        jPanel8.add(jPasswordFieldAdminUserPassword2, gridBagConstraints);
-
-        jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
-        jButtonAdminUserNewUser.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAdminUserNewUserActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
-        jPanel8.add(jButtonAdminUserNewUser, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        jPanel4.add(jPanel8, gridBagConstraints);
-
-        jPanelAdminUsers.add(jPanel4, new java.awt.GridBagConstraints());
-
-        jTabbedPaneAdministrator.addTab("Benutzerverwaltung", jPanelAdminUsers);
-
-        jButtonAdminNewStorage.setText("Lager erstellen");
-        jButtonAdminNewStorage.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonAdminNewStorageActionPerformed(evt);
-            }
-        });
-
-        jLabel4.setText("Lagername:");
-
-        javax.swing.GroupLayout jPanelAdminStoragesLayout = new javax.swing.GroupLayout(jPanelAdminStorages);
-        jPanelAdminStorages.setLayout(jPanelAdminStoragesLayout);
-        jPanelAdminStoragesLayout.setHorizontalGroup(
-            jPanelAdminStoragesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanelAdminStoragesLayout.createSequentialGroup()
-                .addComponent(jScrollPaneAdminStorageManagment, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanelAdminStoragesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonAdminNewStorage)
-                    .addGroup(jPanelAdminStoragesLayout.createSequentialGroup()
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextFieldAdminNewStorageName, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanelAdminStoragesLayout.setVerticalGroup(
-            jPanelAdminStoragesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPaneAdminStorageManagment)
-            .addGroup(jPanelAdminStoragesLayout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addGroup(jPanelAdminStoragesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jTextFieldAdminNewStorageName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButtonAdminNewStorage)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        jTabbedPaneAdministrator.addTab("Lagerverwaltung", jPanelAdminStorages);
-
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -605,175 +260,20 @@ public class MainWindow extends javax.swing.JFrame {
         jPanelControlsMain.add(jPanelAdministrator, "AdminCard");
 
         JPanelStockManOverview.setEnabled(false);
-        JPanelStockManOverview.setMaximumSize(null);
+        JPanelStockManOverview.setLayout(new java.awt.GridBagLayout());
 
         jTabbedPaneStockMan.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTabbedPaneStockManStateChanged(evt);
             }
         });
-
-        jPanel1.setName("Lagerverwaltung"); // NOI18N
-
-        jButtonCreateYard.setText("Neuen Lagerplatz erstellen");
-        jButtonCreateYard.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCreateYardActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPaneStockManYards, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButtonCreateYard)
-                .addContainerGap(927, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jButtonCreateYard)
-                .addGap(0, 517, Short.MAX_VALUE))
-            .addComponent(jScrollPaneStockManYards)
-        );
-
-        jTabbedPaneStockMan.addTab("Lagerverwaltung", jPanel1);
-
-        jPanel2.setName("Artikelverwaltung"); // NOI18N
-
-        jLabel7.setText("Artikeltypname:");
-
-        jLabel8.setText("Artikeltypbeschreibung:");
-
-        jTextAreaArticleTypeDescription.setColumns(20);
-        jTextAreaArticleTypeDescription.setRows(5);
-        jScrollPane2.setViewportView(jTextAreaArticleTypeDescription);
-
-        jButtonCreateArticletype.setText("Artikeltyp erstellen");
-        jButtonCreateArticletype.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonCreateArticletypeActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jScrollPaneStockArticletypes, javax.swing.GroupLayout.PREFERRED_SIZE, 372, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel7)
-                            .addGap(43, 43, 43)
-                            .addComponent(jTextFieldArticletypeName))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addComponent(jLabel8)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jButtonCreateArticletype))
-                .addGap(0, 759, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPaneStockArticletypes)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(jTextFieldArticletypeName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(15, 15, 15)
-                .addComponent(jButtonCreateArticletype)
-                .addContainerGap(357, Short.MAX_VALUE))
-        );
-
-        jTabbedPaneStockMan.addTab("Artikelverwaltung", jPanel2);
-
-        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        jList1.setToolTipText("");
-        jScrollPane3.setViewportView(jList1);
-
-        jLabel9.setText("Artikeltypname:");
-
-        jLabel10.setText("Artikeltypbeschreibung:");
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jButton1.setText("Bearbeiten");
-
-        jButton6.setText("Loeschen");
-
-        jButton7.setText("Neuen Artikel hinzufuegen");
-
-        javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
-        jPanel7.setLayout(jPanel7Layout);
-        jPanel7Layout.setHorizontalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
-                            .addComponent(jLabel9))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jScrollPane1)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                        .addGap(0, 706, Short.MAX_VALUE)
-                        .addComponent(jButton7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1)))
-                .addContainerGap())
-        );
-        jPanel7Layout.setVerticalGroup(
-            jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel7Layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
-                .addContainerGap(340, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
-        jPanel6.setLayout(jPanel6Layout);
-        jPanel6Layout.setHorizontalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel6Layout.createSequentialGroup()
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 378, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel6Layout.setVerticalGroup(
-            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
-            .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-        );
-
-        jTabbedPaneStockMan.addTab("tab3", jPanel6);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        JPanelStockManOverview.add(jTabbedPaneStockMan, gridBagConstraints);
 
         jButton4.setText("Benuzter abmelden");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -781,49 +281,11 @@ public class MainWindow extends javax.swing.JFrame {
                 LogOutUser(evt);
             }
         });
-
-        jComboBoxStockManStorages.setToolTipText("");
-        jComboBoxStockManStorages.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBoxStockManStoragesActionPerformed(evt);
-            }
-        });
-
-        jLabel6.setText("Lager:");
-
-        jButtonUpdateStorages.setText("Lager aktualisieren");
-        jButtonUpdateStorages.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonUpdateStoragesActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout JPanelStockManOverviewLayout = new javax.swing.GroupLayout(JPanelStockManOverview);
-        JPanelStockManOverview.setLayout(JPanelStockManOverviewLayout);
-        JPanelStockManOverviewLayout.setHorizontalGroup(
-            JPanelStockManOverviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(JPanelStockManOverviewLayout.createSequentialGroup()
-                .addComponent(jButton4)
-                .addGap(39, 39, 39)
-                .addComponent(jButtonUpdateStorages)
-                .addGap(41, 41, 41)
-                .addComponent(jLabel6)
-                .addGap(18, 18, 18)
-                .addComponent(jComboBoxStockManStorages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addComponent(jTabbedPaneStockMan)
-        );
-        JPanelStockManOverviewLayout.setVerticalGroup(
-            JPanelStockManOverviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, JPanelStockManOverviewLayout.createSequentialGroup()
-                .addGroup(JPanelStockManOverviewLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton4)
-                    .addComponent(jComboBoxStockManStorages, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6)
-                    .addComponent(jButtonUpdateStorages))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTabbedPaneStockMan))
-        );
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        JPanelStockManOverview.add(jButton4, gridBagConstraints);
 
         jPanelControlsMain.add(JPanelStockManOverview, "UserCard");
 
@@ -852,43 +314,6 @@ public class MainWindow extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     
-    Integer storageId = null;
-    private void createListStorages()
-    {
-        if(!initDone)
-            return;
-        
-        setBusy();
-        
-        SwingWorker worker = new SwingWorker() {
-            @Override
-            protected Object doInBackground() throws Exception {
-                return placeManager.getAllStorages();
-            }
-            
-            @Override
-            public void done() {
-                try {
-                    List<StorageDTO> storages = (List<StorageDTO>) get();
-                    jComboBoxStockManStorages.removeAllItems();
-        
-                    for(StorageDTO storage : storages)
-                    {
-                        jComboBoxStockManStorages.addItem(new Item(storage.getId(), storage.getName()));
-                    }
-
-                    jComboBoxStockManStorages.validate();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-                
-                clearBusy();
-            }
-        };
-        
-        worker.execute();
-    }
-    
     private void jButtonLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogInActionPerformed
         setBusy();
         final String usrName = jTextFieldUserName.getText();
@@ -898,11 +323,53 @@ public class MainWindow extends javax.swing.JFrame {
             @Override
             protected Object doInBackground() throws Exception {
                 try
-                {            
+                {        
                     Properties environment = new Properties();
-                    environment.put("org.omg.CORBA.ORBInitialHost", "localhost");
-                    environment.put("org.omg.CORBA.ORBInitialPort", "3700");		
-                    System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout","5000");
+                    
+                    boolean configLoaded = false;
+                    File f = new File("server.conf");
+                    if(f.exists()) 
+                    {
+                        try
+                        {
+                            BufferedReader br = new BufferedReader(new FileReader("server.conf"));
+                            try {
+                                StringBuilder sb = new StringBuilder();
+                                String line = br.readLine();
+
+                                while (line != null) {
+                                    sb.append(line);
+                                    sb.append('\n');
+                                    line = br.readLine();
+                                }
+                                String fileContent = sb.toString().trim();
+                                String[] splittedtFileContents = fileContent.split(":");
+                                if(splittedtFileContents.length > 1)
+                                {
+                                    environment.put("org.omg.CORBA.ORBInitialHost", splittedtFileContents[0].trim());
+                                    environment.put("org.omg.CORBA.ORBInitialPort", splittedtFileContents[1].trim());
+                                    configLoaded = true;
+                                }
+                            } catch(Exception ex)
+                            {
+
+                            } finally {
+                                br.close();
+                            }
+                        } catch(Exception e)
+                        {
+                        }
+                    }
+		
+                    if(!configLoaded)
+                    {
+                        environment.put("org.omg.CORBA.ORBInitialHost", "localhost");
+                        environment.put("org.omg.CORBA.ORBInitialPort", "3700");
+                        JOptionPane.showMessageDialog(thisWindow, "Fehler beim Laden der server.conf Datei. "
+                                + "Es werden die Standard Einstellungen benutzt.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
+                    
+                    System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout","10000");//10 seconds timeout for connection to glassfish ever
                     System.setProperty("java.security.auth.login.config", "auth.conf");
                 
                     InitialContext ctx = new InitialContext(environment);
@@ -917,7 +384,6 @@ public class MainWindow extends javax.swing.JFrame {
                             ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/UserManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface");
                          //if that works getUserRoles and return it...
                     
-                    loggedInUsr = userManager.find(usrName);
                 } catch (Exception e)
                 {
                     e.printStackTrace();   
@@ -932,43 +398,49 @@ public class MainWindow extends javax.swing.JFrame {
             @Override
             public void done() {
                 try {
-                    if(loggedInUsr != null)
+                    if(userManager != null)
                     {
                         jTextFieldUserName.setText("");
                         jPasswordFieldPassword.setText("");
 
                         jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br></html>");
-                        
-                         List<GroupDTO> userInGroups = loggedInUsr.getGroups();
-                         boolean isAdmin = false;
-                         for(GroupDTO group : userInGroups)
+                     
+                         if(userManager.isInGroup(GroupType.ADMINISTRATOR))
                          {
-                             if(group.getGroup() == GroupType.ADMINISTRATOR)
-                             {
-                                 isAdmin = true;
-                             }
-                         }
-                         
-                         if(isAdmin)
-                         {
-                            createListViewAdminStorages();
-                            createListViewAdminUser();
+                             UserDTO loggedInUsr = userManager.find(usrName);
+                             jPanelAdminUsers = new JPanelAdminUsers(userManager, placeManager, loggedInUsr);
+                             jPanelAdminStorages = new JPanelAdminStorages(placeManager);
+                             jTabbedPaneAdministrator.removeAll();
+                             jTabbedPaneAdministrator.addTab("Benutzerverwaltung", jPanelAdminUsers);
+                             jTabbedPaneAdministrator.addTab("Lagerverwaltung", jPanelAdminStorages);
+                             jPanelAdminUsers.createJTableAdminUsers();
+                             jPanelAdminStorages.createJTableAdminStorage();
+
                             CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
                             cl.show(jPanelControlsMain, "AdminCard");            
                          }
-                         else
+                         else if(userManager.isInGroup(GroupType.LAGERVERWALTER))
                          {
-                            createListStorages();
-                            createListViewStockYards();
-                            createListViewStockArticletypes();
+                            jPanelStockManagerArticletypes = new JPanelStockManagerArticletypes(articleManager, placeManager);
+                            jPanelStockManagerYards = new JPanelStockManagerYards(placeManager);
+                            jTabbedPaneStockMan.removeAll();
+                            jTabbedPaneStockMan.addTab("Lagerplatzverwaltung", jPanelStockManagerYards);
+                            jTabbedPaneStockMan.addTab("Artikelverwaltung", jPanelStockManagerArticletypes);
+                            jPanelStockManagerYards.createJTableStockManagerYards();
+                            jPanelStockManagerArticletypes.createJTableStockManagerArticletypes();
+                            
                             CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
                             cl.show(jPanelControlsMain, "UserCard");   
+                         } else
+                         {
+                             jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br>"
+                                + "<font color='red'>Benutzer ist kein Lagerverwalter oder Administrator.</font></html>");
                          }
                     }
                     else
                     {
                         jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br>"
-                                + "<font color='red'>Anmeldedaten ung&uuml;ltig</font></html>");
+                                + "<font color='red'>Anmeldung nicht m&ouml;lich.</font></html>");
                     }                    
                 } catch (Exception ex) {
                    // ex.printStackTrace();
@@ -981,195 +453,10 @@ public class MainWindow extends javax.swing.JFrame {
        worker.execute();
     }//GEN-LAST:event_jButtonLogInActionPerformed
     
-    private void deleteStorageEvent(java.awt.event.ActionEvent evt) {
-        String cmd = evt.getActionCommand();
-        int id = Integer.parseInt(cmd);
-        placeManager.deleteStorage(id);
-        createListViewAdminStorages();
-    } 
     
-    private void createListViewAdminStorages()
-    {
-        if(!initDone)
-            return;
-        
-        List<StorageDTO> storages = placeManager.getAllStorages();
-        //JPanel panelView = new JPanel();
-        //GridLayout layout = new GridLayout(storages.size(), 1);
-        //panelView.setLayout(layout);
-
-        JPanel help = new JPanel(new BorderLayout());
-        JPanel zeilen = new JPanel(new GridLayout(0, 1, 4, 4));
-        help.add(zeilen, BorderLayout.NORTH);
-        
-        this.jScrollPaneAdminStorageManagment.setViewportView(help);
-      
-        int pos = 0;
-        for(StorageDTO storage : storages)
-        {
-            JPanel panel = new JPanel(new BorderLayout());//(new FlowLayout(FlowLayout.LEFT));
-                                
-            JLabel label = new JLabel();
-            label.setText(storage.getName());
-            
-            JButton btn = new JButton();
-            btn.setText("Lager löschen");
-            btn.setActionCommand(((Integer)storage.getId()).toString());
-            btn.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteStorageEvent(evt);
-            }});
-            
-            panel.add(label, BorderLayout.CENTER);
-            panel.add(btn, BorderLayout.EAST);
-            
-            pos++;
-            zeilen.add(panel);
-        }
-        
-        this.jScrollPaneAdminStorageManagment.validate();
-    }
-    
-    
-    public void JTableAdminUserValueChanged(ListSelectionEvent e) {
-        if(jTableAdminUsers.isEnabled())
-        {
-            if(jTableAdminUsers.getSelectedRow() >= 0)
-            {
-                String userName = (String) jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0);
-                UserDTO selectedUser = userManager.find(userName);
-
-                jTextFieldAdminUserFirstName.setText(selectedUser.getFname());
-                jTextFieldAdminUserLastName.setText(selectedUser.getLname());
-                jTextFieldAdminUserName.setText(selectedUser.getEmail());
-                jPasswordFieldAdminUserPassword.setText("");
-                jPasswordFieldAdminUserPassword2.setText("");
-                List<GroupDTO> groups = selectedUser.getGroups();
-                if(groups.isEmpty()) //User doesn't belong to a Group, not possible make him sth...
-                {
-                    GroupDTO group = new GroupDTO();
-                    group.setGroup(GroupType.ADMINISTRATOR);
-
-                    groups.add(group);
-                    selectedUser.setGroups(groups);
-                    userManager.editUserGroups(selectedUser);
-                }
-
-                DefaultComboBoxModel modelGroups = new DefaultComboBoxModel();
-                Item selectedGroup = null;
-                for(GroupType type : GroupType.values())
-                {
-                    Item itmGroup = new Item(type, type.toString());
-                    if(groups.get(0).getGroup().equals(type))
-                    {
-                        selectedGroup = itmGroup;
-                    }
-                    modelGroups.addElement(itmGroup);
-                }
-
-                jComboBoxAdminUserGroup.setModel(modelGroups);
-                if(selectedGroup != null)
-                {
-                    jComboBoxAdminUserGroup.setSelectedItem(selectedGroup);
-                }
-
-                DefaultComboBoxModel modelStorages = new DefaultComboBoxModel();
-
-                modelStorages.addElement(new Item(null, ""));
-                List<Integer> listStorages = groups.get(0).getStorageId();
-                Item selectedItem = null;
-                for(StorageDTO storage : placeManager.getAllStorages())
-                {
-                    Item itm = new Item(storage, storage.getName());
-                    modelStorages.addElement(itm);
-                    if(!listStorages.isEmpty())
-                    {              
-                        if(listStorages.get(0) == storage.getId())
-                        {
-                            selectedItem = itm;
-                        }
-                    }
-                }
-
-                jComboBoxAdminUserStorage.setModel(modelStorages);
-
-                if(selectedItem != null)
-                {
-                    jComboBoxAdminUserStorage.setSelectedItem(selectedItem);
-                }
-
-                jButtonAdminUserEditAndSave.setEnabled(true);
-                jButtonAdminUserDeleteAndDiscard.setEnabled(true);
-            }
-            else
-            {
-                jButtonAdminUserEditAndSave.setText("Benutzer bearbeiten");
-                jButtonAdminUserEditAndSave.setEnabled(false);
-
-                jButtonAdminUserDeleteAndDiscard.setEnabled(false);
-
-                jTextFieldAdminUserFirstName.setText("");
-                jTextFieldAdminUserLastName.setText("");
-                jTextFieldAdminUserName.setText("");
-                jPasswordFieldAdminUserPassword.setText("");
-                jPasswordFieldAdminUserPassword2.setText("");
-                jComboBoxAdminUserGroup.setModel(new DefaultComboBoxModel());
-                jComboBoxAdminUserStorage.setModel(new DefaultComboBoxModel());
-            }
-        }
-    }
-    
-    private void createListViewAdminUser()
-    {
-        if(!initDone)
-            return;
-        
-        List<UserDTO> users = userManager.getAllUsers();
-
-        DefaultTableModel model = new DefaultTableModel(0, 2);
-        model.setColumnIdentifiers(new Object[] {"Benutzername", "Zugewiesene Rollen"});
-        for(UserDTO user : users)
-        {
-            String groupString = "";
-            List<GroupDTO> groups = user.getGroups();
-            for(GroupDTO group : groups)
-            {
-                groupString += group.getGroup().toString();
-            }
-            
-            model.addRow(new Object[] {user.getEmail(), groupString});
-        }
-        jTableAdminUsers.setModel(model);
-        TableColumnAdjuster tca = new TableColumnAdjuster(jTableAdminUsers);
-        tca.adjustColumns();
-    }
-    
-    private void jDialog1WindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog1WindowActivated
-
-    }//GEN-LAST:event_jDialog1WindowActivated
-
     private PrintService selectedPrintService = null;
     private PrintService pss[] = null;
     
-    private void jDialog1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jDialog1ComponentShown
-
-    }//GEN-LAST:event_jDialog1ComponentShown
-
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        selectedPrintService = pss[jComboBox1.getSelectedIndex()];
-        jDialog1.setVisible(false);
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        selectedPrintService = null;
-        jDialog1.setVisible(false);
-    }//GEN-LAST:event_jButton3ActionPerformed
-
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
     }//GEN-LAST:event_formWindowOpened
@@ -1178,572 +465,71 @@ public class MainWindow extends javax.swing.JFrame {
         CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
         cl.show(jPanelControlsMain, "LogInCard");
         
-        loggedInUsr = null;
         this.JPanelLogin.setVisible(true);
         this.JPanelLogin.setEnabled(true);
         pl.logout(); 
     }//GEN-LAST:event_LogOutUser
-
-    private void jButtonAdminNewStorageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminNewStorageActionPerformed
-        placeManager.createNewStorage(jTextFieldAdminNewStorageName.getText());
-        createListViewAdminStorages();
-    }//GEN-LAST:event_jButtonAdminNewStorageActionPerformed
 
     private void jTabbedPaneAdministratorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneAdministratorStateChanged
         int selectedTabb = jTabbedPaneAdministrator.getSelectedIndex();
         switch(selectedTabb)
         {
             case 0:
-                createListViewAdminUser();
+                if(jPanelAdminUsers != null)
+                {
+                    jPanelAdminUsers.createJTableAdminUsers();
+                }
                 break;
                 
             case 1:
-                createListViewAdminStorages();
+                if(jPanelAdminStorages != null)
+                {
+                    jPanelAdminStorages.createJTableAdminStorage();
+                }
                 break;
         }
     }//GEN-LAST:event_jTabbedPaneAdministratorStateChanged
 
-    private void jComboBoxStockManStoragesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBoxStockManStoragesActionPerformed
-        Item comboItem = (Item) jComboBoxStockManStorages.getSelectedItem();
-        
-        if(comboItem != null)
-        {
-            storageId = (Integer) comboItem.getObj();
-            createListViewStockYards();
-            createListViewStockArticletypes();
-        }
-    }//GEN-LAST:event_jComboBoxStockManStoragesActionPerformed
-
     private void jTabbedPaneStockManStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneStockManStateChanged
-                int selectedTabb = jTabbedPaneAdministrator.getSelectedIndex();
+        int selectedTabb = jTabbedPaneAdministrator.getSelectedIndex();
         switch(selectedTabb)
         {
-            case 0:
-                createListViewStockArticletypes();
+            case 1:
+                if(jPanelStockManagerArticletypes != null)
+                {
+                    jPanelStockManagerArticletypes.createJTableStockManagerArticletypes();
+                }
                 break;
                 
-            case 1:
-                createListViewStockYards();
+            case 0:
+                if(jPanelStockManagerYards != null)
+                {
+                    jPanelStockManagerYards.createJTableStockManagerYards();
+                }
                 break;
         }
     }//GEN-LAST:event_jTabbedPaneStockManStateChanged
-
-    private void jButtonUpdateStoragesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUpdateStoragesActionPerformed
-        createListStorages();
-    }//GEN-LAST:event_jButtonUpdateStoragesActionPerformed
-
-    private void jButtonCreateYardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateYardActionPerformed
-        if(storageId != null)
-        {
-            placeManager.createNewYard(storageId);
-            createListViewStockYards();
-        }
-    }//GEN-LAST:event_jButtonCreateYardActionPerformed
-
-    private void jButtonCreateArticletypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonCreateArticletypeActionPerformed
-        articleManager.createNewArticleType(jTextFieldArticletypeName.getText(), jTextAreaArticleTypeDescription.getText(), storageId);
-        createListViewStockArticletypes();
-    }//GEN-LAST:event_jButtonCreateArticletypeActionPerformed
-
-    private void jPasswordFieldAdminUserPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldAdminUserPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordFieldAdminUserPasswordActionPerformed
-
-    private void jButtonAdminUserEditAndSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserEditAndSaveActionPerformed
-        if(!jButtonAdminUserEditAndSave.getText().equals("Speichern"))
-        {
-            if(((String)jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0))
-                        .equals(loggedInUsr.getEmail()))
-            {
-                    JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
-                            + "kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
-                jButtonAdminUserEditAndSave.setText("Speichern");
-                jButtonAdminUserDeleteAndDiscard.setText("Abbrechen");
-                jTableAdminUsers.setEnabled(false);
-                jComboBoxAdminUserGroup.setEnabled(true);
-                jComboBoxAdminUserStorage.setEnabled(true);
-                jButtonAdminUserNewUser.setEnabled(false);
-            }
-        }
-        else
-        {
-            UserDTO user = userManager.find(jTextFieldAdminUserName.getText());
-            GroupDTO group = new GroupDTO();
-            group.setGroup((GroupType)((Item)jComboBoxAdminUserGroup.getSelectedItem()).getObj());
-            
-            Item storage = (Item)jComboBoxAdminUserStorage.getSelectedItem();
-            if(storage.getObj() != null)
-            {
-                List storagesUser = new ArrayList<Integer>();
-                storagesUser.add(((StorageDTO)storage.getObj()).getId());
-                group.setStorageId(storagesUser);
-            }
-            List<GroupDTO> groups = new ArrayList<GroupDTO>();
-            groups.add(group);
-            user.setGroups(groups);
-            userManager.editUserGroups(user);
-            
-            jButtonAdminUserEditAndSave.setText("Bearbeiten");
-            jButtonAdminUserDeleteAndDiscard.setText("Löschen");
-            jComboBoxAdminUserGroup.setEnabled(false);
-            jComboBoxAdminUserStorage.setEnabled(false);
-            jButtonAdminUserNewUser.setEnabled(true);
-            jTableAdminUsers.setEnabled(true);
-            createListViewAdminUser();
-        }
-    }//GEN-LAST:event_jButtonAdminUserEditAndSaveActionPerformed
-
-    private void jButtonAdminUserNewUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserNewUserActionPerformed
-        if(!jButtonAdminUserNewUser.getText().equals("Speichern"))
-        {
-            jButtonAdminUserEditAndSave.setEnabled(false);
-            jButtonAdminUserNewUser.setText("Speichern");
-            
-            jTextFieldAdminUserFirstName.setEnabled(true);
-            jTextFieldAdminUserLastName.setEnabled(true);
-            jTextFieldAdminUserName.setEnabled(true);
-            jPasswordFieldAdminUserPassword.setEnabled(true);
-            jPasswordFieldAdminUserPassword2.setEnabled(true);
-            jComboBoxAdminUserGroup.setEnabled(true);
-            jComboBoxAdminUserStorage.setEnabled(true);
-            
-            jButtonAdminUserDeleteAndDiscard.setText("Abbrechen");
-            jButtonAdminUserDeleteAndDiscard.setEnabled(true);
-            jTableAdminUsers.setEnabled(false);
-            
-                DefaultComboBoxModel modelGroups = new DefaultComboBoxModel();
-                for(GroupType type : GroupType.values())
-                {
-                    modelGroups.addElement(new Item(type, type.toString()));
-                }
-                jComboBoxAdminUserGroup.setModel(modelGroups);
-
-                DefaultComboBoxModel modelStorages = new DefaultComboBoxModel();
-                modelStorages.addElement(new Item(null, ""));
-                for(StorageDTO storage : placeManager.getAllStorages())
-                {
-                        Item itm = new Item(storage, storage.getName());
-                        modelStorages.addElement(itm);
-                }
-                jComboBoxAdminUserStorage.setModel(modelStorages);
-                
-            jTextFieldAdminUserFirstName.setText("");
-            jTextFieldAdminUserLastName.setText("");
-            jTextFieldAdminUserName.setText("");
-            jPasswordFieldAdminUserPassword.setText("");
-            jPasswordFieldAdminUserPassword2.setText("");
-        }
-        else
-        {
-            String passwd1 = new String(jPasswordFieldAdminUserPassword.getPassword());
-            String passwd2 = new String(jPasswordFieldAdminUserPassword2.getPassword());
-            if(!passwd1.equals(passwd2))
-            {
-                JOptionPane.showMessageDialog(this, "Die Passwort-Felder sind nicht identisch.", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {                 
-                UserDTO user = new UserDTO();
-                user.setEmail(jTextFieldAdminUserName.getText());
-                user.setFname(jTextFieldAdminUserFirstName.getText());
-                user.setLname(jTextFieldAdminUserLastName.getText());
-                user.setPassword1(passwd1);
-                user.setPassword2(passwd2);
-                
-                GroupDTO group = new GroupDTO();
-                group.setGroup((GroupType)((Item)jComboBoxAdminUserGroup.getSelectedItem()).getObj());
-
-                Item storage = (Item)jComboBoxAdminUserStorage.getSelectedItem();
-                if(storage.getObj() != null && group.getGroup() != GroupType.ADMINISTRATOR 
-                        && group.getGroup() != GroupType.EINKAEUFER)
-                {
-                    List storagesUser = new ArrayList<Integer>();
-                    storagesUser.add((Integer)((StorageDTO)storage.getObj()).getId());
-                    group.setStorageId(storagesUser);
-                }
-                List<GroupDTO> groups = new ArrayList<GroupDTO>();
-                groups.add(group);
-                user.setGroups(groups);
-                
-                try
-                {
-                    userManager.register(user);
-
-                    jTextFieldAdminUserFirstName.setEnabled(false);
-                    jTextFieldAdminUserLastName.setEnabled(false);
-                    jTextFieldAdminUserName.setEnabled(false);
-                    jPasswordFieldAdminUserPassword.setEnabled(false);
-                    jPasswordFieldAdminUserPassword2.setEnabled(false);
-                    jComboBoxAdminUserGroup.setEnabled(false);
-                    jComboBoxAdminUserStorage.setEnabled(false);
-                    jButtonAdminUserDeleteAndDiscard.setText("Löschen");
-                    jButtonAdminUserDeleteAndDiscard.setEnabled(false);
-                    jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
-                    jTableAdminUsers.setEnabled(true);
-                    createListViewAdminUser();
-                } catch(Exception es)
-                {
-                    JOptionPane.showMessageDialog(this, "Fehler beim Erstellen des Benutzer."
-                            + "(evtl. ist der Benutzername schon vergeben)", "Fehler", JOptionPane.ERROR_MESSAGE);                    
-                }
-            }
-        }
-    }//GEN-LAST:event_jButtonAdminUserNewUserActionPerformed
-
-    private void jButtonAdminUserDeleteAndDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserDeleteAndDiscardActionPerformed
-        if(jButtonAdminUserDeleteAndDiscard.getText().equals("Löschen"))
-        {
-            if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Benutzer: " + 
-                    jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0) +
-                    " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
-                    == JOptionPane.YES_OPTION)
-            {
-                if(((String)jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0))
-                        .equals(loggedInUsr.getEmail()))
-                {
-                    JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
-                            + "kann nicht geloescht werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                }
-                else
-                {
-                    userManager.deleteUser((String)jTableAdminUsers.getModel().getValueAt(jTableAdminUsers.getSelectedRow(), 0));
-                    createListViewAdminUser();
-                }
-            }
-        }
-        else
-        {
-            jButtonAdminUserEditAndSave.setText("Bearbeiten");
-            jButtonAdminUserDeleteAndDiscard.setText("Löschen");
-            jComboBoxAdminUserGroup.setEnabled(false);
-            jComboBoxAdminUserStorage.setEnabled(false);
-            jButtonAdminUserNewUser.setEnabled(true);
-            jTextFieldAdminUserFirstName.setEnabled(false);
-            jTextFieldAdminUserLastName.setEnabled(false);
-            jTextFieldAdminUserName.setEnabled(false);
-            jPasswordFieldAdminUserPassword.setEnabled(false);
-            jPasswordFieldAdminUserPassword2.setEnabled(false);
-            jComboBoxAdminUserGroup.setEnabled(false);
-            jComboBoxAdminUserStorage.setEnabled(false);
-            jButtonAdminUserDeleteAndDiscard.setText("Löschen");
-            jButtonAdminUserDeleteAndDiscard.setEnabled(false);
-            jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
-            jTableAdminUsers.setEnabled(true);
-            createListViewAdminUser();
-        }
-    }//GEN-LAST:event_jButtonAdminUserDeleteAndDiscardActionPerformed
-
-    private void deleteYardEvent(java.awt.event.ActionEvent evt) {
-        String cmd = evt.getActionCommand();
-        int id = Integer.parseInt(cmd);
-        placeManager.deleteYard(id);
-        createListViewStockYards();
-    } 
-    
-    private void printYardIdEvent(java.awt.event.ActionEvent evt) {
-        String cmd = evt.getActionCommand();
-        int id = Integer.parseInt(cmd);
-        
-        int width = 440; 
-        int height = 48;            
-        
-        selectedPrintService = null;
-        PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-        pras.add(new Copies(1));
-        pss = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.PNG, pras);
-        
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for(int cnt = 0; cnt < pss.length; cnt++)
-        {
-            model.addElement(pss[cnt].getName());
-        }
-        
-        jComboBox1.setModel(model);
-                
-        jComboBox1.doLayout();
-        jComboBox1.invalidate();
-        
-        jDialog1.setModal(true);
-        jDialog1.setVisible(true);
-        
-        if(selectedPrintService != null)
-        {
-            BitMatrix bitMatrix;
-            try {
-                bitMatrix = new Code128Writer().encode("S" + cmd,BarcodeFormat.CODE_128,width,height,null);
-                ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
-                MatrixToImageWriter.writeToStream(bitMatrix, "png", streamMemoryStream);
-                
-                byte[] barcodeImage = streamMemoryStream.toByteArray();
-                ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
-                                
-                DocPrintJob job = selectedPrintService.createPrintJob();
-                Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
-                job.print(doc, pras); 
-                streamInput.close();                
-            } catch (Exception e) {
-                int ahhh=0;
-            }    
-        }
-    }
-  
-    private void createListViewStockArticletypes()
-    {
-        if(!initDone)
-            return;
-        
-        if(storageId == null)
-            return;
-        
-        List<ArticleTypeDTO> articleTypes = articleManager.getAllArticleTypes(storageId);
-
-        JPanel help = new JPanel(new BorderLayout());
-        JPanel zeilen = new JPanel(new GridLayout(0, 1, 4, 4));
-        help.add(zeilen, BorderLayout.NORTH);
-        
-        this.jScrollPaneStockArticletypes.setViewportView(help);
-      
-        int pos = 0;
-        for(ArticleTypeDTO articleType : articleTypes)
-        {
-            JPanel panel = new JPanel(new BorderLayout());//(new FlowLayout(FlowLayout.LEFT));
-                                
-            JLabel label = new JLabel();
-            label.setText(articleType.getName());
-            
-            JPanel panelBtns = new JPanel();
-            JButton btn2 = new JButton();
-            btn2.setText("Artikel hinzufügen");
-            btn2.setActionCommand(((Integer)articleType.getId()).toString());
-            btn2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                 createArticleEvent(evt);
-            }});
-            
-            JButton btn = new JButton();
-            btn.setText("Artikeltyp löschen");
-            btn.setActionCommand(((Integer)articleType.getId()).toString());
-            btn.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteArticletypeEvent(evt);
-            }});
-            
-            panelBtns.add(btn2);
-            panelBtns.add(btn);
-            
-            panel.add(label, BorderLayout.CENTER);
-            panel.add(panelBtns, BorderLayout.EAST);
-            
-            pos++;
-            zeilen.add(panel);
-        }
-        
-        this.jScrollPaneStockArticletypes.validate();
-    }
-    
-    private void deleteArticletypeEvent(java.awt.event.ActionEvent evt) {
-        String cmd = evt.getActionCommand();
-        int id = Integer.parseInt(cmd);
-        // not doing anything right now..
-    } 
-    
-    private void createArticleEvent(java.awt.event.ActionEvent evt) {
-        String cmd = evt.getActionCommand();
-        int id = Integer.parseInt(cmd);
-        
-        ArticleDTO article = articleManager.createNewArticle(id);
-        
-        int width = 440; 
-        int height = 48;            
-        
-        selectedPrintService = null;
-        PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
-        pras.add(new Copies(1));
-        pss = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.PNG, pras);
-        
-        DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for(int cnt = 0; cnt < pss.length; cnt++)
-        {
-            model.addElement(pss[cnt].getName());
-        }
-        
-        jComboBox1.setModel(model);
-                
-        jComboBox1.doLayout();
-        jComboBox1.invalidate();
-        
-        jDialog1.setModal(true);
-        jDialog1.setVisible(true);
-        
-        if(selectedPrintService != null)
-        {
-            BitMatrix bitMatrix;
-            try {
-                bitMatrix = new Code128Writer().encode("A" + article.getId(),BarcodeFormat.CODE_128,width,height,null);
-                ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
-                MatrixToImageWriter.writeToStream(bitMatrix, "png", streamMemoryStream);
-                
-                byte[] barcodeImage = streamMemoryStream.toByteArray();
-                ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
-                                
-                DocPrintJob job = selectedPrintService.createPrintJob();
-                Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
-                job.print(doc, pras); 
-                streamInput.close();                
-            } catch (Exception e) {
-                int ahhh=0;
-            }    
-        } else
-        {
-            // delete article if not succesfull
-        }
-    }
- 
-    
-    private void createListViewStockYards()
-    {
-        if(!initDone)
-            return;
-                
-        if(storageId == null)
-            return;
-        
-        List<YardDTO> yards = placeManager.getAllYards(storageId);
-        
-        //JPanel panelView = new JPanel();
-        //GridLayout layout = new GridLayout(storages.size(), 1);
-        //panelView.setLayout(layout);
-
-        JPanel help = new JPanel(new BorderLayout());
-        JPanel zeilen = new JPanel(new GridLayout(0, 1, 4, 4));
-        help.add(zeilen, BorderLayout.NORTH);
-        
-        this.jScrollPaneStockManYards.setViewportView(help);
-      
-        int pos = 0;
-        for(YardDTO yard : yards)
-        {
-            JPanel panel = new JPanel(new BorderLayout());//(new FlowLayout(FlowLayout.LEFT));
-                                
-            JLabel label = new JLabel();
-            label.setText(((Integer)yard.getId()).toString());
-            
-            JPanel panelBtns = new JPanel();
-            JButton btn2 = new JButton();
-            btn2.setText("Barcode drucken");
-            btn2.setActionCommand(((Integer)yard.getId()).toString());
-            btn2.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                 printYardIdEvent(evt);
-            }});
-            
-            JButton btn = new JButton();
-            btn.setText("Lagerplatz löschen");
-            btn.setActionCommand(((Integer)yard.getId()).toString());
-            btn.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                deleteYardEvent(evt);
-            }});
-            
-            panelBtns.add(btn2);
-            panelBtns.add(btn);
-            
-            panel.add(label, BorderLayout.CENTER);
-            panel.add(panelBtns, BorderLayout.EAST);
-            
-            pos++;
-            zeilen.add(panel);
-        }
-        
-        this.jScrollPaneStockManYards.validate();
-    }
- 
-    
+   
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelLogin;
     private javax.swing.JPanel JPanelStockManOverview;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButtonAdminNewStorage;
-    private javax.swing.JButton jButtonAdminUserDeleteAndDiscard;
-    private javax.swing.JButton jButtonAdminUserEditAndSave;
-    private javax.swing.JButton jButtonAdminUserNewUser;
-    private javax.swing.JButton jButtonCreateArticletype;
-    private javax.swing.JButton jButtonCreateYard;
     private javax.swing.JButton jButtonLogIn;
-    private javax.swing.JButton jButtonUpdateStorages;
-    private javax.swing.JComboBox jComboBox1;
-    private javax.swing.JComboBox jComboBoxAdminUserGroup;
-    private javax.swing.JComboBox jComboBoxAdminUserStorage;
-    private javax.swing.JComboBox jComboBoxStockManStorages;
-    private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
-    private javax.swing.JLabel jLabelAdminUserStorage;
     private javax.swing.JLabel jLabelControlsHeader;
     private javax.swing.JLabel jLabelLogIn;
-    private javax.swing.JList jList1;
-    private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel6;
-    private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
-    private javax.swing.JPanel jPanelAdminStorages;
-    private javax.swing.JPanel jPanelAdminUsers;
     private javax.swing.JPanel jPanelAdministrator;
     private javax.swing.JPanel jPanelBusyIndicator;
     private javax.swing.JPanel jPanelControls;
     private javax.swing.JPanel jPanelControlsMain;
     private javax.swing.JPanel jPanelWindow;
-    private javax.swing.JPasswordField jPasswordFieldAdminUserPassword;
-    private javax.swing.JPasswordField jPasswordFieldAdminUserPassword2;
     private javax.swing.JPasswordField jPasswordFieldPassword;
     private javax.swing.JProgressBar jProgressBar1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPaneAdminStorageManagment;
-    private javax.swing.JScrollPane jScrollPaneAdminUserManagment;
-    private javax.swing.JScrollPane jScrollPaneStockArticletypes;
-    private javax.swing.JScrollPane jScrollPaneStockManYards;
     private javax.swing.JTabbedPane jTabbedPaneAdministrator;
     private javax.swing.JTabbedPane jTabbedPaneStockMan;
-    private javax.swing.JTable jTableAdminUsers;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextArea jTextAreaArticleTypeDescription;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextFieldAdminNewStorageName;
-    private javax.swing.JTextField jTextFieldAdminUserFirstName;
-    private javax.swing.JTextField jTextFieldAdminUserLastName;
-    private javax.swing.JTextField jTextFieldAdminUserName;
-    private javax.swing.JTextField jTextFieldArticletypeName;
     private javax.swing.JTextField jTextFieldUserName;
     // End of variables declaration//GEN-END:variables
 }
