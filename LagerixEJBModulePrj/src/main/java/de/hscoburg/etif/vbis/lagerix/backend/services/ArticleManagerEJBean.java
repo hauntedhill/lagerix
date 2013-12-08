@@ -236,4 +236,8 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
 
     }
 
+    public void deleteArticle(int articleId) {
+        articleDAO.remove(articleDAO.findById(Article.class, articleId));
+    }
+
 }

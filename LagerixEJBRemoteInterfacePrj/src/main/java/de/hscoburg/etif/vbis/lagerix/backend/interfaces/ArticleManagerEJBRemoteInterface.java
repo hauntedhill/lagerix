@@ -96,4 +96,6 @@ public interface ArticleManagerEJBRemoteInterface {
 
     public void updateArticleType(ArticleTypeDTO articleType);
 
+    public void deleteArticle(int articleId);
+
 }
