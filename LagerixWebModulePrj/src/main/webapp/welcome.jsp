@@ -15,11 +15,11 @@
         <link rel="stylesheet" type="text/css" href="./css/auth.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Lagerix Login</title>
-        <script src="js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
-        <link  href="css/lagerix-web-app.css" rel="stylesheet" type="text/css">
-        <link href="css/bootstrap.css" rel="stylesheet" media="screen">
-        <script src="js/bootstrap.js" type="text/javascript"></script>     
-        <script src="js/lagerix-web-app.js" type="text/javascript"></script> 
+        <script src="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <link  href="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/css/lagerix-web-app.css" rel="stylesheet" type="text/css">
+        <link href="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet" media="screen">
+        <script src="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/bootstrap.js" type="text/javascript"></script>     
+        <script src="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/lagerix-web-app.js" type="text/javascript"></script> 
 
         <script type="text/javascript">
             $(function() {

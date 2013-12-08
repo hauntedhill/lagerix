@@ -158,11 +158,40 @@ function displayArticleTypes(data) {
 
 function displayStockTrend(data) {
     var rows = "";
+    var bookingDirection="";
     for (var i = 0; i < data.length; i++) {
-        rows += "<tr><td>" + data[i].timestamp + "</td><td>"  + data[i].bookedIn + "</td></tr>";
+        if(data[i].bookedIn){bookingDirection = "Einbuchung"; }else{bookingDirection = "Ausbuchung";}
+        rows += "<tr><td>" + formatDate(new Date(data[i].timestamp), '%d.%M.%Y - %H:%m:%s') + "</td><td>"  + bookingDirection + "</td></tr>";
     }
     return rows;
 }
+
+function formatDate(date, fmt) {
+    function pad(value) {
+        return (value.toString().length < 2) ? '0' + value : value;
+    }
+    return fmt.replace(/%([a-zA-Z])/g, function (_, fmtCode) {
+        switch (fmtCode) {
+        case 'Y':
+            return date.getUTCFullYear();
+        case 'M':
+            return pad(date.getUTCMonth() + 1);
+        case 'd':
+            return pad(date.getUTCDate());
+        case 'H':
+            return pad(date.getUTCHours());
+        case 'm':
+            return pad(date.getUTCMinutes());
+        case 's':
+            return pad(date.getUTCSeconds());
+        default:
+            throw new Error('Unsupported format code: ' + fmtCode);
+        }
+    });
+}
+
+
+
 
 
 function displayArticleType(data, textStatus, jqXHR) {
@@ -173,7 +202,7 @@ function displayArticleType(data, textStatus, jqXHR) {
     $("#ipStorageId").val(data.storageId);
     $("#ipStorageName").val(data.storageName);
     $("#ipCurrentStock").val(data.currentStock);
-//    $("#tbodyStockTrend").html(displayStockTrend(data.movements));
+    $("#tbodyStockTrend").html(displayStockTrend(data.movements));
     
     
     var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
