@@ -63,7 +63,7 @@ public class WebAppService
 
             ArticleTypeDTO atDTO = this.myArticleBean.getArticleTypeByID(id);
 //            List <MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
-            List<YardDTO> yDTOs = this.myPlaceBean.getAllYardsForStorage(atDTO.getStorageID());
+            List<YardDTO> yDTOs = this.myPlaceBean.getYardsForArticleType(id);
             
 //            tc.setMovements(mDTOs);
             tc.setDescription(atDTO.getDescription());
