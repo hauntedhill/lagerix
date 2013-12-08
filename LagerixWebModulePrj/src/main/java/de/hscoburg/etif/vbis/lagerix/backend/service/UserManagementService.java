@@ -4,11 +4,8 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInte
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,7 +14,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import de.hscoburg.etif.vbis.lagerix.backend.service.dto.JsonResponseDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
@@ -34,11 +30,11 @@ public class UserManagementService {
 
     @POST
     @Path("login")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String login(@FormParam("email") String email, @FormParam("password") String password,
             @Context HttpServletRequest req) {
 
-                //only login if not already logged in...
+        //only login if not already logged in...
         if (req.getUserPrincipal() == null) {
             try {
                 req.login(email, password);
@@ -65,7 +61,7 @@ public class UserManagementService {
 
     @GET
     @Path("logout")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.TEXT_PLAIN)
     public String logout(@Context HttpServletRequest req) {
 
         try {

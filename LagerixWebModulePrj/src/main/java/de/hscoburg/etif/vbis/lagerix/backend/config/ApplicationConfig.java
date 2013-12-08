@@ -33,7 +33,6 @@ public class ApplicationConfig extends Application {
      */
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(de.hscoburg.etif.vbis.lagerix.backend.service.BookingService.class);
-        resources.add(de.hscoburg.etif.vbis.lagerix.backend.service.TimeService.class);
         resources.add(de.hscoburg.etif.vbis.lagerix.backend.service.UserManagementService.class);
         resources.add(de.hscoburg.etif.vbis.lagerix.backend.service.WebAppService.class);
     }
