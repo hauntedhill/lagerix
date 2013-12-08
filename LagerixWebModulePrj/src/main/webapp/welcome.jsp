@@ -37,10 +37,10 @@
                         type: "POST",
                         data: $("#loginForm").serialize(),
                         cache: false,
-                        dataType: "json",
+                        dataType: "text",
                         success: function(data, textStatus, jqXHR) {
                             //alert("success");
-                            if (data.status == "SUCCESS") {
+                            if (data == "SUCCESS") {
                                 //redirect to secured page
                                 window.location.replace("http://" + window.location.host + "<%=request.getContextPath()%>/secure/lagerix.jsp");
                             } else {
