@@ -1,23 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
 
 /**
+ * DTO for the data of an movement
  *
  * @author zuch1000
  */
 public class MovementDTO extends BaseDTO {
-	private int articleID;			//ID of the scanned article
-	//private int yardID;			//ID of the scanned storage location
-	private boolean bookedIn;		//true, if the article was booked int, false otherwise
-	//private int userID;				//ID of the user account which was logged in on the device that sent the request
-	private long timestamp;			//Timestamp at which the booking request was sent
+
+    private int articleID;			//ID of the scanned article
+    //private int yardID;			//ID of the scanned storage location
+    private boolean bookedIn;		//true, if the article was booked int, false otherwise
+    //private int userID;				//ID of the user account which was logged in on the device that sent the request
+    private long timestamp;			//Timestamp at which the booking request was sent
 
     /**
      * @return the articleID
@@ -39,14 +35,12 @@ public class MovementDTO extends BaseDTO {
     //public int getYardID() {
     //    return yardID;
     //}
-
     /**
      * @param locationID the locationID to set
      */
     //public void setYardID(int locationID) {
     //    this.yardID = locationID;
     //}
-
     /**
      * @return the bookedIn
      */
@@ -67,14 +61,12 @@ public class MovementDTO extends BaseDTO {
     //public int getUserID() {
     //    return userID;
     //}
-
     /**
      * @param userID the userID to set
      */
     //public void setUserID(int userID) {
     //    this.userID = userID;
     //}
-
     /**
      * @return the timestamp
      */

@@ -1,27 +1,23 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
 
 /**
+ * DTO for the article data.
  *
- * @author Haunted
+ * @author zuch1000
  */
-public class ArticleDTO extends BaseDTO{
+public class ArticleDTO extends BaseDTO {
+
     private int id;
-	private int articleTypeID;
+    private int articleTypeID;
 
     @Override
     public String toString() {
         return "ArticleDTO{" + "id=" + id + ", articleTypeID=" + articleTypeID + ", yardID=" + yardID + '}';
     }
-	private int yardID;			//where the article is stored in
-	//Image barcodeImage; wirklich?
+    private int yardID;			//where the article is stored in
+    //Image barcodeImage; wirklich?
 
     /**
      * @return the id

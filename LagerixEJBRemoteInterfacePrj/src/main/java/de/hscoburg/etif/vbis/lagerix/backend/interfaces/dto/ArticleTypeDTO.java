@@ -1,23 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
 
 /**
+ * DTO for the artileType data.
  *
  * @author zuch1000
  */
-public class ArticleTypeDTO extends BaseDTO{
-	private int id;
-	private String name;
-	private String description;
-	private int minimumStock;
-	private int storageID;			//where the article type is stored in
+public class ArticleTypeDTO extends BaseDTO {
+
+    private int id;
+    private String name;
+    private String description;
+    private int minimumStock;
+    private int storageID;			//where the article type is stored in
 
     @Override
     public String toString() {
