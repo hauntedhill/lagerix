@@ -1,11 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.backend.services;
 
-import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.ArticleTypeDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.MovementDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.YardDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
@@ -18,13 +12,13 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.services.base.BaseService;
 import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -39,26 +33,8 @@ import javax.mail.internet.MimeMessage;
  * @author zuch1000
  */
 @Stateless
-public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
-    
-    @EJB
-    private YardDAO yardDAO;
-    
-    @EJB
-    private ArticleDAO articleDAO;
-    
-    @EJB
-    private MovementDAO movementDAO;
-    
-    @EJB
-    private ArticleTypeDAO articleTypeDAO;
-    
-    @EJB
-    private StorageDAO storageDAO;
-    
-    @EJB
-    private UserDAO userDAO;
-    
+public class ArticleManagerEJBean extends BaseService implements ArticleManagerEJBRemoteInterface {
+
     @Resource(name = "mail/Email")
     private Session mailSession;
 
@@ -71,17 +47,17 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
     public int saveMovementEntry(MovementDTO entry, int yardID) {
-        
+
         Message msg = new MimeMessage(mailSession);
-        
-        Yard yard = yardDAO.findById(Yard.class, yardID);
-        
-        Article article = articleDAO.findById(Article.class, entry.getArticleID());
-        
+
+        Yard yard = findById(Yard.class, yardID);
+
+        Article article = findById(Article.class, entry.getArticleID());
+
         if (yard == null || article == null) {
             return 1;
         }
-        
+
         Movement m = new Movement();
         if (entry.isBookedIn()) {
             m.setMovement(Movements.INCORPORATE);
@@ -89,14 +65,14 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
         } else {
             m.setMovement(Movements.RELEASE);
             article.setYard(null);
-            
-            if (articleTypeDAO.getArticleTypeStock(article.getArticleType()) - 1 < article.getArticleType().getMinimumStock()) {
+
+            if (getArticleTypeStock(article.getArticleType()) - 1 < article.getArticleType().getMinimumStock()) {
                 try {
-                    
-                    List<User> einkaeufer = userDAO.findAllByGroupAndStorage(Group.EINKAEUFER, article.getArticleType().getStorage());
+
+                    List<User> einkaeufer = findAllUsersByGroupAndStorage(Group.EINKAEUFER, article.getArticleType().getStorage());
                     if (einkaeufer != null && einkaeufer.size() > 0) {
                         msg.setSubject("Lagerbestand unterschritten für " + article.getArticleType().getName());
-                        
+
                         for (User u : einkaeufer) {
                             msg.setRecipient(Message.RecipientType.TO,
                                     new InternetAddress(u.getEmail()));
@@ -104,7 +80,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
 
                         //msg.setFrom(new InternetAddress("lagerix@gmx.de"));
                         msg.setText("Sehr geehrter Einkäufer,\n\nder Meldebestand für " + article.getArticleType().getName() + " wurde unterschritten.\n\nMit freundlichen Grüßen\n\nIhr Lagerix");
-                        
+
                         Transport.send(msg);
                     }
                 } catch (MessagingException me) {
@@ -114,12 +90,12 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
         }
         m.setArticle(article);
         m.setTime(new Date());
-        
-        movementDAO.save(m);
-        articleDAO.merge(article);
-        
+
+        save(m);
+        merge(article);
+
         return 0;
-        
+
     }
 
     /**
@@ -130,9 +106,9 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
     public List<MovementDTO> getMovementEntriesForArticleType(int articleTypeID) {
-        
-        List<Movement> list = articleTypeDAO.getMovementsForArticleTypeId(articleTypeID);
-        
+
+        List<Movement> list = getMovementsForArticleTypeId(articleTypeID);
+
         return DTOConverter.convertMovement(list);
     }
 
@@ -144,10 +120,10 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
     public ArticleTypeDTO getArticleTypeByID(int articleTypeID) {
-        ArticleType at = articleTypeDAO.findById(ArticleType.class, articleTypeID);
-        
+        ArticleType at = findById(ArticleType.class, articleTypeID);
+
         return DTOConverter.convert(at);
-        
+
     }
 
     /**
@@ -161,9 +137,9 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
     public List<ArticleTypeDTO> searchArticleType(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock) {
-        
-        List<ArticleType> a = articleTypeDAO.getArticleTypesBy(articleTypeName, articleTypeDescription, articleTypeMinimumStock);
-        
+
+        List<ArticleType> a = getArticleTypesBy(articleTypeName, articleTypeDescription, articleTypeMinimumStock);
+
         return DTOConverter.convertArticleType(a);
     }
 
@@ -176,14 +152,14 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"EINKAEUFER"})
     public int updateMinimumStock(int articleTypeId, int newMinStock) {
-        
-        ArticleType a = articleTypeDAO.findById(ArticleType.class, articleTypeId);
+
+        ArticleType a = findById(ArticleType.class, articleTypeId);
         if (a == null) {
             return 1;
         }
         a.setMinimumStock(newMinStock);
-        articleTypeDAO.merge(a);
-        
+        merge(a);
+
         return 0;
     }
 
@@ -194,17 +170,17 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"EINKAEUFER"})
     public List<ArticleTypeDTO> getAllArticleTypesWithUnderrunMinStock() {
-        
-        List<ArticleType> articleTypes = articleTypeDAO.getAllArticleTypes();
-        
+
+        List<ArticleType> articleTypes = getAllArticleTypes();
+
         List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
-        
+
         for (ArticleType at : articleTypes) {
-            if (articleTypeDAO.getArticleTypeStock(at) < at.getMinimumStock()) {
+            if (getArticleTypeStock(at) < at.getMinimumStock()) {
                 result.add(DTOConverter.convert(at));
             }
         }
-        
+
         return result;
     }
 
@@ -218,23 +194,23 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public ArticleTypeDTO createNewArticleType(String name, String description, int storageId) {
-        
+
         ArticleType a = new ArticleType();
-        
-        Storage s = storageDAO.findById(Storage.class, storageId);
-        
+
+        Storage s = findById(Storage.class, storageId);
+
         s.addArticleType(a);
-        
+
         a.setStorage(s);
-        
+
         a.setName(name);
         a.setDescription(description);
         a.setMinimumStock(0);
-        articleTypeDAO.save(a);
-        storageDAO.merge(s);
-        
+        save(a);
+        merge(s);
+
         return DTOConverter.convert(a);
-        
+
     }
 
     /**
@@ -245,11 +221,11 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public List<ArticleTypeDTO> getAllArticleTypes(int storageID) {
-        
-        Storage s = storageDAO.findById(Storage.class, storageID);
-        
+
+        Storage s = findById(Storage.class, storageID);
+
         return DTOConverter.convertArticleType(s.getArticleTypes());
-        
+
     }
 
     /**
@@ -260,18 +236,18 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public ArticleDTO createNewArticle(int articleTypeID) {
-        
+
         Article a = new Article();
-        
-        ArticleType at = articleTypeDAO.findById(ArticleType.class, articleTypeID);
-        
+
+        ArticleType at = findById(ArticleType.class, articleTypeID);
+
         at.addArticle(a);
-        
-        articleDAO.save(a);
-        articleTypeDAO.merge(at);
-        
+
+        save(a);
+        merge(at);
+
         return DTOConverter.convert(a);
-        
+
     }
 
     /**
@@ -281,12 +257,12 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public void deleteArticleType(int articleTypeid) {
-        
-        ArticleType at = articleTypeDAO.findById(ArticleType.class, articleTypeid);
-        
+
+        ArticleType at = findById(ArticleType.class, articleTypeid);
+
         at.getStorage().getArticleTypes().remove(at);
-        
-        articleTypeDAO.remove(at);
+
+        remove(at);
     }
 
     /**
@@ -296,14 +272,14 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public void updateArticleType(ArticleTypeDTO articleType) {
-        
-        ArticleType at = articleTypeDAO.findById(ArticleType.class, articleType.getId());
+
+        ArticleType at = findById(ArticleType.class, articleType.getId());
         at.setDescription(articleType.getDescription());
         //at.setMinimumStock(articleType.getMinimumStock());
         at.setName(articleType.getName());
-        
-        articleTypeDAO.merge(at);
-        
+
+        merge(at);
+
     }
 
     /**
@@ -313,11 +289,11 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public void deleteArticle(int articleId) {
-        
-        Article a = articleDAO.findById(Article.class, articleId);
+
+        Article a = findById(Article.class, articleId);
         a.getArticleType().getArticles().remove(a);
-        articleTypeDAO.merge(a.getArticleType());
-        articleDAO.remove(a);
+        merge(a.getArticleType());
+        remove(a);
     }
 
     /**
@@ -328,7 +304,7 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
      */
     @RolesAllowed({"LAGERVERWALTER"})
     public List<ArticleDTO> getAllArticleByArticleType(int articleTypeId) {
-        return DTOConverter.convertArtice(articleTypeDAO.findById(ArticleType.class, articleTypeId).getArticles());
+        return DTOConverter.convertArtice(findById(ArticleType.class, articleTypeId).getArticles());
     }
-    
+
 }

@@ -1,7 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.backend.services;
 
-import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
-import de.hscoburg.etif.vbis.lagerix.backend.dao.UserDAO;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
@@ -10,13 +8,13 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInte
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
+import de.hscoburg.etif.vbis.lagerix.backend.services.base.BaseService;
 import de.hscoburg.etif.vbis.lagerix.backend.util.DTOConverter;
 import de.hscoburg.etif.vbis.lagerix.backend.util.SHA512;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.annotation.security.RolesAllowed;
-import javax.ejb.EJB;
 import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
@@ -26,13 +24,7 @@ import javax.ejb.Stateless;
  * @author zuch1000
  */
 @Stateless
-public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
-
-    @EJB
-    private UserDAO userDAO;
-
-    @EJB
-    private StorageDAO storageDAO;
+public class UserManagerEJBean extends BaseService implements UserManagerEJBRemoteInterface {
 
     @Resource
     private SessionContext sctx;
@@ -45,7 +37,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
      */
     @RolesAllowed({"ADMINISTRATOR"})
     public UserDTO find(String email) {
-        User u = userDAO.find(email);
+        User u = findUser(email);
         if (u != null) {
             /*UserDTO dto = new UserDTO();
              dto.setEmail(u.getEmail());
@@ -78,7 +70,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
      */
     @RolesAllowed({"ADMINISTRATOR"})
     public void editUserGroups(UserDTO user) {
-        User u = userDAO.find(user.getEmail());
+        User u = findUser(user.getEmail());
 
         if (u.getGroups() != null) {
             for (Groups g : u.getGroups()) {
@@ -86,14 +78,14 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
                     for (Storage s : g.getStorage()) {
                         if (s.getGroup() != null) {
                             s.getGroup().remove(g);
-                            storageDAO.merge(s);
+                            merge(s);
                         }
                     }
 
                 }
                 //g.getStorage().remove(g);
 
-                userDAO.remove(g);
+                remove(g);
             }
             u.getGroups().clear();
         }
@@ -104,11 +96,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
                 if (g.getStorageId() != null) {
 
                     for (Integer storageId : g.getStorageId()) {
-                        Storage s = storageDAO.findById(Storage.class, storageId);
+                        Storage s = findById(Storage.class, storageId);
                         s.addGroup(group);
                         group.addStorage(s);
-                        userDAO.save(group);
-                        storageDAO.merge(s);
+                        save(group);
+                        merge(s);
                     }
 
                 }
@@ -116,7 +108,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
             }
         }
 
-        userDAO.merge(u);
+        merge(u);
     }
 
     /**
@@ -145,11 +137,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
                 if (g.getStorageId() != null) {
 
                     for (Integer storageId : g.getStorageId()) {
-                        Storage s = storageDAO.findById(Storage.class, storageId);
+                        Storage s = findById(Storage.class, storageId);
                         s.addGroup(group);
                         group.addStorage(s);
-                        userDAO.save(group);
-                        storageDAO.merge(s);
+                        save(group);
+                        merge(s);
                     }
 
                 }
@@ -164,7 +156,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         }
         u.setRegisteredOn(new Date());
 
-        userDAO.save(u);
+        save(u);
     }
 
     /**
@@ -174,7 +166,7 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
      */
     @RolesAllowed({"ADMINISTRATOR"})
     public List<UserDTO> getAllUsers() {
-        List<User> users = userDAO.findAll();
+        List<User> users = findAllUser();
 
         /* List<UserDTO> result = new ArrayList<UserDTO>();
         
@@ -198,12 +190,12 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
     @RolesAllowed({"ADMINISTRATOR"})
     public void deleteUser(String userName) {
 
-        User u = userDAO.find(userName);
+        User u = findUser(userName);
         if (u != null) {
             for (Groups g : u.getGroups()) {
-                userDAO.remove(g);
+                remove(g);
             }
-            userDAO.remove(u);
+            remove(u);
         }
 
     }
