@@ -315,9 +315,18 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
                 " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
             == JOptionPane.YES_OPTION)
             {
-                Integer yardId = (Integer)jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0);
-                placeManager.deleteYard(yardId);
-                createJTableStockManagerYards();
+                try
+                {
+                    Integer yardId = (Integer)jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0);
+                    placeManager.deleteYard(yardId);
+                    createJTableStockManagerYards();
+                } catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Lagerplatzes: "
+                            + jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0)
+                            + ". Bitte loeschen Sie zuerst den aktuell im Lagerplatz eingelagerten Artikel.", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         else

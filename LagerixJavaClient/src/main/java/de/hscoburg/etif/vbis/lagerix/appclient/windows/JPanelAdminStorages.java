@@ -180,8 +180,17 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
                 " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
             == JOptionPane.YES_OPTION)
             {
-                placeManager.deleteStorage((Integer)jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 1));
-                createJTableAdminStorage();
+                try
+                {
+                    placeManager.deleteStorage((Integer)jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 1));
+                    createJTableAdminStorage();
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Lagers: "
+                            + jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 0)
+                            + ". Bitte loeschen Sie zuerst alle Artikeltypen und Lagerplaetze des Lagers.", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         else
