@@ -216,7 +216,12 @@ public class ArticleManagerEJBean implements ArticleManagerEJBRemoteInterface {
 
     @RolesAllowed({"LAGERVERWALTER"})
     public void deleteArticleType(int articleTypeid) {
-        articleTypeDAO.remove(articleTypeDAO.findById(ArticleType.class, articleTypeid));
+
+        ArticleType at = articleTypeDAO.findById(ArticleType.class, articleTypeid);
+
+        at.getStorage().getArticleTypes().remove(at);
+
+        articleTypeDAO.remove(at);
     }
 
     @RolesAllowed({"LAGERVERWALTER"})
