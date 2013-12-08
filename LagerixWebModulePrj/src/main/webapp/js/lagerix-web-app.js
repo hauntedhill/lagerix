@@ -86,9 +86,9 @@ $(document).on("click", "#btnLogOut", function() {
         url: urli,
         type: "GET",
         cache: false,
-        dataType: "json",
+        dataType: "text",
         success: function(data, textStatus, jqXHR) {
-            if (data.status == "SUCCESS") {
+            if (data == "SUCCESS") {
                 //redirect to welcome page
                 window.location.replace("http://" + window.location.hostname + ":8080/lagerix");
             } else {
