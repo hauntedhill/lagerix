@@ -32,6 +32,8 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -56,7 +58,32 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         this.articleManager = articleManager;
         this.placeManager = placeManager;
         
-                
+        
+        jTextFieldStockManagerSearchName.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+              createJTableStockManagerArticletypes();
+            }
+            public void removeUpdate(DocumentEvent e) {
+              createJTableStockManagerArticletypes();
+            }
+            public void insertUpdate(DocumentEvent e) {
+              createJTableStockManagerArticletypes();
+            }
+       });
+        
+        
+      jTextFieldStockManagerArticleSearchDescription.getDocument().addDocumentListener(new DocumentListener() {
+            public void changedUpdate(DocumentEvent e) {
+              createJTableStockManagerArticletypes();
+            }
+            public void removeUpdate(DocumentEvent e) {
+              createJTableStockManagerArticletypes();
+            }
+            public void insertUpdate(DocumentEvent e) {
+              createJTableStockManagerArticletypes();
+            }
+       });
+        
         jTableStockManagerArticletypeTable.getSelectionModel().addListSelectionListener(
             new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
@@ -170,8 +197,11 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
  
         if(placeManager.getStorages().size() > 0)
         {
-            List<ArticleTypeDTO> articles = articleManager.getAllArticleTypes(placeManager.getStorages().get(0).getId());
-
+            //List<ArticleTypeDTO> articles = articleManager.getAllArticleTypes(placeManager.getStorages().get(0).getId());
+            List<ArticleTypeDTO> articles = articleManager.searchArticleType(
+                    jTextFieldStockManagerSearchName.getText(), 
+                    jTextFieldStockManagerArticleSearchDescription.getText(), null);
+            
             for(ArticleTypeDTO article : articles)
             {
                 model.addRow(new Object[] {new Item((Integer) article.getId(), article.getName()), article.getDescription(), article.getId()});
@@ -213,8 +243,15 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jPanelAdminStoragesPanel = new javax.swing.JPanel();
+        jPanel2 = new javax.swing.JPanel();
         jScrollPaneStockManagerArticletypManagment = new javax.swing.JScrollPane();
         jTableStockManagerArticletypeTable = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        jTextFieldStockManagerSearchName = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jTextFieldStockManagerArticleSearchDescription = new javax.swing.JTextField();
         jPanel4 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
         jTextFieldStockManagerArticletypesName = new javax.swing.JTextField();
@@ -303,6 +340,8 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         jPanelAdminStoragesPanel.setPreferredSize(new java.awt.Dimension(750, 300));
         jPanelAdminStoragesPanel.setLayout(new java.awt.GridBagLayout());
 
+        jPanel2.setLayout(new java.awt.GridBagLayout());
+
         jScrollPaneStockManagerArticletypManagment.setMaximumSize(null);
         jScrollPaneStockManagerArticletypManagment.setMinimumSize(null);
 
@@ -320,12 +359,64 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
 
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridy = 1;
         gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         gridBagConstraints.weightx = 1.0;
         gridBagConstraints.weighty = 1.0;
-        jPanelAdminStoragesPanel.add(jScrollPaneStockManagerArticletypManagment, gridBagConstraints);
+        jPanel2.add(jScrollPaneStockManagerArticletypManagment, gridBagConstraints);
+
+        jPanel3.setLayout(new java.awt.GridBagLayout());
+
+        jTextFieldStockManagerSearchName.setColumns(15);
+        jTextFieldStockManagerSearchName.setMinimumSize(new java.awt.Dimension(126, 20));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(jTextFieldStockManagerSearchName, gridBagConstraints);
+
+        jLabel2.setText("Artikeltypname:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(jLabel2, gridBagConstraints);
+
+        jLabel3.setText("Filter:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(jLabel3, gridBagConstraints);
+
+        jLabel4.setText("Artikeltypbeschreibung:");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(jLabel4, gridBagConstraints);
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel3.add(jTextFieldStockManagerArticleSearchDescription, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
+        jPanel2.add(jPanel3, gridBagConstraints);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_START;
+        gridBagConstraints.weightx = 1.0;
+        gridBagConstraints.weighty = 1.0;
+        jPanelAdminStoragesPanel.add(jPanel2, gridBagConstraints);
 
         jPanel4.setLayout(new java.awt.GridBagLayout());
 
@@ -430,8 +521,9 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
         jPanel1.add(jButtonStockManagerArticlePrintBarcode, gridBagConstraints);
 
-        jScrollPane3.setMinimumSize(new java.awt.Dimension(452, 402));
+        jScrollPane3.setMinimumSize(new java.awt.Dimension(350, 302));
         jScrollPane3.setName(""); // NOI18N
+        jScrollPane3.setPreferredSize(null);
 
         jTableStockManagerArticles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -445,6 +537,8 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             }
         ));
         jTableStockManagerArticles.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jTableStockManagerArticles.setName(""); // NOI18N
+        jTableStockManagerArticles.setPreferredSize(null);
         jTableStockManagerArticles.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jScrollPane3.setViewportView(jTableStockManagerArticles);
 
@@ -493,6 +587,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
         gridBagConstraints.anchor = java.awt.GridBagConstraints.FIRST_LINE_END;
         jPanelAdminStoragesPanel.add(jPanel4, gridBagConstraints);
 
@@ -759,8 +854,13 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     private javax.swing.JDialog jDialog1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanelAdminStoragesPanel;
@@ -770,6 +870,8 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     private javax.swing.JTable jTableStockManagerArticles;
     private javax.swing.JTable jTableStockManagerArticletypeTable;
     private javax.swing.JTextArea jTextAreaStockManagerArticletypeDescription;
+    private javax.swing.JTextField jTextFieldStockManagerArticleSearchDescription;
     private javax.swing.JTextField jTextFieldStockManagerArticletypesName;
+    private javax.swing.JTextField jTextFieldStockManagerSearchName;
     // End of variables declaration//GEN-END:variables
 }

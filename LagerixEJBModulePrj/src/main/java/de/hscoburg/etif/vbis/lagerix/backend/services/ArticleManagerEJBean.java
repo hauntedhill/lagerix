@@ -135,7 +135,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      * @param articleTypeMinimumStock - The minimum stock of an article
      * @return A list with all articles found for the parameter passing.
      */
-    @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
+    @RolesAllowed({"EINKAEUFER", "LAGERARBEITER", "LAGERVERWALTER"})
     public List<ArticleTypeDTO> searchArticleType(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock) {
 
         List<ArticleType> a = getArticleTypesBy(articleTypeName, articleTypeDescription, articleTypeMinimumStock);
