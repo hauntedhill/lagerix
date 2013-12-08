@@ -20,6 +20,11 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 
+/**
+ * Activity which logs the user out of the application and sends him back to the login screen
+ * @author Felix Lisczyk
+ *
+ */
 public class LogoutActivity extends Activity {
 
 	private View mLogoutStatusView;
@@ -30,6 +35,10 @@ public class LogoutActivity extends Activity {
 	//IP address from settings
 	String baseURL;
 
+	/**
+	 * Initializer method for the activity
+	 * Gets called on first launch
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -41,12 +50,18 @@ public class LogoutActivity extends Activity {
 		mLogoutStatusView = findViewById(R.id.logout_status);
 	}
 	
+	/**
+	 * Gets called every time the activity appears on screen
+	 */
 	@Override
 	public void onStart() {
 		super.onStart();
 		logout();
 	}
 	
+	/**
+	 * Sends a REST request to perform a logout
+	 */
 	public void logout() {
 		showProgress(true);
 		
@@ -60,7 +75,7 @@ public class LogoutActivity extends Activity {
 	                logoutResult = response.getString("status");
 	                Log.d("JSONResult", logoutResult);
 	                
-
+	                // Logout was successful, forward the user to the login activity
 	                if(logoutResult.equals("SUCCESS")) {
 	                	showProgress(false);
     					Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
@@ -68,9 +83,13 @@ public class LogoutActivity extends Activity {
     			    	finish();
 	                }
 
+	                // Logout failed, send the user back to the scan activity
 	                else {
-	    				showProgress(false);
 	    				Log.e("LogoutActivity", "Error logging out");
+	    				showProgress(false);
+    					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+    			    	startActivity(intent);
+    			    	finish();
 
 	                }
 	        			

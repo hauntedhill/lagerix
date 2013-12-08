@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- glassfish-application.xml for role mapping of JAAS and the default realm
+Autor: zuch1000
+-->
 <!DOCTYPE glassfish-application PUBLIC "-//GlassFish.org//DTD 
 GlassFish Application Server 3.1 Java EE Application 6.0//EN" 
 "http://glassfish.org/dtds/glassfish-application_6_0-1.dtd">

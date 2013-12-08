@@ -1,11 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,25 +8,27 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 /**
+ * Entity for an yard
  *
  * @author zuch1000
  */
 @Entity
-public class Yard {
+public class Yard implements Serializable {
+
     @Id
     @GeneratedValue
     private Integer id;
-    
+
     private Integer positionX;
-    
+
     private Integer positionY;
-    
+
     private Integer positionZ;
-    
+
     @ManyToOne(targetEntity = Storage.class)
     private Storage storage;
-    
-    @OneToOne(targetEntity = Article.class,mappedBy = "yard")
+
+    @OneToOne(targetEntity = Article.class, mappedBy = "yard")
     private Article article;
 
     /**

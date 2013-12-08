@@ -1,11 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,26 +10,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 /**
+ * Entity for an ArticleType
  *
  * @author zuch1000
  */
 @Entity
-public class ArticleType {
-   
+public class ArticleType implements Serializable {
+
     @Id
     @GeneratedValue
     private Integer id;
-    
+
     private String name;
-    
+
     private String description;
-    
+
     private Integer minimumStock;
-    
-    
-    @OneToMany(targetEntity = Article.class,mappedBy = "articleType")
+
+    @OneToMany(targetEntity = Article.class, mappedBy = "articleType")
     private List<Article> articles;
-    
+
     @ManyToOne(targetEntity = Storage.class)
     private Storage storage;
 
@@ -120,5 +116,12 @@ public class ArticleType {
     public void setMinimumStock(Integer minimumStock) {
         this.minimumStock = minimumStock;
     }
-    
+
+    public void addArticle(Article a) {
+        if (articles == null) {
+            articles = new ArrayList<Article>();
+        }
+        a.setArticleType(this);
+        articles.add(a);
+    }
 }

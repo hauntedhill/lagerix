@@ -19,17 +19,19 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
+ * This class contains all converter logic for converting list an single Entities in there DTO equivalents.
  *
  * @author zuch1000
  */
 public class DTOConverter {
 
+    /**
+     * Convert the movement to a movementDTO
+     *
+     * @param m - The movement class
+     * @return The created movmentDTO class
+     */
     public static MovementDTO convert(Movement m) {
         MovementDTO dto = new MovementDTO();
 
@@ -41,6 +43,12 @@ public class DTOConverter {
 
     }
 
+    /**
+     * Convert the movement list to a movementDTO list
+     *
+     * @param m - The movement list
+     * @return The created movmentDTO list
+     */
     public static List<MovementDTO> convertMovement(List<Movement> m) {
         List<MovementDTO> result = new ArrayList<MovementDTO>();
 
@@ -53,6 +61,12 @@ public class DTOConverter {
         return result;
     }
 
+    /**
+     * Convert the articleType to a articleTypeDTO
+     *
+     * @param at - The articleType class
+     * @return The created articleTypeDTO class
+     */
     public static ArticleTypeDTO convert(ArticleType at) {
         ArticleTypeDTO dto = new ArticleTypeDTO();
 
@@ -65,6 +79,12 @@ public class DTOConverter {
         return dto;
     }
 
+    /**
+     * Convert the articleType list to a articleTypeDTO list
+     *
+     * @param m - The articleType list
+     * @return The created articleTypeDTO list
+     */
     public static List<ArticleTypeDTO> convertArticleType(List<ArticleType> m) {
         List<ArticleTypeDTO> result = new ArrayList<ArticleTypeDTO>();
 
@@ -77,6 +97,12 @@ public class DTOConverter {
         return result;
     }
 
+    /**
+     * Convert the article list to a articleDTO list
+     *
+     * @param a - The article
+     * @return The created articleDTO
+     */
     public static ArticleDTO convert(Article a) {
 
         ArticleDTO dto = new ArticleDTO();
@@ -89,6 +115,12 @@ public class DTOConverter {
 
     }
 
+    /**
+     * Convert the yard list to a yardDTO list
+     *
+     * @param y - The yard
+     * @return The created yardDTO
+     */
     public static YardDTO convert(Yard y) {
         YardDTO dto = new YardDTO();
 
@@ -98,6 +130,12 @@ public class DTOConverter {
         return dto;
     }
 
+    /**
+     * Convert the yard list to a yardDTO list
+     *
+     * @param m - The yard list
+     * @return The created yardDTO list
+     */
     public static List<YardDTO> convertYard(List<Yard> m) {
         List<YardDTO> result = new ArrayList<YardDTO>();
 
@@ -110,6 +148,12 @@ public class DTOConverter {
         return result;
     }
 
+    /**
+     * Convert the storage to a storageDTO
+     *
+     * @param s - The storage
+     * @return The created storageDTO
+     */
     public static StorageDTO convert(Storage s) {
         StorageDTO dto = new StorageDTO();
 
@@ -127,6 +171,12 @@ public class DTOConverter {
         return dto;
     }
 
+    /**
+     * Convert the storage list to a storageDTO list
+     *
+     * @param m - The storage list
+     * @return The created storageDTO list
+     */
     public static List<StorageDTO> convertStorage(List<Storage> m) {
         List<StorageDTO> result = new ArrayList<StorageDTO>();
 
@@ -139,6 +189,12 @@ public class DTOConverter {
         return result;
     }
 
+    /**
+     * Convert the user to a userDTO
+     *
+     * @param u - The user
+     * @return The created userDTO
+     */
     public static UserDTO convert(User u) {
         UserDTO dto = new UserDTO();
 
@@ -158,6 +214,12 @@ public class DTOConverter {
         return dto;
     }
 
+    /**
+     * Convert the user list to a userDTO list
+     *
+     * @param m - The user list
+     * @return The created userDTO list
+     */
     public static List<UserDTO> convertUser(List<User> m) {
         List<UserDTO> result = new ArrayList<UserDTO>();
 
@@ -170,6 +232,12 @@ public class DTOConverter {
         return result;
     }
 
+    /**
+     * Convert the article list to articleDTO list
+     *
+     * @param m - The article list
+     * @return The created articleDTO list
+     */
     public static List<ArticleDTO> convertArtice(List<Article> m) {
         List<ArticleDTO> result = new ArrayList<ArticleDTO>();
 

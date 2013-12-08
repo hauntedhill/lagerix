@@ -1,15 +1,9 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Column;
-import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -18,28 +12,28 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 /**
+ * Entity for a group.
  *
  * @author zuch1000
  */
-@Entity(name="USERS_GROUPS")
-public class Groups {
+@Entity(name = "USERS_GROUPS")
+public class Groups implements Serializable {
+
     @Id
     @GeneratedValue
     private Integer id;
-    
+
     @Column(name = "groupname")
     @Enumerated(EnumType.STRING)
     private Group groups;
-    
-    
+
     @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "email")
     private User user;
-    
-    @ManyToMany(targetEntity = Storage.class,mappedBy = "group")
+
+    @ManyToMany(targetEntity = Storage.class, mappedBy = "group")
     private List<Storage> storage;
 
     /**
@@ -97,14 +91,12 @@ public class Groups {
     public void setStorage(List<Storage> storage) {
         this.storage = storage;
     }
-    
-     public void addStorage(Storage g )
-    {
-        if(storage==null)
-       {
-           storage = new ArrayList<Storage>();
-       }
-       
-       storage.add(g); 
+
+    public void addStorage(Storage g) {
+        if (storage == null) {
+            storage = new ArrayList<Storage>();
+        }
+
+        storage.add(g);
     }
 }
