@@ -8,10 +8,9 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Secured JSP Page</title>
          
-        <!-- see http://github.com/douglascrockford/JSON-js -->
-        <script src="<%=request.getContextPath() %>/js/json2.js" type="text/javascript"></script>
+  
          
-        <%@ include file="/WEB-INF/includes/head/jquery.jsp" %>
+        <script src="../js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script> 
          
         <script type="text/javascript">
         $(function(){

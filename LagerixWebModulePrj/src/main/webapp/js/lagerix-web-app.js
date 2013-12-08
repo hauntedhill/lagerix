@@ -17,19 +17,22 @@ $(document).ready(function() {
 
 
 
-$(document).on("click", ".articleTypeRow", function() {
-    var articleTypeId = $(this).children(".articleTypeId").html();
+$(document).on("click", ".articleTypeRow",function(){
+    simpleSearch("ipIdSimpleSearch=" + $(this).children(".articleTypeId").html());
+});
+
+function simpleSearch(pData) {
     $.ajax({
         url: urlGlobal + "simplesearch",
         type: "GET",
-        data: "ipIdSimpleSearch=" + articleTypeId,
+        data: pData,
         cache: false,
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
             displayArticleType(data, textStatus, jqXHR);
         }
     });
-});
+}
 
 $(document).on("click", "#btnChangeMinimumStock", function() {
     if ($("#ipArticleTypeId").val() > 0)
@@ -47,7 +50,6 @@ $(document).on("click", "#btnChangeMinimumStock", function() {
             $("button[name='btnChangeMinimumStockAbort']").css('visibility', 'hidden');
             $("button[name='btnChangeMinimumStockConfirm']").css('visibility', 'hidden');
             $("button[name='btnChangeMinimumStock']").css('visibility', 'visible');
-            
         }
     }
     return false;
@@ -64,29 +66,46 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
         cache: false,
         dataType: "text",
         contentType: "application/x-www-form-urlencoded",
-        success: function(){$("#btnChangeMinimumStock").click();}
+        success: function() {
+            $("#btnChangeMinimumStock").click();
+        }
     });
-    
     return false;
 });
 
 
 $(document).on("click", "#btnChangeMinimumStockAbort", function() {
     $("#btnChangeMinimumStock").click();
+    simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
     return false;
 });
 
-
+$(document).on("click", "#btnLogOut", function() {
+    var urli ="https://" + window.location.host + "/lagerix/services/auth/logout";
+    $.ajax({
+        url: urli,
+        type: "GET",
+        cache: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+            if (data.status == "SUCCESS") {
+                //redirect to welcome page
+                window.location.replace("http://" + window.location.hostname + ":8080/lagerix");
+            } else {
+                alert("logout failed");
+            }
+        }
+    });
+    return false;
+});
 
 $(document).on("mouseenter", ".articleTypeRow", function() {
     $(this).css('cursor', 'pointer');
 });
 
-
 $(document).on("mouseleave", ".articleTypeRow", function() {
     $(this).css('cursor', 'auto');
 });
-
 
 $(document).ready(function() {
     $(document.forms['advancedSearchForm']).submit(function() {
@@ -106,25 +125,10 @@ $(document).ready(function() {
 
 $(document).ready(function() {
     $(document.forms['simpleSearchForm']).submit(function() {
-        var url = urlGlobal + "simplesearch";
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: $("#simpleSearchForm").serialize(),
-            cache: false,
-            dataType: "json",
-            success: function(data, textStatus, jqXHR) {
-                displayArticleType(data, textStatus, jqXHR);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert("ERROR!\ntextStatus: " + textStatus + "\nerrorThrown: " + errorThrown + "\njqXHR.responseText: " + jqXHR.responseText);
-            }
-        });
+        simpleSearch($("#simpleSearchForm").serialize()); 
         return false;
     });
 });
-
-
 
 $(document).ready(function() {
     $(document.forms['formRefreshMinUnderrun']).submit(function() {
@@ -152,6 +156,13 @@ function displayArticleTypes(data) {
     return rows;
 }
 
+function displayStockTrend(data) {
+    var rows = "";
+    for (var i = 0; i < data.length; i++) {
+        rows += "<tr><td>" + data[i].timestamp + "</td><td>"  + data[i].bookedIn + "</td></tr>";
+    }
+    return rows;
+}
 
 
 function displayArticleType(data, textStatus, jqXHR) {
@@ -162,6 +173,9 @@ function displayArticleType(data, textStatus, jqXHR) {
     $("#ipStorageId").val(data.storageId);
     $("#ipStorageName").val(data.storageName);
     $("#ipCurrentStock").val(data.currentStock);
+//    $("#tbodyStockTrend").html(displayStockTrend(data.movements));
+    
+    
     var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
     $("#panelTitelArticleTypeDescription").html(title);
 

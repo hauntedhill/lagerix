@@ -8,21 +8,18 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
-        <!--<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">-->
-        <script src="../js/jquery/jquery-1.10.2.min.js"></script> 
+        <title>Lagerix</title>
+        <script src="../js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script> 
         <link rel="stylesheet" type="text/css" href="../css/lagerix-web-app.css">
         <link href="../css/bootstrap.css" rel="stylesheet" media="screen">
-        <script src="../js/bootstrap.js"></script>
-        <script src="../js/json2.js"></script>         
-        <script src="../js/lagerix-web-app.js"></script> 
+        <script src="../js/bootstrap.js" type="text/javascript"></script>     
+        <script src="../js/lagerix-web-app.js" type="text/javascript"></script> 
     </head>
     <body>
         <div class="container">
             <div class="page-header" style="margin: 10px 0px">
                 <img src="../images/lagerix-logo.png" alt="Lagerix">
                 <form><button type="submit" class="btn btn-default btn-sm" id="btnLogOut"><span class="glyphicon glyphicon-log-out" style="margin: 0px 15px 0px 0px"></span>Abmelden</button></form>
-                <a id="logoutLink" href="<%=request.getContextPath() %>/services/auth/logout" >logout</a>
             </div>
             <div class="row">
                 <div class="col-md-6">               
@@ -31,7 +28,7 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-info-sign" style="margin: 0px 15px 0px 0px"></span>Informationen zu Artikelart </h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="https://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/webApp/" autocomplete="off">
+                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="https://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/secure/webApp/" autocomplete="off">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
@@ -71,10 +68,21 @@
                                     </div>                        
                                 </div> 
                                 <div class="row">
-                                    <label for="stockTrend" class="col-sm-3 control-label">Bestandsverlauf</label>
-                                    <div class="col-sm-9">
-                                        <textarea rows="4" class="form-control input-sm " disabled id="stockTrend" name="stockTrend"></textarea>
-                                    </div>                        
+                                    <label for="stockTrend" class="col-sm-3 control-label">Bestandsverlauf</label>                                  
+                                    
+                                    
+                                    <div class="lagerix-scrollable lagerix-bodycontainer col-sm-9">
+                                        <table class="table table-condensed table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr><th>Zeitpunkt</th><th>Buchungsrichtung</th></tr>
+                                            </thead>
+                                            <tbody id="tbodyStockTrend">
+                                            </tbody>
+                                        </table>  
+                                    </div>
+                                    
+                                    
+                                    
                                 </div>  
                                 <hr>
                                 <div class="row">
@@ -82,7 +90,7 @@
                                     <div class="col-sm-5">
                                         <input type="text" class="form-control input-sm " disabled id="ipStorageName" name="ipStorageName">
                                     </div>      
-                                      <label for="ipStorageId" class="col-sm-2 control-label">Lager-ID</label>
+                                    <label for="ipStorageId" class="col-sm-2 control-label">Lager-ID</label>
                                     <div class="col-sm-2">
                                         <input type="text" class="form-control input-sm " disabled id="ipStorageId" name="ipStorageId">
                                     </div>  
@@ -224,6 +232,7 @@
                         </div>
                     </div>
                 </div>
-            </div>       
+            </div> 
+        </div>
     </body>
 </html>

@@ -32,7 +32,7 @@ import java.util.List;
  *
  * @author Tamas
  */
-@Path("webApp")
+@Path("/secure/webApp")
 public class WebAppService
 {
 
@@ -62,16 +62,16 @@ public class WebAppService
             ArticleTypeExtended tc = new ArticleTypeExtended();
 
             ArticleTypeDTO atDTO = this.myArticleBean.getArticleTypeByID(id);
-            List <MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
-            List<YardDTO> yDTOs = this.myPlaceBean.getYardsForArticleType(id);
+//            List <MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
+            List<YardDTO> yDTOs = this.myPlaceBean.getAllYardsForStorage(atDTO.getStorageID());
             
+//            tc.setMovements(mDTOs);
             tc.setDescription(atDTO.getDescription());
             tc.setId(atDTO.getId());
             tc.setName(atDTO.getName());
             tc.setMinimumStock(atDTO.getMinimumStock());
             tc.setStorageId(atDTO.getStorageID());
-            int currentStock = yDTOs.size();
-            tc.setCurrentStock(currentStock);
+            tc.setCurrentStock(yDTOs.size());
             StorageDTO myStorage = null;
             List<StorageDTO> storages = this.myPlaceBean.getAllStorages();
             for (StorageDTO storage : storages)
@@ -200,6 +200,27 @@ class ArticleTypeExtended implements Serializable
     private int storageId;
     private String storageName;
     private int currentStock;
+    private List<MovementDTO> movements;
+
+    /**
+     * Get the value of movements
+     *
+     * @return the value of movements
+     */
+    public List<MovementDTO> getMovements()
+    {
+        return movements;
+    }
+
+    /**
+     * Set the value of movements
+     *
+     * @param movements new value of movements
+     */
+    public void setMovements(List<MovementDTO> movements)
+    {
+        this.movements = movements;
+    }
 
     /**
      * Get the value of currentStock
