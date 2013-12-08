@@ -45,7 +45,7 @@ public class PlaceManagerEJBean implements PlaceManagerEJBRemoteInterface {
     private StorageDAO storageDAO;
 
     @Resource
-    SessionContext scxt;
+    private SessionContext scxt;
 
     @RolesAllowed({"LAGERVERWALTER"})
     public YardDTO createNewYard(int storageID) {

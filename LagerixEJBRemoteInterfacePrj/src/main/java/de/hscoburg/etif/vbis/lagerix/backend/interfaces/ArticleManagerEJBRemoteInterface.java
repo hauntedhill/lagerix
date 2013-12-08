@@ -98,4 +98,6 @@ public interface ArticleManagerEJBRemoteInterface {
 
     public void deleteArticle(int articleId);
 
+    public List<ArticleDTO> getAllArticleByArticleType(int articleTypeId);
+
 }
