@@ -12,6 +12,11 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;
 import com.loopj.android.http.RequestParams;
 
+/**
+ * Helper class which performs REST requests
+ * @author Felix Lisczyk
+ *
+ */
 public class LagerixRestClient {
 
 	private static AsyncHttpClient client;

@@ -6,8 +6,17 @@ import android.view.Menu;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+/**
+ * Activity which displays the results of the search request in a list
+ * @author Felix Lisczyk
+ *
+ */
 public class SearchResultActivity extends Activity {
 
+	/**
+	 * Initializer method for the activity
+	 * Gets called on first launch
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

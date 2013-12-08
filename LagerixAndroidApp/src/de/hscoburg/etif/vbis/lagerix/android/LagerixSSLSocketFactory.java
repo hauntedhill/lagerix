@@ -17,6 +17,11 @@ import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.conn.ssl.SSLSocketFactory;
 
+/**
+ * Helper class which creats a SSL certificate
+ * @author Felix Lisczyk
+ *
+ */
 public class LagerixSSLSocketFactory extends SSLSocketFactory {
     SSLContext sslContext = SSLContext.getInstance("TLS");
 

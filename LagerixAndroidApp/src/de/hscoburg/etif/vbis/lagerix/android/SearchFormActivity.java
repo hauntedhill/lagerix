@@ -6,8 +6,18 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 
+/**
+ * Activity which displays a search form to the user
+ * @author Felix Lisczyk
+ *
+ */
 public class SearchFormActivity extends Activity {
 
+	
+	/**
+	 * Initializer method for the activity
+	 * Gets called on first launch
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -16,6 +26,9 @@ public class SearchFormActivity extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
+	/**
+	 * Initializer method for the action bar
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.

@@ -20,7 +20,8 @@
         <activity
             android:name="de.hscoburg.etif.vbis.lagerix.android.LoginActivity"
             android:label="@string/app_name"
-            android:windowSoftInputMode="adjustResize|stateVisible" >
+            android:windowSoftInputMode="adjustResize|stateVisible"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -28,8 +29,9 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="de.hscoburg.etif.vbis.lagerix.android.MainActivity"
-            android:label="@string/app_name" >
+            android:name="de.hscoburg.etif.vbis.lagerix.android.ScanActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="com.google.zxing.client.android.CaptureActivity"
@@ -46,7 +48,8 @@
         <activity
             android:name="de.hscoburg.etif.vbis.lagerix.android.SearchFormActivity"
             android:label="@string/title_activity_search_form"
-            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.MainActivity" >
+            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.ScanActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.hscoburg.etif.vbis.lagerix.android.MainActivity" />
@@ -54,7 +57,8 @@
         <activity
             android:name="de.hscoburg.etif.vbis.lagerix.android.SearchResultActivity"
             android:label="@string/title_activity_search_result"
-            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.SearchFormActivity" >
+            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.SearchFormActivity"
+            android:screenOrientation="portrait" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.hscoburg.etif.vbis.lagerix.android.SearchFormActivity" />
@@ -62,11 +66,13 @@
         <activity
             android:name="de.hscoburg.etif.vbis.lagerix.android.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.LoginActivity" >
+            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.LoginActivity"
+            android:screenOrientation="portrait" >
         </activity>
         <activity
             android:name="de.hscoburg.etif.vbis.lagerix.android.LogoutActivity"
-            android:label="@string/title_activity_logout" >
+            android:label="@string/title_activity_logout"
+            android:screenOrientation="portrait" >
         </activity>
     </application>
 

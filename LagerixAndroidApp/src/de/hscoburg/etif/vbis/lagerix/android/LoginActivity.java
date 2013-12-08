@@ -28,8 +28,9 @@ import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
 /**
- * Activity which displays a login screen to the user, offering registration as
- * well.
+ * Activity which displays a login screen to the user
+ * @author Felix Lisczyk
+ * 
  */
 public class LoginActivity extends Activity {
 
@@ -50,6 +51,10 @@ public class LoginActivity extends Activity {
 	//IP address from settings
 	String baseURL;
 
+	/**
+	 * Initializer method for the activity
+	 * Gets called on first launch
+	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -57,8 +62,6 @@ public class LoginActivity extends Activity {
 		setContentView(R.layout.activity_login);
 		
 		PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
 
 		// Set up the login form.
 		mEmailView = (EditText) findViewById(R.id.email);
@@ -89,7 +92,20 @@ public class LoginActivity extends Activity {
 					}
 				});
 	}
+	
+	/**
+	 * Gets called every time the activity appears on screen
+	 */
+	@Override
+	public void onStart() {
+		super.onStart();
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		baseURL = sharedPref.getString("server_ip", "localhost:8080");
+	}
 
+	/**
+	 * Initializer method for the action bar
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
@@ -97,6 +113,9 @@ public class LoginActivity extends Activity {
 		return true;
 	}
 	
+	/**
+	 * Listener method for the action bar buttons
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
@@ -203,10 +222,12 @@ public class LoginActivity extends Activity {
 	 */
 	public void login() {
 		
+		// Create parameters for the REST request
 		RequestParams restParams = new RequestParams();
 		restParams.put("email", mEmail);
 		restParams.put("password", mPassword);
-				
+		
+		// Show the progress spinner
 		showProgress(true);
 
 		// This first REST request checks if the supplied credentials are valid.
@@ -232,7 +253,7 @@ public class LoginActivity extends Activity {
 	        				@Override
 	        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 	        					showProgress(false);
-	        					Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+	        					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
 	        			    	startActivity(intent);
 	        			    	finish();
 	        				}
