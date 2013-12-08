@@ -608,8 +608,17 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
                 " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
             == JOptionPane.YES_OPTION)
             {
-                articleManager.deleteArticleType((Integer)(((Item)jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj()));
-                createJTableStockManagerArticletypes();
+                try
+                {
+                    articleManager.deleteArticleType((Integer)(((Item)jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj()));
+                    createJTableStockManagerArticletypes();
+                } catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Artikeltyps: "
+                            + jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)
+                            + ". Bitte loeschen Sie zuerst alle Artikel dieses Artikeltyps.", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         else
@@ -834,10 +843,25 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
 
     private void jButtonStockManagerArticleDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticleDeleteActionPerformed
         int id = (Integer) jTableStockManagerArticles.getValueAt(jTableStockManagerArticles.getSelectedRow(), 0);
-        articleManager.deleteArticle(id);
-        jButtonStockManagerArticleDelete.setEnabled(false);
-        jButtonStockManagerArticlePrintBarcode.setEnabled(false);
-        createJTableStockManagerArticles();
+        if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Artikel mit der ID: " +
+                id +
+                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+            == JOptionPane.YES_OPTION)
+        {
+            try
+            {
+                articleManager.deleteArticle(id);
+                jButtonStockManagerArticleDelete.setEnabled(false);
+                jButtonStockManagerArticlePrintBarcode.setEnabled(false);
+                createJTableStockManagerArticles();
+            } catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Artikels mit der ID: "
+                            + id
+                            + ".", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButtonStockManagerArticleDeleteActionPerformed
 
 
