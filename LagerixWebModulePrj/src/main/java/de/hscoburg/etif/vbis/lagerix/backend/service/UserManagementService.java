@@ -46,16 +46,9 @@ public class UserManagementService {
         } else {
             req.getServletContext().log("Skip logged because already logged in: " + email);
         }
-
-        //read the user data from db and return to caller
-
-        UserDTO user = userBean.find(email);
+        
         req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
-
-        //we don't want to send the hashed password out in the json response
-        //userBean.detach(user);
-        //user.setPassword(null);
-        //user.setGroups(null);
+        
         return "SUCCESS";
     }
 
