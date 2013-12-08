@@ -37,13 +37,12 @@ public class BookingService {
     @Path("saveEntry")
     @POST
     @Consumes("application/x-www-form-urlencoded")
-    public int saveBookEntry(@FormParam("articleID") int articleID, @FormParam("locationID") int locationID, @FormParam("bookedIn") boolean bookedIn, @FormParam("userID") int userID, @FormParam("timestamp") long timestamp) {
+    public int saveBookEntry(@FormParam("articleID") int articleID, @FormParam("locationID") int locationID, @FormParam("bookedIn") boolean bookedIn, @FormParam("timestamp") long timestamp) {
         
         System.out.println("Method saveBookEntry() called - Received values:");
         System.out.println("ArticleID: "+articleID);
         System.out.println("LocationID: "+locationID);
         System.out.println("BookedIn: "+bookedIn);
-        System.out.println("UserID: "+userID);
         System.out.println("Timestamp: "+timestamp);
         
         MovementDTO movementEntry = new MovementDTO();
