@@ -24,6 +24,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import static de.hscoburg.etif.vbis.lagerixjavaclient.Main.serverConfig;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.GridLayout;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -73,6 +74,7 @@ public class MainWindow extends javax.swing.JFrame {
     private JPanelAdminUsers jPanelAdminUsers = null;
     private JPanelAdminStorages jPanelAdminStorages = null;
     private JPanelStockManagerYards jPanelStockManagerYards = null;
+    private JPanelStockManagerOverview jPanelStockManagerOverview = null;
     /**
      * Creates new form MainWindow
      */
@@ -422,13 +424,16 @@ public class MainWindow extends javax.swing.JFrame {
                          }
                          else if(userManager.isInGroup(GroupType.LAGERVERWALTER))
                          {
+                            jPanelStockManagerOverview = new JPanelStockManagerOverview(placeManager, articleManager);
                             jPanelStockManagerArticletypes = new JPanelStockManagerArticletypes(articleManager, placeManager);
                             jPanelStockManagerYards = new JPanelStockManagerYards(placeManager);
                             jTabbedPaneStockMan.removeAll();
                             jTabbedPaneStockMan.addTab("Lagerplatzverwaltung", jPanelStockManagerYards);
                             jTabbedPaneStockMan.addTab("Artikelverwaltung", jPanelStockManagerArticletypes);
+                            jTabbedPaneStockMan.addTab("Lagerbelegung", jPanelStockManagerOverview);
                             jPanelStockManagerYards.createJTableStockManagerYards();
                             jPanelStockManagerArticletypes.createJTableStockManagerArticletypes();
+                            jPanelStockManagerOverview.createTables();
                             
                             CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
                             cl.show(jPanelControlsMain, "UserCard");   
@@ -492,7 +497,7 @@ public class MainWindow extends javax.swing.JFrame {
     }//GEN-LAST:event_jTabbedPaneAdministratorStateChanged
 
     private void jTabbedPaneStockManStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneStockManStateChanged
-        int selectedTabb = jTabbedPaneAdministrator.getSelectedIndex();
+        int selectedTabb = jTabbedPaneStockMan.getSelectedIndex();
         switch(selectedTabb)
         {
             case 1:
@@ -506,6 +511,13 @@ public class MainWindow extends javax.swing.JFrame {
                 if(jPanelStockManagerYards != null)
                 {
                     jPanelStockManagerYards.createJTableStockManagerYards();
+                }
+                break;
+                
+            case 2:
+                if(jPanelStockManagerOverview != null)
+                {
+                    jPanelStockManagerOverview.createTables();
                 }
                 break;
         }
