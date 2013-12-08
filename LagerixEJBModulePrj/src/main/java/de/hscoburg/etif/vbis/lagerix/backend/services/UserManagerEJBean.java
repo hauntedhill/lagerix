@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.hscoburg.etif.vbis.lagerix.backend.services;
 
 import de.hscoburg.etif.vbis.lagerix.backend.dao.StorageDAO;
@@ -26,6 +21,7 @@ import javax.ejb.SessionContext;
 import javax.ejb.Stateless;
 
 /**
+ * This class manage all operations on an user object.
  *
  * @author zuch1000
  */
@@ -41,6 +37,12 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
     @Resource
     private SessionContext sctx;
 
+    /**
+     * This method search for an user by its unique email
+     *
+     * @param email - The email of the user
+     * @return The data of the user or null if it not exists
+     */
     @RolesAllowed({"ADMINISTRATOR"})
     public UserDTO find(String email) {
         User u = userDAO.find(email);
@@ -69,6 +71,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         }
     }
 
+    /**
+     * This method update the groups of an user with the groups in the DTO
+     *
+     * @param user - The DTO with the mail of the user an the new groups
+     */
     @RolesAllowed({"ADMINISTRATOR"})
     public void editUserGroups(UserDTO user) {
         User u = userDAO.find(user.getEmail());
@@ -112,6 +119,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         userDAO.merge(u);
     }
 
+    /**
+     * This method registers an new User on the system
+     *
+     * @param user - A DTO with all the data of an user
+     */
     @RolesAllowed({"ADMINISTRATOR"})
     public void register(UserDTO user) {
 
@@ -155,6 +167,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         userDAO.save(u);
     }
 
+    /**
+     * This method returns all user in the system.
+     *
+     * @return A list with all user
+     */
     @RolesAllowed({"ADMINISTRATOR"})
     public List<UserDTO> getAllUsers() {
         List<User> users = userDAO.findAll();
@@ -173,6 +190,11 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
         return DTOConverter.convertUser(users);
     }
 
+    /**
+     * This method delete an user in the system.
+     *
+     * @param userName - The email of the user.
+     */
     @RolesAllowed({"ADMINISTRATOR"})
     public void deleteUser(String userName) {
 
@@ -186,6 +208,12 @@ public class UserManagerEJBean implements UserManagerEJBRemoteInterface {
 
     }
 
+    /**
+     * This method check that the user logged in is in the passed group.
+     *
+     * @param group - The group to ne checked
+     * @return true or false if not.
+     */
     public boolean isInGroup(GroupType group) {
         return sctx.isCallerInRole(group.name());
     }
