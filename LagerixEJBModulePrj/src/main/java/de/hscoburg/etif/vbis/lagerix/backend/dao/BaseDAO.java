@@ -35,6 +35,7 @@ public class BaseDAO<T> {
 
     public void merge(T obj) {
         em.merge(obj);
+        em.flush();
     }
 
 }
