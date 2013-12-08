@@ -232,14 +232,13 @@ public class LoginActivity extends Activity {
 
 		// This first REST request checks if the supplied credentials are valid.
 		// It is required because the actual login request doesn't return a proper status.
-		LagerixRestClient.post(baseURL+"/lagerix/services/auth/login", restParams, new JsonHttpResponseHandler() {
+		LagerixRestClient.post(baseURL+"/lagerix/services/auth/login", restParams, new TextHttpResponseHandler() {
 
 			// The first REST request was successful.
-			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
-				try {
-					Log.d("JSONObject", response.toString());
-	                loginResult = response.getString("status");
-	                Log.d("JSONResult", loginResult);
+			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
+	                loginResult = responseBody;
+	                Log.d("First REST-Request", "Response: "+responseBody);
+					Log.d("First REST-Request", "Statuscode: "+statusCode);
 	                
 	                // The user provided valid credentials.
 	                if(loginResult.equals("SUCCESS")) {
@@ -252,6 +251,8 @@ public class LoginActivity extends Activity {
 	        				// The second REST request was successful. The first REST request already checked the user credentials, so we can forward to the main application.
 	        				@Override
 	        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
+	        	                Log.d("Second REST-Request", "Response: "+responseBody);
+	        					Log.d("Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
 	        					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
 	        			    	startActivity(intent);
@@ -265,22 +266,17 @@ public class LoginActivity extends Activity {
 	        				}
 	        			});
 	                }
+	                
 	                // The user provided invalid credentials.
 	                else {
 	    				showProgress(false);
 	    				mPasswordView.setError(getString(R.string.error_incorrect_password));
 	    				mPasswordView.requestFocus();
 	                }
-	        			
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-    				showProgress(false);
-					e.printStackTrace();
-				}
 			}
 			
 			//The first REST request failed due to a server error.
-			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
+			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 				Log.e("First REST-Request", "Error: "+responseBody);
 				Log.e("First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
