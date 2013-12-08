@@ -129,7 +129,7 @@ public class PlaceManagerEJBean extends BaseService implements PlaceManagerEJBRe
      *
      * @return A list with all storages.
      */
-    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR"})
+    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR", "EINKAEUFER"})
     public List<StorageDTO> getAllStorages() {
 
         return DTOConverter.convertStorage(getAllStoragesFromDB());
