@@ -153,7 +153,7 @@
                                         <div class="row">
                                             <label for="ipMinimumStockAdvancedSearch" class="col-sm-3 control-label">Mindestbestand</label>
                                             <div class="col-sm-5">
-                                                <input type="number" class="form-control input-sm " id="ipMinimumStockAdvancedSearch" name="ipMinimumStockAdvancedSearch">
+                                                <input type="text" class="form-control input-sm " id="ipMinimumStockAdvancedSearch" name="ipMinimumStockAdvancedSearch">
                                             </div>                      
                                             <div class="col-sm-2" style="padding: 0px 5px 0px 0px; width: auto">
                                                 <button type="submit" class="btn btn-default btn-sm" id="btnSearchAdvancedSearch" >Suchen</button>         
@@ -232,7 +232,12 @@
                                 </h4>
                             </div>
                             <div id="collapseStorageOccupancyOne" class="panel-collapse collapse ">
-                                <div class="panel-body">
+                                <div class="panel-body" id="pbStorageOccupancy">
+                                    
+                                    
+                                     <input type="text" class="form-control input-sm " id="ipStorageId2" name="ipStorageId2">
+                                     
+                                     
                                     Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung 
                                 </div>
                             </div>

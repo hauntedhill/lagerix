@@ -34,6 +34,27 @@ function simpleSearch(pData) {
     });
 }
 
+$(document).on("change","#ipStorageId2", function(){
+    getStorage("storageId="+$("#ipStorageId2").val());
+});
+
+function getStorage(pData){
+     $.ajax({
+        url: urlGlobal + "storage",
+        type: "GET",
+        data: pData,
+        cache: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+            displayStorage(data, textStatus, jqXHR);
+        }
+    });
+}
+
+function displayStorage(data, textStatus, jqXHR){
+    $("#pbStorageOccupancy").html(data);
+}
+
 $(document).on("click", "#btnChangeMinimumStock", function() {
     if ($("#ipArticleTypeId").val() > 0)
     {
