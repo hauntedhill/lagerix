@@ -142,10 +142,14 @@ public class BaseService {
      * @return The Predicate o be add to the where cause
      */
     private Predicate addPermissionCheckForArticleType(From<?, ArticleType> join, CriteriaBuilder cb) {
+        if (!scxt.isCallerInRole("ADMINISTRATOR")) {
+            Join<ArticleType, Storage> storageRoot = join.join(ArticleType_.storage, JoinType.LEFT);
 
-        Join<ArticleType, Storage> storageRoot = join.join(ArticleType_.storage, JoinType.LEFT);
+            return addPermissionCheckForStorage(storageRoot, cb);
+        } else {
+            return cb.or(cb.isNull(join.get(ArticleType_.id)), cb.isNotNull(join.get(ArticleType_.id)));
+        }
 
-        return addPermissionCheckForStorage(storageRoot, cb);
     }
 
     /**
@@ -157,13 +161,12 @@ public class BaseService {
      */
     private Predicate addPermissionCheckForStorage(From<?, Storage> join, CriteriaBuilder cb) {
 
-        Join<Storage, Groups> groupRoot = join.join(Storage_.group, JoinType.LEFT);
-        Join<Groups, User> userRoot = groupRoot.join(Groups_.user, JoinType.LEFT);
-
         if (!scxt.isCallerInRole("ADMINISTRATOR")) {
+            Join<Storage, Groups> groupRoot = join.join(Storage_.group, JoinType.LEFT);
+            Join<Groups, User> userRoot = groupRoot.join(Groups_.user, JoinType.LEFT);
             return cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName());
         } else {
-            return cb.or(cb.isNull(userRoot.get(User_.email)), cb.isNotNull(userRoot.get(User_.email)));
+            return cb.or(cb.isNull(join.get(Storage_.id)), cb.isNotNull(join.get(Storage_.id)));
         }
 
     }
