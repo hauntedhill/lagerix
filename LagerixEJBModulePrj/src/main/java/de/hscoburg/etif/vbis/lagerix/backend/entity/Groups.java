@@ -1,5 +1,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Group;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;

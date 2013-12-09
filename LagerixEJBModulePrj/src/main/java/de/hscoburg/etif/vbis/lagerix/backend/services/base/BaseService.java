@@ -1,26 +1,21 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.hscoburg.etif.vbis.lagerix.backend.services.base;
 
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType_;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article_;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups_;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement_;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.SecureEntity;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage_;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User_;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard_;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Group;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.SecureEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.annotation.Resource;
@@ -41,10 +36,10 @@ import javax.persistence.criteria.Root;
  * @author zuch1000
  */
 public class BaseService {
-    
+
     @PersistenceContext
     private EntityManager em;
-    
+
     @Resource
     private SessionContext scxt;
 
@@ -54,7 +49,7 @@ public class BaseService {
      * @param obj
      */
     public void save(Object obj) {
-        if (obj.getClass().isAssignableFrom(SecureEntity.class)) {
+        if (obj.getClass().isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
             SecureEntity a = (SecureEntity) obj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return;
@@ -63,10 +58,16 @@ public class BaseService {
         em.persist(obj);
         em.flush();
     }
-    
+
+    /**
+     * Checks the storage against the user group storage permissions
+     *
+     * @param s - The storage to be access
+     * @return true if the user had access, otherwise false
+     */
     private boolean checkStoragePermission(Storage s) {
         User u = em.find(User.class, scxt.getCallerPrincipal().getName());
-        
+
         if (u.getGroups() != null) {
             for (Groups g : u.getGroups()) {
                 if (g.getStorage().contains(s)) {
@@ -74,7 +75,7 @@ public class BaseService {
                 }
             }
         }
-        
+
         return false;
     }
 
@@ -87,15 +88,15 @@ public class BaseService {
      * @return The object or null
      */
     public <T> T findById(Class<T> obj, Integer id) {
-        
+
         T dbObj = em.find(obj, id);
-        if (obj.isAssignableFrom(SecureEntity.class)) {
+        if (obj.isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
             SecureEntity a = (SecureEntity) dbObj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return null;
             }
         }
-        
+
         return dbObj;
     }
 
@@ -105,7 +106,7 @@ public class BaseService {
      * @param obj
      */
     public void remove(Object obj) {
-        if (obj.getClass().isAssignableFrom(SecureEntity.class)) {
+        if (obj.getClass().isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
             SecureEntity a = (SecureEntity) obj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return;
@@ -122,7 +123,7 @@ public class BaseService {
      * @param obj
      */
     public void merge(Object obj) {
-        if (obj.getClass().isAssignableFrom(SecureEntity.class)) {
+        if (obj.getClass().isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
             SecureEntity a = (SecureEntity) obj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return;
@@ -131,19 +132,33 @@ public class BaseService {
         em.merge(obj);
         em.flush();
     }
-    
+
+    /**
+     * Add the security checks to a query over the ArticleType root or join class
+     *
+     * @param join - The root or join class
+     * @param cb - The criterieQuery builder to be used
+     * @return The Predicate o be add to the where cause
+     */
     private Predicate addPermissionCheckForArticleType(From<?, ArticleType> join, CriteriaBuilder cb) {
-        
+
         Join<ArticleType, Storage> storageRoot = join.join(ArticleType_.storage);
-        
+
         return addPermissionCheckForStorage(storageRoot, cb);
     }
-    
+
+    /**
+     * Add the security checks to a query over the storage root or join class
+     *
+     * @param join - The root or join class
+     * @param cb - The criterieQuery builder to be used
+     * @return The Predicate o be add to the where cause
+     */
     private Predicate addPermissionCheckForStorage(From<?, Storage> join, CriteriaBuilder cb) {
-        
+
         Join<Storage, Groups> groupRoot = join.join(Storage_.group);
         Join<Groups, User> userRoot = groupRoot.join(Groups_.user);
-        
+
         return cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName());
     }
 
@@ -154,19 +169,19 @@ public class BaseService {
      * @return List with all movements of the type
      */
     public List<Movement> getMovementsForArticleTypeId(int articleTypeId) {
-        
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        
+
         CriteriaQuery<Movement> movementCriteria = cb.createQuery(Movement.class);
         Root<Movement> movementRoot = movementCriteria.from(Movement.class);
         // Person.address is an embedded attribute
         Join<Movement, Article> articelRoot = movementRoot.join(Movement_.article);
         // Address.country is a ManyToOne
         Join<Article, ArticleType> articleTypeRoot = articelRoot.join(Article_.articleType);
-        
+
         movementCriteria.select(movementRoot).where(cb.and(cb.equal(articleTypeRoot.get(ArticleType_.id), articleTypeId), addPermissionCheckForArticleType(articleTypeRoot, cb)));
         TypedQuery<Movement> q = em.createQuery(movementCriteria);
-        
+
         return q.getResultList();
     }
 
@@ -179,14 +194,14 @@ public class BaseService {
      * @return A list with all articleTypes found for the criterias
      */
     public List<ArticleType> getArticleTypesBy(String articleTypeName, String articleTypeDescription, String articleTypeMinimumStock) {
-        
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        
+
         CriteriaQuery<ArticleType> movementCriteria = cb.createQuery(ArticleType.class);
         Root<ArticleType> articleTypeRoot = movementCriteria.from(ArticleType.class);
-        
+
         List<Predicate> wheres = new ArrayList<Predicate>();
-        
+
         if (articleTypeName != null && !"".equals(articleTypeName.trim())) {
             wheres.add(cb.like(cb.upper(articleTypeRoot.get(ArticleType_.name)), "%" + articleTypeName.toUpperCase() + "%"));
         }
@@ -197,11 +212,11 @@ public class BaseService {
             wheres.add(cb.equal(articleTypeRoot.get(ArticleType_.minimumStock), new Integer(articleTypeMinimumStock)));
         }
         wheres.add(addPermissionCheckForArticleType(articleTypeRoot, cb));
-        
+
         movementCriteria.select(articleTypeRoot).where(wheres.toArray(new Predicate[0]));
-        
+
         TypedQuery<ArticleType> q = em.createQuery(movementCriteria);
-        
+
         return q.getResultList();
     }
 
@@ -216,7 +231,7 @@ public class BaseService {
         Root<ArticleType> root = cq.from(ArticleType.class);
         cq.select(root).where(addPermissionCheckForArticleType(root, cb));
         TypedQuery<ArticleType> q = em.createQuery(cq);
-        
+
         return q.getResultList();
     }
 
@@ -227,20 +242,20 @@ public class BaseService {
      * @return Count of all articles in stock
      */
     public long getArticleTypeStock(ArticleType articleType) {
-        
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        
+
         CriteriaQuery<Long> articleCriteria = cb.createQuery(Long.class);
         Root<ArticleType> articleRoot = articleCriteria.from(ArticleType.class);
-        
+
         Join<ArticleType, Article> articelRoot = articleRoot.join(ArticleType_.articles);
-        
+
         articleCriteria.select(cb.count(articleRoot)).where(cb.and(addPermissionCheckForArticleType(articleRoot, cb), cb.isNotNull(articelRoot.get(Article_.yard)), cb.equal(articleRoot.get(ArticleType_.id), articleType.getId()))).groupBy(articleRoot.get(ArticleType_.id));
-        
+
         TypedQuery<Long> q = em.createQuery(articleCriteria);
-        
+
         return q.getResultList().size() == 1 ? q.getResultList().get(0).longValue() : 0;
-        
+
     }
 
     /**
@@ -254,7 +269,7 @@ public class BaseService {
         Root<Storage> storageRoot = cq.from(Storage.class);
         cq.select(storageRoot).where(addPermissionCheckForStorage(storageRoot, cb));
         TypedQuery<Storage> q = em.createQuery(cq);
-        
+
         return q.getResultList();
     }
 
@@ -264,15 +279,15 @@ public class BaseService {
      * @return List with all users
      */
     public List<User> findAllUser() {
-        
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
         Root<User> pet = cq.from(User.class);
         cq.select(pet);
         TypedQuery<User> q = em.createQuery(cq);
-        
+
         return q.getResultList();
-        
+
     }
 
     /**
@@ -283,7 +298,7 @@ public class BaseService {
      * @return A list with all found users
      */
     public List<User> findAllUsersByGroupAndStorage(Group g, Storage s) {
-        
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
         Root<User> pet = cq.from(User.class);
@@ -291,9 +306,9 @@ public class BaseService {
         Join<Groups, Storage> storageRoot = groupsRoot.join(Groups_.storage);
         cq.select(pet).where(cb.and(cb.equal(groupsRoot.get(Groups_.groups), g), cb.equal(storageRoot.get(Storage_.id), s.getId())));
         TypedQuery<User> q = em.createQuery(cq);
-        
+
         return q.getResultList();
-        
+
     }
 
     /**
@@ -308,9 +323,9 @@ public class BaseService {
         Root<User> pet = cq.from(User.class);
         cq.select(pet).where(cb.equal(pet.get(User_.email), email));
         TypedQuery<User> q = em.createQuery(cq);
-        
+
         List<User> result = q.getResultList();
-        
+
         return result.size() == 1 ? result.get(0) : null;
     }
 
@@ -352,20 +367,20 @@ public class BaseService {
      * @return A list with all yards for the passed articleType
      */
     public List<Yard> getYardsForArticleTypeFromDB(int articleTypeId) {
-        
+
         CriteriaBuilder cb = em.getCriteriaBuilder();
-        
+
         CriteriaQuery<Yard> movementCriteria = cb.createQuery(Yard.class);
         Root<Yard> movementRoot = movementCriteria.from(Yard.class);
         // Person.address is an embedded attribute
         Join<Yard, Article> articelRoot = movementRoot.join(Yard_.article);
         // Address.country is a ManyToOne
         Join<Article, ArticleType> articleTypeRoot = articelRoot.join(Article_.articleType);
-        
+
         movementCriteria.select(movementRoot).where(cb.and(addPermissionCheckForArticleType(articleTypeRoot, cb), cb.equal(articleTypeRoot.get(ArticleType_.id), articleTypeId)));
         TypedQuery<Yard> q = em.createQuery(movementCriteria);
-        
+
         return q.getResultList();
-        
+
     }
 }

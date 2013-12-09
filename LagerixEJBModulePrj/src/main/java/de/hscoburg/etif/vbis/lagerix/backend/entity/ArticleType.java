@@ -1,5 +1,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.SecureEntity;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;

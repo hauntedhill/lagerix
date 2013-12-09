@@ -1,5 +1,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 import javax.xml.crypto.Data;

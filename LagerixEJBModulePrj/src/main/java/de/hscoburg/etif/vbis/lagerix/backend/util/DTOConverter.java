@@ -4,7 +4,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.Movements;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;

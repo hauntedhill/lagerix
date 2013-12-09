@@ -1,7 +1,7 @@
 <%-- 
     Document   : articleTest.jsp
     Created on : 28.11.2013, 13:59:16
-    Author     : Haunted
+    Author     : zuch1000
 --%>
 
 <%@page import="de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO"%>

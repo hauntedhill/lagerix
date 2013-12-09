@@ -1,4 +1,4 @@
-package de.hscoburg.etif.vbis.lagerix.backend.entity;
+package de.hscoburg.etif.vbis.lagerix.backend.entity.base;
 
 /**
  * Enumeration with all available movements

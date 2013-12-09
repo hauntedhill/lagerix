@@ -1,5 +1,6 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.SecureEntity;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;

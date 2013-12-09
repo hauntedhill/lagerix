@@ -1,5 +1,7 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.SecureEntity;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
