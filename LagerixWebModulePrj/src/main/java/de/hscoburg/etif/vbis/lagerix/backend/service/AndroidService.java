@@ -11,8 +11,8 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.service.dto.StorageLocationInfoDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.service.dto.StorageOverviewDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.service.dto.YardInfoDTO;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedList;
@@ -110,21 +110,29 @@ public class AndroidService {
             }
         }
         
-        List<StorageLocationInfoDTO> result = new LinkedList<StorageLocationInfoDTO>();
-        for(Integer i : occupiedYards)
-            result.add(new StorageLocationInfoDTO(i, "Belegt"));
+        List<YardInfoDTO> yardList = new LinkedList<YardInfoDTO>();
+        for(Integer i : occupiedYards) {
+            YardInfoDTO yard = new YardInfoDTO();
+            yard.setYardId(i);
+            yard.setYardStatus("Belegt");
+            yardList.add(yard);
+        }
+        for(Integer i : freeYards) {
+            YardInfoDTO yard = new YardInfoDTO();
+            yard.setYardId(i);
+            yard.setYardStatus("Frei");
+            yardList.add(yard);
+        }
         
-        for(Integer i : freeYards)
-            result.add(new StorageLocationInfoDTO(i, "Frei"));
-        
-        Collections.sort(result, new Comparator<StorageLocationInfoDTO>() {
+        Collections.sort(yardList, new Comparator<YardInfoDTO>() {
             @Override
-            public int compare(StorageLocationInfoDTO o1, StorageLocationInfoDTO o2) {
+            public int compare(YardInfoDTO o1, YardInfoDTO o2) {
                 return o1.getYardId().compareTo(o2.getYardId());
             }
         });
-        
-        return new StorageOverviewDTO(result);
+        StorageOverviewDTO result = new StorageOverviewDTO();
+        result.setStorageInfo(yardList);
+        return result;
         
         
     }
@@ -145,3 +153,58 @@ public class AndroidService {
     }
     
 }
+
+
+//class StorageOverviewDTO {
+//    
+//    private List<YardInfoDTO> storageInfo;
+//    
+//    /**
+//     * @return the storageInfo
+//     */
+//    public List<YardInfoDTO> getStorageInfo() {
+//        return storageInfo;
+//    }
+//
+//    /**
+//     * @param storageInfo the storageInfo to set
+//     */
+//    public void setStorageInfo(List<YardInfoDTO> storageInfo) {
+//        this.storageInfo = storageInfo;
+//    }
+//}
+//
+//class YardInfoDTO {
+//    
+//    private Integer yardId;
+//    private String yardStatus;
+//
+//    /**
+//     * @return the yardId
+//     */
+//    public Integer getYardId() {
+//        return yardId;
+//    }
+//
+//    /**
+//     * @param yardId the yardId to set
+//     */
+//    public void setYardId(Integer yardId) {
+//        this.yardId = yardId;
+//    }
+//
+//    /**
+//     * @return the yardStatus
+//     */
+//    public String getYardStatus() {
+//        return yardStatus;
+//    }
+//
+//    /**
+//     * @param yardStatus the yardStatus to set
+//     */
+//    public void setYardStatus(String yardStatus) {
+//        this.yardStatus = yardStatus;
+//    }
+//    
+//}

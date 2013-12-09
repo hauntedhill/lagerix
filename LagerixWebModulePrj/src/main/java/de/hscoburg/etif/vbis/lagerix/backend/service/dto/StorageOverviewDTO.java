@@ -4,18 +4,27 @@
  */
 package de.hscoburg.etif.vbis.lagerix.backend.service.dto;
 
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.BaseDTO;
 import java.util.List;
 
 /**
  *
- * @author Felix Lisczyk
+ * @author Felix
  */
-public class StorageOverviewDTO extends BaseDTO {
+public class StorageOverviewDTO {
     
-    private List<StorageLocationInfoDTO> storageInfo;
+    private List<YardInfoDTO> storageInfo;
     
-    public StorageOverviewDTO(List<StorageLocationInfoDTO> storageInfo) {
+    /**
+     * @return the storageInfo
+     */
+    public List<YardInfoDTO> getStorageInfo() {
+        return storageInfo;
+    }
+
+    /**
+     * @param storageInfo the storageInfo to set
+     */
+    public void setStorageInfo(List<YardInfoDTO> storageInfo) {
         this.storageInfo = storageInfo;
     }
 }
