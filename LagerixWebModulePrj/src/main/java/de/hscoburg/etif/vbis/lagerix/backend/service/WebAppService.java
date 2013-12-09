@@ -73,18 +73,8 @@ public class WebAppService
             tc.setName(atDTO.getName());
             tc.setMinimumStock(atDTO.getMinimumStock());
             tc.setStorageId(atDTO.getStorageID());
-            tc.setCurrentStock(yDTOs.size());
-            StorageDTO myStorage = null;
-            List<StorageDTO> storages = this.myPlaceBean.getAllStorages();
-            for (StorageDTO storage : storages)
-            {
-                if (storage.getId() == tc.getStorageId())
-                {
-                    myStorage = storage;
-                    break;
-                }
-            }
-            tc.setStorageName(myStorage == null ? "kein Lagername" : myStorage.getName());
+            tc.setCurrentStock(yDTOs.size());           
+            tc.setStorageName(this.myPlaceBean.getStorage(tc.getStorageId()).getName());
             return tc;
         } catch (Exception e)
         {
@@ -192,17 +182,16 @@ public class WebAppService
     @Path("/storage")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public StorageExtended getStorage(@QueryParam("ipIdSimpleSearch") String pId)
+    public StorageExtended getStorage(@QueryParam("storageId") String pId)
     {
         int storageId = Integer.parseInt(pId);
         StorageExtended storeEx = new StorageExtended();
 
         storeEx.setStorageId(storageId);
+        StorageDTO store = this.myPlaceBean.getStorage(storageId);
+        String name = store.getName();
         storeEx.setName(this.myPlaceBean.getStorage(storageId).getName());
         storeEx.setYards(new ArrayList<YardExtended>());
-
-        List<Integer> occupiedYards = new ArrayList<Integer>();
-        List<Integer> freeYards = new ArrayList<Integer>();
 
         List<YardDTO> yards = this.myPlaceBean.getAllYardsForStorage(storageId);
         List<ArticleTypeDTO> articleTypes = this.myArticleBean.getAllArticleTypes(storageId);
