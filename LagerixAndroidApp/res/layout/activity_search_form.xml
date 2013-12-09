@@ -11,29 +11,6 @@
         android:text="@string/label_searchIntro" />
 
     <LinearLayout
-        android:id="@+id/layout_searchArticleID"
-        android:layout_width="fill_parent"
-        android:layout_height="40dp"
-        android:gravity="center"
-        android:orientation="horizontal" >
-
-        <TextView
-            android:id="@+id/label_searchArticleID"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".40"
-            android:text="Artikel-ID:"
-            android:textColor="@android:color/black" />
-
-        <EditText
-            android:id="@+id/field_searchArticleID"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight=".60" />
-            <requestFocus />
-    </LinearLayout>
-
-    <LinearLayout
         android:id="@+id/layout_searchArticleName"
         android:layout_width="fill_parent"
         android:layout_height="40dp"
@@ -50,6 +27,29 @@
 
         <EditText
             android:id="@+id/field_searchArticleName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".60" />
+            <requestFocus />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_searchArticleDescription"
+        android:layout_width="fill_parent"
+        android:layout_height="40dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/label_searchArticleDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight=".40"
+            android:text="Artikelbeschreibung"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/field_searchArticleDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".60" />

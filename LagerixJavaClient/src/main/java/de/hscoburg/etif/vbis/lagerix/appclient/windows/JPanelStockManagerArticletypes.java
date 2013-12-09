@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.appclient.windows;
 
 import com.google.zxing.BarcodeFormat;
@@ -16,8 +10,6 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -38,8 +30,8 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
- * @author mti578
+ * GUI Class for all Article and Articletype operations
+ * @author tima0900
  */
 public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     private ArticleManagerEJBRemoteInterface articleManager = null;
@@ -99,6 +91,10 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             });        
     }
 
+    /**
+     * 
+     * @param e
+     */
     public void jTableStockManagerArticlesTableValueChanged(ListSelectionEvent e) {
         if(jTableStockManagerArticles.isEnabled() && articleTypeId != null && jTableStockManagerArticles.getSelectedRow() >= 0)
         {
@@ -121,6 +117,9 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         }
     }
 
+    /**
+     *
+     */
     public void createJTableStockManagerArticles()
     {
         DefaultTableModel model = new DefaultTableModel(0, 1);
@@ -149,8 +148,12 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             jTableStockManagerArticles.setEnabled(false);
         }
     }
-    
-        public void jTableStockManagerArticletypeTableValueChanged(ListSelectionEvent e) {
+
+    /**
+     *
+     * @param e
+     */
+    public void jTableStockManagerArticletypeTableValueChanged(ListSelectionEvent e) {
         if(jTableStockManagerArticletypeTable.isEnabled())
         {
             if(jTableStockManagerArticletypeTable.getSelectedRow() >= 0)
@@ -188,7 +191,9 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         }        
     }
 
-    
+    /**
+     *
+     */
     public void createJTableStockManagerArticletypes()
     {
         articleTypeId = null;
@@ -608,8 +613,17 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
                 " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
             == JOptionPane.YES_OPTION)
             {
-                articleManager.deleteArticleType((Integer)(((Item)jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj()));
-                createJTableStockManagerArticletypes();
+                try
+                {
+                    articleManager.deleteArticleType((Integer)(((Item)jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj()));
+                    createJTableStockManagerArticletypes();
+                } catch(Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Artikeltyps: "
+                            + jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)
+                            + ". Bitte loeschen Sie zuerst alle Artikel dieses Artikeltyps.", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         else
@@ -834,10 +848,25 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
 
     private void jButtonStockManagerArticleDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticleDeleteActionPerformed
         int id = (Integer) jTableStockManagerArticles.getValueAt(jTableStockManagerArticles.getSelectedRow(), 0);
-        articleManager.deleteArticle(id);
-        jButtonStockManagerArticleDelete.setEnabled(false);
-        jButtonStockManagerArticlePrintBarcode.setEnabled(false);
-        createJTableStockManagerArticles();
+        if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Artikel mit der ID: " +
+                id +
+                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+            == JOptionPane.YES_OPTION)
+        {
+            try
+            {
+                articleManager.deleteArticle(id);
+                jButtonStockManagerArticleDelete.setEnabled(false);
+                jButtonStockManagerArticlePrintBarcode.setEnabled(false);
+                createJTableStockManagerArticles();
+            } catch(Exception ex)
+            {
+                JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Artikels mit der ID: "
+                            + id
+                            + ".", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_jButtonStockManagerArticleDeleteActionPerformed
 
 

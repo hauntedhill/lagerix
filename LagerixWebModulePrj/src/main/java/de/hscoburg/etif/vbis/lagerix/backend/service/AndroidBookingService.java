@@ -20,19 +20,13 @@ import javax.ws.rs.core.MediaType;
  *
  * @author Felix
  */
-@Path("/secure/book")
+@Path("/secure/android/")
 @Produces(MediaType.TEXT_PLAIN)
 @Stateless
-public class BookingService {
+public class AndroidBookingService {
     
     @EJB
     ArticleManagerEJBRemoteInterface articleManager;
-    
-    @Path("ping")
-    @GET
-    public String ping() {
-        return "alive";
-    }
     
     @Path("saveEntry")
     @POST

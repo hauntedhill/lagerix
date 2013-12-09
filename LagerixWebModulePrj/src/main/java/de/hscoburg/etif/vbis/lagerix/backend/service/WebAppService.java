@@ -62,10 +62,11 @@ public class WebAppService
             ArticleTypeExtended tc = new ArticleTypeExtended();
 
             ArticleTypeDTO atDTO = this.myArticleBean.getArticleTypeByID(id);
-//            List <MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
+            List <MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
+            List<YardDTO> yfatDTOs = this.myPlaceBean.getYardsForArticleType(id);
             List<YardDTO> yDTOs = this.myPlaceBean.getAllYardsForStorage(atDTO.getStorageID());
             
-//            tc.setMovements(mDTOs);
+            tc.setMovements(mDTOs);
             tc.setDescription(atDTO.getDescription());
             tc.setId(atDTO.getId());
             tc.setName(atDTO.getName());

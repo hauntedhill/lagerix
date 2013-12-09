@@ -97,7 +97,7 @@ public class LoginActivity extends Activity {
 	 * Gets called every time the activity appears on screen
 	 */
 	@Override
-	public void onStart() {
+	protected void onStart() {
 		super.onStart();
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", "localhost:8080");

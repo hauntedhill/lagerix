@@ -64,10 +64,8 @@ public class LogoutActivity extends Activity {
 	 */
 	public void logout() {
 		showProgress(true);
-		
-		RequestParams restParams = new RequestParams();
-		
-		LagerixRestClient.get(baseURL+"/lagerix/services/auth/logout", restParams, new JsonHttpResponseHandler() {
+			
+		LagerixRestClient.get(baseURL+"/lagerix/services/auth/logout", new JsonHttpResponseHandler() {
 
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
 				try {

@@ -28,7 +28,7 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-info-sign" style="margin: 0px 15px 0px 0px"></span>Informationen zu Artikelart </h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="https://<%=request.getServerName()%>:<%=request.getLocalPort()%>/lagerix/services/secure/webApp/" autocomplete="off">
+                            <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="https://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/services/secure/webApp/" autocomplete="off">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
@@ -69,9 +69,9 @@
                                 </div> 
                                 <div class="row">
                                     <label for="stockTrend" class="col-sm-3 control-label">Bestandsverlauf</label>                                  
-                                    
-                                    
-                                    <div class="lagerix-scrollable lagerix-bodycontainer col-sm-9">
+
+
+                                    <div class="lagerix-scrollable col-sm-9" style=" max-height: 125px !important;">
                                         <table class="table table-condensed table-striped table-bordered table-hover">
                                             <thead>
                                                 <tr><th>Zeitpunkt</th><th>Buchungsrichtung</th></tr>
@@ -80,9 +80,9 @@
                                             </tbody>
                                         </table>  
                                     </div>
-                                    
-                                    
-                                    
+
+
+
                                 </div>  
                                 <hr>
                                 <div class="row">
@@ -95,24 +95,6 @@
                                         <input type="text" class="form-control input-sm " disabled id="ipStorageId" name="ipStorageId">
                                     </div>  
                                 </div> 
-                                <div class="row" style="padding: 10px">
-                                    <div class="panel-group" id="accordionStorageOccupansy">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h4 class="panel-title">
-                                                    <a data-toggle="collapse" data-parent="#accordionStorageOccupansy" href="#collapseStorageOccupancyOne">
-                                                        Lagerbelegung anzeigen
-                                                    </a>
-                                                </h4>
-                                            </div>
-                                            <div id="collapseStorageOccupancyOne" class="panel-collapse collapse ">
-                                                <div class="panel-body">
-                                                    Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung 
-                                                </div>
-                                            </div>
-                                        </div>  
-                                    </div>
-                                </div>
                             </form>
                         </div>
                     </div>
@@ -233,6 +215,37 @@
                     </div>
                 </div>
             </div> 
+
+
+
+
+
+            <div class="row">
+                <div class="col-md-12">
+
+
+                    <div class="panel-group" id="accordionStorageOccupansy" style="margin: 10px 0px">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" data-parent="#accordionStorageOccupansy" href="#collapseStorageOccupancyOne">Lagerbelegung anzeigen</a>
+                                </h4>
+                            </div>
+                            <div id="collapseStorageOccupancyOne" class="panel-collapse collapse ">
+                                <div class="panel-body">
+                                    Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung 
+                                </div>
+                            </div>
+                        </div>  
+                    </div>
+
+
+
+                </div>
+            </div>
+
+
+
         </div>
     </body>
 </html>

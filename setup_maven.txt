@@ -1,0 +1,3 @@
+Damit die Android-App kompilierbar ist, muss vorher im Wurzelverzeichnis des Gesamtsystems (Speicherort dieser Datei) folgender Befehl ausgeführt werden:
+
+mvn install:install-file -Dfile=LagerixAndroidApp/libs/CaptureActivity.apklib -DgroupId=de.hscoburg.etif.vbis.lagerix.android -DartifactId=zxing-android -Dversion=2.2.0 -Dpackaging=apklib

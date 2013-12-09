@@ -341,8 +341,17 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
             }
             else
             {
-                userManager.deleteUser((String)jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0));
-                createJTableAdminUsers();
+                try
+                {
+                    userManager.deleteUser((String)jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0));
+                    createJTableAdminUsers();
+                } catch (Exception ex)
+                {
+                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Benutzers: "
+                            + jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0)
+                            + ".", 
+                            "Fehler", JOptionPane.ERROR_MESSAGE);
+                }
             }
         }
         }
