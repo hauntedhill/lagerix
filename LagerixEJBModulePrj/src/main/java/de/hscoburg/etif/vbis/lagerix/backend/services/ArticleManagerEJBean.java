@@ -2,12 +2,12 @@ package de.hscoburg.etif.vbis.lagerix.backend.services;
 
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Group;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
@@ -219,7 +219,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      * @param storageID - The storage to search for articleTypes
      * @return A list with all articleTypes of the storage
      */
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "EINKAEUFER"})
     public List<ArticleTypeDTO> getAllArticleTypes(int storageID) {
 
         Storage s = findById(Storage.class, storageID);
@@ -302,7 +302,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      * @param articleTypeId - The articleTypeId
      * @return A list with all articles for the articleType
      */
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "EINKAEUFER"})
     public List<ArticleDTO> getAllArticleByArticleType(int articleTypeId) {
         return DTOConverter.convertArtice(findById(ArticleType.class, articleTypeId).getArticles());
     }
