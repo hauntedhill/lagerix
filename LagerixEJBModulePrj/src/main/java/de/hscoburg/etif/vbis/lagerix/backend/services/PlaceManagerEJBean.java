@@ -108,7 +108,7 @@ public class PlaceManagerEJBean extends BaseService implements PlaceManagerEJBRe
      *
      * @return A list with all storages of the user
      */
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERVERWALTER", "EINKAEUFER"})
     public List<StorageDTO> getStorages() {
 
         User u = findUser(scxt.getCallerPrincipal().getName());
