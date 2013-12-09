@@ -159,7 +159,7 @@ public class BaseService {
         Join<Storage, Groups> groupRoot = join.join(Storage_.group);
         Join<Groups, User> userRoot = groupRoot.join(Groups_.user);
 
-        return cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName());
+        return cb.or(cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName()), cb.equal(groupRoot.get(Groups_.groups), Group.ADMINISTRATOR));
     }
 
     /**
