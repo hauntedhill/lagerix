@@ -11,7 +11,6 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.service.dto.StorageOverviewDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.service.dto.YardInfoDTO;
 import java.util.Collections;
 import java.util.Comparator;
@@ -83,7 +82,7 @@ public class AndroidService {
     @Path("storageOverview")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public StorageOverviewDTO storageOverview() {
+    public List<YardInfoDTO> storageOverview() {
         
         StorageDTO storage = placeManager.getStorages().get(0);
         List<YardDTO> yards = placeManager.getAllYards(storage.getId());
@@ -130,9 +129,7 @@ public class AndroidService {
                 return o1.getYardId().compareTo(o2.getYardId());
             }
         });
-        StorageOverviewDTO result = new StorageOverviewDTO();
-        result.setStorageInfo(yardList);
-        return result;
+        return yardList;
         
         
     }

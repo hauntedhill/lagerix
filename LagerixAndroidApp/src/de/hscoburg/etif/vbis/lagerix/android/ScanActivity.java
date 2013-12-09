@@ -27,13 +27,13 @@ import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
  *
  */
 public class ScanActivity extends Activity {
-	
+
 	//UI elements
 	TextView article_result;
 	TextView location_result;
 	RadioButton bookedIn;
 	TextView restResult;
-	
+
 	//IP address from settings
 	String baseURL;
 
@@ -48,13 +48,13 @@ public class ScanActivity extends Activity {
 
 		article_result = (TextView) findViewById(R.id.label_articleIDResult);
 		location_result = (TextView) findViewById(R.id.label_storageIDResult);
-		
+
 		bookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
-		
+
 		restResult = (TextView) findViewById(R.id.label_restResult);
-		
+
 	}
-	
+
 	/**
 	 * Gets called every time the activity appears on screen
 	 */
@@ -64,43 +64,47 @@ public class ScanActivity extends Activity {
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", "localhost:8080");
 	}
-	
+
 	/**
 	 * Initializer method for the action bar
 	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-	    // Inflate the menu items for use in the action bar
-	    MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.activity_main_actions, menu);
-	    return super.onCreateOptionsMenu(menu);
+		// Inflate the menu items for use in the action bar
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main_actions, menu);
+		return super.onCreateOptionsMenu(menu);
 	}
-	
+
 	/**
 	 * Listener method for the action bar buttons
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	    
-	    	// Search button has been pressed
-	        case R.id.action_search:
-	        	Intent searchIntent = new Intent(this, SearchFormActivity.class);
-	        	startActivity(searchIntent);
-	            return true;
-	            
-	        // Logout button has been pressed
-	        case R.id.action_logout:
-	        	Intent logoutIntent = new Intent(this, LogoutActivity.class);
-	        	startActivity(logoutIntent);
-	        	finish();
-	        	return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+
+		// Search button has been pressed
+		case R.id.action_search:
+			Intent searchIntent = new Intent(this, SearchFormActivity.class);
+			startActivity(searchIntent);
+			return true;
+		// Storage overview button has been pressed
+		case R.id.action_storage_overview:
+			Intent overviewIntent = new Intent(this, StorageOverviewActivity.class);
+			startActivity(overviewIntent);
+			return true;
+		// Logout button has been pressed
+		case R.id.action_logout:
+			Intent logoutIntent = new Intent(this, LogoutActivity.class);
+			startActivity(logoutIntent);
+			finish();
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
-	
+
 	/**
 	 * Opens the barcode scanning activity
 	 * Gets called from UI button "Scan barcode"
@@ -133,18 +137,18 @@ public class ScanActivity extends Activity {
 
 			if (resultCode == RESULT_OK) {
 				String result = intent.getStringExtra("SCAN_RESULT");
-				
+
 				//Article barcodes start with the letter 'A', so we check the first character
 				if(result.charAt(0) == 'A')
 					article_result.setText(result.substring(1));
-				
+
 				//Storage barcodes start withe the letter 'S'
 				else if(result.charAt(0) == 'S')
 					location_result.setText(result.substring(1));
 			}
 		}
 	}
-	
+
 	/**
 	 * Sends a REST request containing the barcode data and selected UI elements
 	 * Gets called from UI button "Send data"
@@ -152,7 +156,7 @@ public class ScanActivity extends Activity {
 	 */
 	public void sendEntry(View view) {
 		if(article_result.getText().length() != 0 && location_result.getText().length() != 0) {
-			
+
 			// Create parameters for the REST request
 			RequestParams params = new RequestParams();
 			params.put("articleID", article_result.getText().toString());
@@ -162,14 +166,14 @@ public class ScanActivity extends Activity {
 			else
 				params.put("bookedIn", "false");
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
-			
+
 			// Call the REST helper class and send the request
 			LagerixRestClient.post(baseURL+"/lagerix/services/secure/android/saveEntry", params, new TextHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 					restResult.setText("Erfolg!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody);
 				}
-				
+
 				@Override
 				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 					restResult.setText("Fehler!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody+"\nError: "+error);
