@@ -73,7 +73,7 @@ public class WebAppService
             tc.setName(atDTO.getName());
             tc.setMinimumStock(atDTO.getMinimumStock());
             tc.setStorageId(atDTO.getStorageID());
-            tc.setCurrentStock(yDTOs.size());           
+            tc.setCurrentStock(yDTOs.size());
             tc.setStorageName(this.myPlaceBean.getStorage(tc.getStorageId()).getName());
             return tc;
         } catch (Exception e)
@@ -150,34 +150,6 @@ public class WebAppService
         }
     }
 
-//    @GET
-//    @Path("/storage")
-//    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    @TransactionAttribute(TransactionAttributeType.NEVER)
-//    public StorageDTO getStrorage(@QueryParam("ipArticleTypeInStorage") String pStorageId)
-//    {
-//        try
-//        {
-//            ArticleTypeDTO result = this.myArticleBean.getArticleTypeByID(Integer.parseInt(pId));
-////            ArticleTypeDTO result = new ArticleTypeDTO();
-////            result.setId(1);
-////            result.setName("Test Artikel");
-////            result.setDescription("Test Beschreibung des Artikels");
-////            result.setMinimumStock(12);
-//            return result;
-//        } catch (Exception e)
-//        {
-//            return new ArticleTypeDTO();
-//        }
-//    }
-    @GET
-    @Path("/test")
-    public String test()
-    {
-        return "Test OK";
-    }
-
     @GET
     @Path("/storage")
     @Produces(MediaType.APPLICATION_JSON)
@@ -188,8 +160,6 @@ public class WebAppService
         StorageExtended storeEx = new StorageExtended();
 
         storeEx.setStorageId(storageId);
-        StorageDTO store = this.myPlaceBean.getStorage(storageId);
-        String name = store.getName();
         storeEx.setName(this.myPlaceBean.getStorage(storageId).getName());
         storeEx.setYards(new ArrayList<YardExtended>());
 
@@ -224,6 +194,15 @@ public class WebAppService
             }
         }
         return storeEx;
+    }
+
+    @GET
+    @Path("/storages")
+    @Produces(MediaType.APPLICATION_JSON)
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public List<StorageDTO> getStorages()
+    {
+        return this.myPlaceBean.getStorages();
     }
 }
 

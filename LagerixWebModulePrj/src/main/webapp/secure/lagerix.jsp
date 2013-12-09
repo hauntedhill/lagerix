@@ -228,17 +228,36 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordionStorageOccupansy" href="#collapseStorageOccupancyOne">Lagerbelegung anzeigen</a>
+                                    <a data-toggle="collapse" data-parent="#accordionStorageOccupansy" href="#collapseStorageOccupancyOne" id="aStorages" >Lagerbelegung anzeigen</a>
                                 </h4>
                             </div>
                             <div id="collapseStorageOccupancyOne" class="panel-collapse collapse ">
-                                <div class="panel-body" id="pbStorageOccupancy">
+                                <div class="panel-body">
                                     
+                                    <input type="text" class="form-control input-sm " id="ipStorageId2" name="ipStorageId2">
                                     
-                                     <input type="text" class="form-control input-sm " id="ipStorageId2" name="ipStorageId2">
-                                     
-                                     
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                                                   
                                     Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung Lagerbelegung 
+                                        </div>
+                                          <div class="col-md-3">
+                                                       <div class="lagerix-scrollable lagerix-bodycontainer">
+                                        <table class="table table-condensed table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr><th>Lager-ID</th><th>Name</th></tr>
+                                            </thead>
+                                            <tbody id="tbodyStorages">
+                                            </tbody>
+                                        </table>  
+                                    </div>
+                                        </div>
+                                    </div>
+                                    
+                                    
+                                     
+                                     
+              
                                 </div>
                             </div>
                         </div>  

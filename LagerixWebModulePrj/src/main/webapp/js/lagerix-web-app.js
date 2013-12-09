@@ -55,6 +55,31 @@ function displayStorage(data, textStatus, jqXHR){
     $("#pbStorageOccupancy").html(data);
 }
 
+$(document).on("click","#aStorages",function(){
+    getStorages();
+});
+
+function getStorages(){
+    $.ajax({
+        url: urlGlobal + "storages",
+        type: "GET",
+        data: "",
+        cache: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+         $("#tbodyStorages").html(displayStorages(data));
+        }
+    });
+}
+
+function displayStorages(data){
+        var rows = "";
+    for (var i = 0; i < data.length; i++) {
+        rows += "<tr class=\"storageRow\"><td class=\"storageId\">" + data[i].id + "</td><td>" + data[i].name + "</td></tr>";
+    }
+    return rows;
+}
+
 $(document).on("click", "#btnChangeMinimumStock", function() {
     if ($("#ipArticleTypeId").val() > 0)
     {
