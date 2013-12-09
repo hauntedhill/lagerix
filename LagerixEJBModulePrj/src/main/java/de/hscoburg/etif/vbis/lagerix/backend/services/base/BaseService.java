@@ -27,6 +27,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.From;
 import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -142,7 +143,7 @@ public class BaseService {
      */
     private Predicate addPermissionCheckForArticleType(From<?, ArticleType> join, CriteriaBuilder cb) {
 
-        Join<ArticleType, Storage> storageRoot = join.join(ArticleType_.storage);
+        Join<ArticleType, Storage> storageRoot = join.join(ArticleType_.storage, JoinType.LEFT);
 
         return addPermissionCheckForStorage(storageRoot, cb);
     }
@@ -156,10 +157,15 @@ public class BaseService {
      */
     private Predicate addPermissionCheckForStorage(From<?, Storage> join, CriteriaBuilder cb) {
 
-        Join<Storage, Groups> groupRoot = join.join(Storage_.group);
-        Join<Groups, User> userRoot = groupRoot.join(Groups_.user);
+        Join<Storage, Groups> groupRoot = join.join(Storage_.group, JoinType.LEFT);
+        Join<Groups, User> userRoot = groupRoot.join(Groups_.user, JoinType.LEFT);
 
-        return cb.or(cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName()), cb.equal(groupRoot.get(Groups_.groups), Group.ADMINISTRATOR));
+        if (!scxt.isCallerInRole("ADMINISTRATOR")) {
+            return cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName());
+        } else {
+            return cb.or(cb.isNull(userRoot.get(User_.email)), cb.isNotNull(userRoot.get(User_.email)));
+        }
+
     }
 
     /**
