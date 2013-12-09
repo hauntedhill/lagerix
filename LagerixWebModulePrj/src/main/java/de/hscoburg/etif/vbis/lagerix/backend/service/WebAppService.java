@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import java.io.Serializable;
+import java.util.ArrayList;
 import javax.ejb.EJB;
 import java.util.List;
 
@@ -62,10 +63,10 @@ public class WebAppService
             ArticleTypeExtended tc = new ArticleTypeExtended();
 
             ArticleTypeDTO atDTO = this.myArticleBean.getArticleTypeByID(id);
-            List <MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
+            List<MovementDTO> mDTOs = this.myArticleBean.getMovementEntriesForArticleType(id);
             List<YardDTO> yfatDTOs = this.myPlaceBean.getYardsForArticleType(id);
             List<YardDTO> yDTOs = this.myPlaceBean.getAllYardsForStorage(atDTO.getStorageID());
-            
+
             tc.setMovements(mDTOs);
             tc.setDescription(atDTO.getDescription());
             tc.setId(atDTO.getId());
@@ -188,6 +189,77 @@ public class WebAppService
     {
         return "Test OK";
     }
+
+    @GET
+    @Path("/storage")
+    @Produces(MediaType.APPLICATION_JSON)
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public ArticleTypeExtended getStorage(@QueryParam("ipIdSimpleSearch") String pId)
+    {        
+//            int storageId = Integer.parseInt(pId);
+//        List<Integer> occupiedYards = new ArrayList<Integer>();
+//        List<Integer> freeYards = new ArrayList<Integer>();
+//        List<YardDTO> yards = this.myPlaceBean.getAllYards(storageId);
+//        List<ArticleTypeDTO> articleTypes = this.myArticleBean.getAllArticleTypes(storageId);
+//        for (ArticleTypeDTO articleType : articleTypes)
+//        {
+//            List<ArticleDTO> articles = this.myArticleBean.getAllArticleByArticleType(articleType.getId());
+//            for (ArticleDTO article : articles)
+//            {
+//                if (article.getYardID() != 0)
+//                {
+//                    occupiedYards.add(article.getYardID());
+//                    modelOccupied.addRow(new Object[]
+//                    {
+//                        article.getYardID(), articleType.getName(),
+//                        articleType.getId(), article.getId()
+//                    });
+//                }
+//            }
+//        }
+//
+//
+//        for (YardDTO yard : yards)
+//        {
+//            boolean inOccupied = false;
+//            for (Integer occupiedYard : occupiedYards)
+//            {
+//                if (occupiedYard == yard.getId())
+//                {
+//                    inOccupied = true;
+//                    break;
+//                }
+//            }
+//
+//            if (inOccupied == false)
+//            {
+//                freeYards.add(yard.getId());
+//            }
+//        }
+//
+//        for (Integer yard : freeYards)
+//        {
+//            modelFree.addRow(new Object[]
+//            {
+//                yard
+//            });
+//        }
+//    }
+//
+//    jTableStockManagerOverviewFreeYards.setModel (modelFree);
+//
+//    jTableStockManagerOverviewOccupiedYards.setModel (modelOccupied);
+//    TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerOverviewFreeYards);
+//
+//    tca.adjustColumns ();
+//    TableColumnAdjuster tca2 = new TableColumnAdjuster(jTableStockManagerOverviewOccupiedYards);
+//
+//    tca2.adjustColumns ();
+
+return null;
+    }
+
+
 }
 
 @XmlRootElement
