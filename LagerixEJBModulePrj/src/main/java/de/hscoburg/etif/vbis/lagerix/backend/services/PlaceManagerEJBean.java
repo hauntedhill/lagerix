@@ -66,7 +66,7 @@ public class PlaceManagerEJBean extends BaseService implements PlaceManagerEJBRe
      * @param storageID - The id of the storage
      * @return A list with all yards from the storage
      */
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERARBEITER", "LAGERVERWALTER"})
     public List<YardDTO> getAllYards(int storageID) {
         Storage s = findById(Storage.class, storageID);
 
@@ -108,7 +108,7 @@ public class PlaceManagerEJBean extends BaseService implements PlaceManagerEJBRe
      *
      * @return A list with all storages of the user
      */
-    @RolesAllowed({"LAGERVERWALTER"})
+    @RolesAllowed({"LAGERARBEITER", "LAGERVERWALTER"})
     public List<StorageDTO> getStorages() {
 
         User u = findUser(scxt.getCallerPrincipal().getName());

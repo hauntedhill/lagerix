@@ -219,7 +219,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      * @param storageID - The storage to search for articleTypes
      * @return A list with all articleTypes of the storage
      */
-    @RolesAllowed({"LAGERVERWALTER", "EINKAEUFER"})
+    @RolesAllowed({"LAGERARBEITER", "LAGERVERWALTER", "EINKAEUFER"})
     public List<ArticleTypeDTO> getAllArticleTypes(int storageID) {
 
         Storage s = findById(Storage.class, storageID);
@@ -302,7 +302,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      * @param articleTypeId - The articleTypeId
      * @return A list with all articles for the articleType
      */
-    @RolesAllowed({"LAGERVERWALTER", "EINKAEUFER"})
+    @RolesAllowed({"LAGERARBEITER", "LAGERVERWALTER", "EINKAEUFER"})
     public List<ArticleDTO> getAllArticleByArticleType(int articleTypeId) {
         return DTOConverter.convertArtice(findById(ArticleType.class, articleTypeId).getArticles());
     }
