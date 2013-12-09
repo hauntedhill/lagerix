@@ -16,11 +16,6 @@
     <string name="book_out">Book Out</string>
     <string name="send_data">Send data</string>
 
-    <!-- Strings related to search -->
-    <string name="label_searchIntro">Enter a search key to search for articles:</string>
-    <string name="title_activity_search_form">Article search</string>
-    <string name="title_activity_search_result">Result</string>
-
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -41,5 +36,14 @@
     <string name="pref_header_general">General</string>
     <string name="pref_ip_name">IP address</string>
     <string name="pref_ip_defaultValue">https://10.185.45.1:8181</string>
+    
+        <!-- Strings related to search form -->
+    <string name="label_searchIntro">Enter a search key to search for articles:</string>
+    <string name="title_activity_search_form">Article search</string>
+    <string name="title_activity_search_result">Result</string>
+    
+    <!-- Strings related to search results -->
+    <string name="label_loading_results">Loading results&#8230;</string>
+    
 
 </resources>

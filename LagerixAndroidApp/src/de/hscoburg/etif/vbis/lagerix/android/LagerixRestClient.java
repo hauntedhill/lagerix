@@ -34,8 +34,8 @@ public class LagerixRestClient {
 		client.getHttpClient().getParams().setParameter(ClientPNames.ALLOW_CIRCULAR_REDIRECTS, true);
 	}
 
-	public static void get(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {
-		client.get(url, params, responseHandler);
+	public static void get(String url, AsyncHttpResponseHandler responseHandler) {
+		client.get(url, responseHandler);
 	}
 
 	public static void post(String url, RequestParams params, AsyncHttpResponseHandler responseHandler) {

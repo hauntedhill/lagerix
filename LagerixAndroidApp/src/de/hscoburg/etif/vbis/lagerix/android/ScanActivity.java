@@ -57,7 +57,7 @@ public class ScanActivity extends Activity {
 	 * Gets called every time the activity appears on screen
 	 */
 	@Override
-	public void onStart() {
+	protected void onStart() {
 		super.onStart();
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", "localhost:8080");
@@ -162,7 +162,7 @@ public class ScanActivity extends Activity {
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
 			
 			// Call the REST helper class and send the request
-			LagerixRestClient.post(baseURL+"/lagerix/services/secure/book/saveEntry", params, new TextHttpResponseHandler() {
+			LagerixRestClient.post(baseURL+"/lagerix/services/secure/android/saveEntry", params, new TextHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 					restResult.setText("Erfolg!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody);

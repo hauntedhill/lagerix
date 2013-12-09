@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 
 /**
  * Activity which displays a search form to the user
@@ -13,7 +14,7 @@ import android.view.View;
  */
 public class SearchFormActivity extends Activity {
 
-	
+
 	/**
 	 * Initializer method for the activity
 	 * Gets called on first launch
@@ -38,6 +39,10 @@ public class SearchFormActivity extends Activity {
 	
 	public void sendSearch(View view) {
     	Intent intent = new Intent(this, SearchResultActivity.class);
+    	EditText articleName = (EditText) findViewById(R.id.field_searchArticleName);
+    	EditText articleDescription = (EditText) findViewById(R.id.field_searchArticleDescription);
+    	intent.putExtra("ARTICLE_NAME", articleName.getText().toString());
+    	intent.putExtra("ARTICLE_DESCRIPTION", articleDescription.getText().toString());
     	startActivity(intent);
 	}
 
