@@ -1,4 +1,4 @@
-package de.hscoburg.etif.vbis.lagerix.android;
+package de.hscoburg.etif.vbis.lagerix.android.helper;
 
 import java.security.KeyStore;
 

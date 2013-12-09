@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
+
 /**
  * Activity which displays the booking interface to the user
  * @author Felix Lisczyk
