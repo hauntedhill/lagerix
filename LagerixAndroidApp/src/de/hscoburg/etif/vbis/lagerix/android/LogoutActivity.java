@@ -7,6 +7,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;

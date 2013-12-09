@@ -5,6 +5,7 @@
 package de.hscoburg.etif.vbis.lagerix.backend.service;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
@@ -33,12 +34,23 @@ public class AndroidSearchService {
     @EJB
     ArticleManagerEJBRemoteInterface articleManager;
     
+    @EJB
+    PlaceManagerEJBRemoteInterface placeManager;
+    
     @GET
     @Path("articleType/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public ArticleTypeDTO simpleSearch(@PathParam("id") int pId)
     {
         return articleManager.getArticleTypeByID(pId);
+    }
+    
+    @Path("storageLocations")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<YardDTO> storageLocationsForArticleType(@QueryParam("articleTypeId") int articleTypeId)
+    {
+        return placeManager.getYardsForArticleType(articleTypeId);
     }
     
     @Path("search")

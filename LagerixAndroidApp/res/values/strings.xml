@@ -36,14 +36,18 @@
     <string name="pref_header_general">General</string>
     <string name="pref_ip_name">IP address</string>
     <string name="pref_ip_defaultValue">https://10.185.45.1:8181</string>
-    
-        <!-- Strings related to search form -->
+
+    <!-- Strings related to search form -->
     <string name="label_searchIntro">Enter a search key to search for articles:</string>
     <string name="title_activity_search_form">Article search</string>
     <string name="title_activity_search_result">Result</string>
-    
+
     <!-- Strings related to search results -->
     <string name="label_loading_results">Loading results&#8230;</string>
+    <string name="label_article_id">Article ID:</string>
+    <string name="label_article_name">Article name:</string>
+    <string name="label_article_description">Article description:</string>
+    <string name="label_storageLocations">Storage Locations:</string>
     
 
 </resources>

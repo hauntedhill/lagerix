@@ -141,7 +141,7 @@ public class PlaceManagerEJBean extends BaseService implements PlaceManagerEJBRe
      * @param articleTypeID - The articleTypeId
      * @return A list with all Yards.
      */
-    @RolesAllowed({"EINKAEUFER", "LAGERVERWALTER"})
+    @RolesAllowed({"LAGERARBEITER", "EINKAEUFER", "LAGERVERWALTER"})
     public List<YardDTO> getYardsForArticleType(int articleTypeID) {
 
         return DTOConverter.convertYard(getYardsForArticleTypeFromDB(articleTypeID));
