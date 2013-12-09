@@ -74,17 +74,7 @@ public class WebAppService
             tc.setMinimumStock(atDTO.getMinimumStock());
             tc.setStorageId(atDTO.getStorageID());
             tc.setCurrentStock(yDTOs.size());
-            StorageDTO myStorage = null;
-            List<StorageDTO> storages = this.myPlaceBean.getAllStorages();
-            for (StorageDTO storage : storages)
-            {
-                if (storage.getId() == tc.getStorageId())
-                {
-                    myStorage = storage;
-                    break;
-                }
-            }
-            tc.setStorageName(myStorage == null ? "kein Lagername" : myStorage.getName());
+            tc.setStorageName(this.myPlaceBean.getStorage(tc.getStorageId()).getName());
             return tc;
         } catch (Exception e)
         {
@@ -194,75 +184,144 @@ public class WebAppService
     @Path("/storage")
     @Produces(MediaType.APPLICATION_JSON)
     @TransactionAttribute(TransactionAttributeType.NEVER)
-    public ArticleTypeExtended getStorage(@QueryParam("ipIdSimpleSearch") String pId)
-    {        
-//            int storageId = Integer.parseInt(pId);
-//        List<Integer> occupiedYards = new ArrayList<Integer>();
-//        List<Integer> freeYards = new ArrayList<Integer>();
-//        List<YardDTO> yards = this.myPlaceBean.getAllYards(storageId);
-//        List<ArticleTypeDTO> articleTypes = this.myArticleBean.getAllArticleTypes(storageId);
-//        for (ArticleTypeDTO articleType : articleTypes)
-//        {
-//            List<ArticleDTO> articles = this.myArticleBean.getAllArticleByArticleType(articleType.getId());
-//            for (ArticleDTO article : articles)
-//            {
-//                if (article.getYardID() != 0)
-//                {
-//                    occupiedYards.add(article.getYardID());
-//                    modelOccupied.addRow(new Object[]
-//                    {
-//                        article.getYardID(), articleType.getName(),
-//                        articleType.getId(), article.getId()
-//                    });
-//                }
-//            }
-//        }
-//
-//
-//        for (YardDTO yard : yards)
-//        {
-//            boolean inOccupied = false;
-//            for (Integer occupiedYard : occupiedYards)
-//            {
-//                if (occupiedYard == yard.getId())
-//                {
-//                    inOccupied = true;
-//                    break;
-//                }
-//            }
-//
-//            if (inOccupied == false)
-//            {
-//                freeYards.add(yard.getId());
-//            }
-//        }
-//
-//        for (Integer yard : freeYards)
-//        {
-//            modelFree.addRow(new Object[]
-//            {
-//                yard
-//            });
-//        }
-//    }
-//
-//    jTableStockManagerOverviewFreeYards.setModel (modelFree);
-//
-//    jTableStockManagerOverviewOccupiedYards.setModel (modelOccupied);
-//    TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerOverviewFreeYards);
-//
-//    tca.adjustColumns ();
-//    TableColumnAdjuster tca2 = new TableColumnAdjuster(jTableStockManagerOverviewOccupiedYards);
-//
-//    tca2.adjustColumns ();
+    public StorageExtended getStorage(@QueryParam("storageId") String pId)
+    {
+        int storageId = Integer.parseInt(pId);
+        StorageExtended storageEx = new StorageExtended();
+        storageEx.setId(storageId);
+        storageEx.setName(this.myPlaceBean.getStorage(storageId).getName());
+        storageEx.setYards(new ArrayList<YardExtended>());
 
-return null;
+        List<YardDTO> yards = this.myPlaceBean.getAllYardsForStorage(storageId);
+        List<ArticleTypeDTO> articleTypes = this.myArticleBean.getAllArticleTypes(storageId);
+
+        for (ArticleTypeDTO articleType : articleTypes)
+        {
+            List<ArticleDTO> articles = this.myArticleBean.getAllArticleByArticleType(articleType.getId());
+            for (ArticleDTO article : articles)
+            {
+                if (article.getYardID() != 0)
+                {
+                    for (YardDTO yard : yards)
+                    {
+                        if (yard.getId() == article.getYardID())
+                        {
+                            YardExtended yardEx = new YardExtended();
+                            yardEx.setId(article.getYardID());
+                            yardEx.setArticleId(article.getId());
+                            yardEx.setArticleTypeId(articleType.getId());
+                            yardEx.setArticleTypeName(articleType.getName());
+                            storageEx.getYards().add(yardEx);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        return storageEx;
     }
 
-
+    @GET
+    @Path("/storages")
+    @Produces(MediaType.APPLICATION_JSON)
+    @TransactionAttribute(TransactionAttributeType.NEVER)
+    public List<StorageDTO> getStorages()
+    {
+        return this.myPlaceBean.getAllStorages();
+    }
 }
 
-@XmlRootElement
+class StorageExtended implements Serializable
+{
+
+    private int id;
+    private String name;
+    private List<YardExtended> yards;
+///<editor-fold defaultstate="collapsed" desc="getter and setter">
+
+    public List<YardExtended> getYards()
+    {
+        return yards;
+    }
+
+    public void setYards(List<YardExtended> yards)
+    {
+        this.yards = yards;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public void setName(String name)
+    {
+        this.name = name;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int storageId)
+    {
+        this.id = storageId;
+    }
+//</editor-fold>
+}
+
+class YardExtended implements Serializable
+{
+
+    private int id;
+    private int articleId;
+    private int articleTypeId;
+    private String articleTypeName;
+///<editor-fold defaultstate="collapsed" desc="getter and setter">
+
+    public String getArticleTypeName()
+    {
+        return articleTypeName;
+    }
+
+    public void setArticleTypeName(String articleTypeName)
+    {
+        this.articleTypeName = articleTypeName;
+    }
+
+    public int getArticleTypeId()
+    {
+        return articleTypeId;
+    }
+
+    public void setArticleTypeId(int articleTypeId)
+    {
+        this.articleTypeId = articleTypeId;
+    }
+
+    public int getArticleId()
+    {
+        return articleId;
+    }
+
+    public void setArticleId(int articleId)
+    {
+        this.articleId = articleId;
+    }
+
+    public int getId()
+    {
+        return id;
+    }
+
+    public void setId(int id)
+    {
+        this.id = id;
+    }
+//</editor-fold>
+}
+
 class ArticleTypeExtended implements Serializable
 {
 
@@ -274,164 +333,86 @@ class ArticleTypeExtended implements Serializable
     private String storageName;
     private int currentStock;
     private List<MovementDTO> movements;
+///<editor-fold defaultstate="collapsed" desc="getter and setter">
 
-    /**
-     * Get the value of movements
-     *
-     * @return the value of movements
-     */
     public List<MovementDTO> getMovements()
     {
         return movements;
     }
 
-    /**
-     * Set the value of movements
-     *
-     * @param movements new value of movements
-     */
     public void setMovements(List<MovementDTO> movements)
     {
         this.movements = movements;
     }
 
-    /**
-     * Get the value of currentStock
-     *
-     * @return the value of currentStock
-     */
     public int getCurrentStock()
     {
         return currentStock;
     }
 
-    /**
-     * Set the value of currentStock
-     *
-     * @param currentStock new value of currentStock
-     */
     public void setCurrentStock(int currentStock)
     {
         this.currentStock = currentStock;
     }
 
-    /**
-     * Get the value of storageName
-     *
-     * @return the value of storageName
-     */
     public String getStorageName()
     {
         return storageName;
     }
 
-    /**
-     * Set the value of storageName
-     *
-     * @param storageName new value of storageName
-     */
     public void setStorageName(String storageName)
     {
         this.storageName = storageName;
     }
 
-    /**
-     * Get the value of storageId
-     *
-     * @return the value of storageId
-     */
     public int getStorageId()
     {
         return storageId;
     }
 
-    /**
-     * Set the value of storageId
-     *
-     * @param storageId new value of storageId
-     */
     public void setStorageId(int storageId)
     {
         this.storageId = storageId;
     }
 
-    /**
-     * Get the value of minimumStock
-     *
-     * @return the value of minimumStock
-     */
     public int getMinimumStock()
     {
         return minimumStock;
     }
 
-    /**
-     * Set the value of minimumStock
-     *
-     * @param minimumStock new value of minimumStock
-     */
     public void setMinimumStock(int minimumStock)
     {
         this.minimumStock = minimumStock;
     }
 
-    /**
-     * Get the value of description
-     *
-     * @return the value of description
-     */
     public String getDescription()
     {
         return description;
     }
 
-    /**
-     * Set the value of description
-     *
-     * @param description new value of description
-     */
     public void setDescription(String description)
     {
         this.description = description;
     }
 
-    /**
-     * Get the value of name
-     *
-     * @return the value of name
-     */
     public String getName()
     {
         return name;
     }
 
-    /**
-     * Set the value of name
-     *
-     * @param name new value of name
-     */
     public void setName(String name)
     {
         this.name = name;
     }
 
-    /**
-     * Get the value of id
-     *
-     * @return the value of id
-     */
     public int getId()
     {
         return id;
     }
 
-    /**
-     * Set the value of id
-     *
-     * @param id new value of id
-     */
     public void setId(int id)
     {
         this.id = id;
     }
+//</editor-fold>
 }
