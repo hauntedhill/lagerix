@@ -1,6 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
@@ -15,7 +14,7 @@ import javax.persistence.OneToMany;
  * @author zuch1000
  */
 @Entity
-public class ArticleType implements Serializable {
+public class ArticleType extends SecureEntity {
 
     @Id
     @GeneratedValue
@@ -124,4 +123,15 @@ public class ArticleType implements Serializable {
         a.setArticleType(this);
         articles.add(a);
     }
+
+    /**
+     * Return the storage assosiated with the articleType
+     *
+     * @return The storage object
+     */
+    @Override
+    public Storage getStorageForObject() {
+        return getStorage();
+    }
+
 }

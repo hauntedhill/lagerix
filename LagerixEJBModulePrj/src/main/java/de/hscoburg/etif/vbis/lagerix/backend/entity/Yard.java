@@ -1,6 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
-import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -13,7 +12,7 @@ import javax.persistence.OneToOne;
  * @author zuch1000
  */
 @Entity
-public class Yard implements Serializable {
+public class Yard extends SecureEntity {
 
     @Id
     @GeneratedValue
@@ -114,4 +113,15 @@ public class Yard implements Serializable {
     public void setArticle(Article article) {
         this.article = article;
     }
+
+    /**
+     * Return the storage assosiated with the yard
+     *
+     * @return The storage object.
+     */
+    @Override
+    public Storage getStorageForObject() {
+        return getStorage();
+    }
+
 }

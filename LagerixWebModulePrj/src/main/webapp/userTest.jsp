@@ -33,7 +33,6 @@ u.setEmail("test@test.de");
 
 GroupDTO g1 = new GroupDTO();
 g1.setGroup(GroupType.ADMINISTRATOR);
-g1.setGroup(GroupType.BENUTZER);
 g1.setStorageId(Arrays.asList(new Integer[] {1,801}));
 
 u.setGroups(Arrays.asList(new GroupDTO[] {g1}));

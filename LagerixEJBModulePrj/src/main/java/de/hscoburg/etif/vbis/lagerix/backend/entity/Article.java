@@ -1,6 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
-import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,7 +14,7 @@ import javax.persistence.OneToOne;
  * @author zuch1000
  */
 @Entity
-public class Article implements Serializable {
+public class Article extends SecureEntity {
 
     @Id
     @GeneratedValue
@@ -101,4 +100,15 @@ public class Article implements Serializable {
     public void setMovements(List<Movement> movements) {
         this.movements = movements;
     }
+
+    /**
+     * Return the storage assosiated with the article
+     *
+     * @return The storage entitiy
+     */
+    @Override
+    public Storage getStorageForObject() {
+        return this.getArticleType().getStorage();
+    }
+
 }

@@ -1,6 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.backend.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -17,7 +16,7 @@ import javax.persistence.TemporalType;
  * @author zuch1000
  */
 @Entity
-public class Movement implements Serializable {
+public class Movement extends SecureEntity {
 
     @Id
     @GeneratedValue
@@ -87,4 +86,15 @@ public class Movement implements Serializable {
     public void setArticle(Article article) {
         this.article = article;
     }
+
+    /**
+     * Return the storage assosiated with the movement
+     *
+     * @return The storage object
+     */
+    @Override
+    public Storage getStorageForObject() {
+        return getArticle().getArticleType().getStorage();
+    }
+
 }
