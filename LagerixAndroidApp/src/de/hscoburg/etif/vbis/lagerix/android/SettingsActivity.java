@@ -16,6 +16,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.view.MenuItem;
 
 import java.util.List;
 
@@ -50,6 +51,23 @@ public class SettingsActivity extends PreferenceActivity {
 		super.onPostCreate(savedInstanceState);
 
 		setupSimplePreferencesScreen();
+	}
+	
+	/**
+	 * Listener method for the action bar buttons
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	    
+	    	// Up button has been pressed
+		    case android.R.id.home:
+		    	finish();
+		    	return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	/**

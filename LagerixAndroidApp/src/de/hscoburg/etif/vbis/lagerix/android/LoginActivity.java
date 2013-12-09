@@ -27,6 +27,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
+
 /**
  * Activity which displays a login screen to the user
  * @author Felix Lisczyk

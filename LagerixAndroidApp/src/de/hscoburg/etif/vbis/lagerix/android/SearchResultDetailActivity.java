@@ -1,12 +1,10 @@
 package de.hscoburg.etif.vbis.lagerix.android;
 
-import java.util.LinkedList;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,10 +12,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -29,14 +24,19 @@ import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
  * @author Felix Lisczyk
  *
  */
-public class SearchResultActivity extends ListActivity {
+public class SearchResultDetailActivity extends Activity {
 
-	//Stores retrieved article types
-	LinkedList<ArticleTypeDTO> articleTypes;
-	ArrayAdapter<ArticleTypeDTO> adapter;
+	//Stores the retrieved article type
+	ArticleTypeDTO articleType;
 	
 	//IP address from settings
 	String baseURL;
+	
+	//UI elements
+	TextView articleIdView;
+	TextView articleNameView;
+	TextView articleDescriptionView;
+	TextView storageLocationsView;
 	
 	/**
 	 * Initializer method for the activity
@@ -45,14 +45,14 @@ public class SearchResultActivity extends ListActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_search_result);
+		setContentView(R.layout.activity_search_result_detail);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
-		articleTypes = new LinkedList<ArticleTypeDTO>();
-
-		adapter = new ArrayAdapter<ArticleTypeDTO>(this,android.R.layout.simple_list_item_1 ,articleTypes);
-		setListAdapter(adapter);
+		
+		articleIdView = (TextView) findViewById(R.id.label_articleID_value);
+		articleNameView = (TextView) findViewById(R.id.label_articleName_value);
+		articleDescriptionView = (TextView) findViewById(R.id.label_articleDescription_value);
+		storageLocationsView = (TextView) findViewById(R.id.label_storageLocations_value);
 
 	}
 
@@ -67,10 +67,15 @@ public class SearchResultActivity extends ListActivity {
 		baseURL = sharedPref.getString("server_ip", "localhost:8080");
 		
 		Intent intent = getIntent();
+		int articleTypeId = intent.getIntExtra("ARTICLE_TYPE_ID", 0);
 		String articleName = intent.getStringExtra("ARTICLE_NAME");
 		String articleDescription = intent.getStringExtra("ARTICLE_DESCRIPTION");
-		if(articleTypes.size() == 0)
-			searchArticleTypes(articleName, articleDescription);
+
+		articleIdView.setText(""+articleTypeId);
+		articleNameView.setText(articleName);
+		articleDescriptionView.setText(articleDescription);
+		
+		getStorageLocations(articleTypeId);
 	}
 
 	@Override
@@ -96,45 +101,28 @@ public class SearchResultActivity extends ListActivity {
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
-	
-	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
-		ArticleTypeDTO articleType = (ArticleTypeDTO) getListView().getAdapter().getItem(position);
-		Intent intent = new Intent(this, SearchResultDetailActivity.class);
-    	intent.putExtra("ARTICLE_TYPE_ID", articleType.getId());
-    	intent.putExtra("ARTICLE_NAME", articleType.getName());
-    	intent.putExtra("ARTICLE_DESCRIPTION", articleType.getDescription());
-    	startActivity(intent);
-	}
-	
-	/**
-	 * Performs a REST request to search for article types using the supplied search keys
-	 * @param articleName Name of the article type
-	 * @param articleDescription Description of the article type
-	 */
 
-	private void searchArticleTypes(String articleName, String articleDescription) {
+	private void getStorageLocations(int articleTypeId) {
 
 		//Submit the search REST request
-		LagerixRestClient.get(baseURL+"/lagerix/services/secure/android/search?name="+articleName+"&description="+articleDescription, new JsonHttpResponseHandler() {
+		LagerixRestClient.get(baseURL+"/lagerix/services/secure/android/storageLocations?articleTypeId="+articleTypeId, new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
 				Log.d("Search REST-Request", "Response: "+response);
 				Log.d("Search REST-Request", "Statuscode: "+statusCode);
+				String storageLocations = "";
 				try {
 					for(int i = 0; i < response.length(); i++) {
 						JSONObject object = response.getJSONObject(i);
 						int id = object.getInt("id");
-						String name = object.getString("name");
-						String description = object.getString("description");
-						articleTypes.add(new ArticleTypeDTO(id, name, description));
+						storageLocations += id+"\n";
 					}
 				} catch(JSONException e) {
 					Log.e("JSON-Exception", e.toString());
 				}
 
-				adapter.notifyDataSetChanged();
+				storageLocationsView.setText(storageLocations);
 
 				
 			}
