@@ -169,7 +169,7 @@ public class PlaceManagerEJBean extends BaseService implements PlaceManagerEJBRe
      * @param storageId - The id of the storage
      * @return A DTO object with the data of the storage.
      */
-    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR"})
+    @RolesAllowed({"LAGERVERWALTER", "ADMINISTRATOR", "EINKAEUFER"})
     public StorageDTO getStorage(int storageId) {
         return DTOConverter.convert(findById(Storage.class, storageId));
     }
