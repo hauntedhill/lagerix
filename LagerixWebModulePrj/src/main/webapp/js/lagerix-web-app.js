@@ -122,13 +122,25 @@ function displayArticleTypes(data) {
 function displayStockTrend(data) {
     var rows = "";
     var bookingDirection = "";
+    var stock = 0;
+    var stockInsert = "";
     for (var i = 0; i < data.length; i++) {
         if (data[i].bookedIn) {
             bookingDirection = "Einbuchung";
+            stock++;
         } else {
             bookingDirection = "Ausbuchung";
+            stock--;
         }
-        rows += "<tr><td>" + formatDate(new Date(data[i].timestamp), '%d.%M.%Y - %H:%m:%s') + "</td><td>" + bookingDirection + "</td></tr>";
+        if (stock < parseInt($("#ipMinimumStock").val()))
+        {
+            stockInsert = "<span style=\"color:#ff0000\">" + stock + "</span>";
+        }
+        else
+        {
+            stockInsert = stock;
+        }
+        rows += "<tr><td>" + formatDate(new Date(data[i].timestamp), '%d.%M.%Y - %H:%m:%s') + "</td><td>" + bookingDirection + "</td><td>" + stockInsert + "</td></tr>";
     }
     return rows;
 }
@@ -172,21 +184,14 @@ function displayArticleType(data, textStatus, jqXHR) {
         var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: #68838B\">" + data.name + "</span>";
         $("#panelTitelArticleTypeDescription").html(title);
 
-        /*get current stock*/
-        var url = urlGlobal + "currentstock";
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: "id=" + data.id,
-            cache: false,
-            dataType: "text",
-            success: function(data2, textStatus2, jqXHR2) {
-                $("#ipCurrentStock").val(data2);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                errorHandler(jqXHR, textStatus, errorThrown);
-            }
-        });
+        if (parseInt($("#ipMinimumStock").val()) > parseInt($("#ipCurrentStock").val()))
+        {
+            $("#ipCurrentStock").css("color", "#ff0000");
+        }
+        else
+        {
+            $("#ipCurrentStock").css("color", "#000000");
+        }
         getStorage("storageId=" + data.storageId);
     }
     else
@@ -306,9 +311,9 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
         success: function(data, textStatus, jqXHR) {
             if (data != 0)
             {
-                simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
                 alert("Mindestbestand konnte nicht geändert werden!");
             }
+            simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
             $("#btnChangeMinimumStock").click();
         },
         error: function(jqXHR, textStatus, errorThrown) {

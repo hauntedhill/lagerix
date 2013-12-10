@@ -25,6 +25,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.ejb.EJB;
 import java.util.List;
 
@@ -73,7 +74,7 @@ public class WebAppService
             tc.setName(atDTO.getName());
             tc.setMinimumStock(atDTO.getMinimumStock());
             tc.setStorageId(atDTO.getStorageID());
-            tc.setCurrentStock(yDTOs.size());
+            tc.setCurrentStock(yfatDTOs.size());
             tc.setStorageName(this.myPlaceBean.getStorage(tc.getStorageId()).getName());
             return tc;
         } catch (Exception e)
@@ -113,23 +114,7 @@ public class WebAppService
             return new java.util.ArrayList<ArticleTypeDTO>();
         }
     }
-
-    @GET
-    @Path("/currentstock")
-    @Produces(MediaType.TEXT_PLAIN)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
-    public int currentStock(@QueryParam("id") String pId)
-    {
-        try
-        {
-            int id = Integer.parseInt(pId);
-            List<YardDTO> result = this.myPlaceBean.getYardsForArticleType(id);
-            return result.size();
-        } catch (Exception e)
-        {
-            return 0;
-        }
-    }
+  
 
     @POST
     @Path("/minimumstock")
@@ -232,6 +217,7 @@ public class WebAppService
                 yard.setId(0);
             }
         }
+        Collections.sort(storageEx.getYards(), new YardComparator());
         return storageEx;
     }
 
@@ -245,16 +231,20 @@ public class WebAppService
     }
 }
 
-//class CustomComparator implements Comparator<YardExtended> {
-//    @Override
-//    public int compare(YardExtended pYyard1, YardExtended pYard2) {
-//        if (true)
-//        {
-//            
-//        }
-//        return ;
-//    }
-//}
+class YardComparator implements Comparator<YardExtended> {
+    @Override
+    public int compare(YardExtended pYard1, YardExtended pYard2) {
+        if (pYard1.getId()<pYard2.getId())
+        {
+            return -1;
+        }
+        if(pYard1.getId()==pYard2.getId())
+        {
+            return 0;
+        }
+        return 1;
+    }
+}
 
 class StorageExtended implements Serializable
 {

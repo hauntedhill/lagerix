@@ -32,24 +32,24 @@
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipArticleTypeId" name="ipArticleTypeId"> </div>
+                                        <input type="text" class="form-control input-sm" style="color:#000000" disabled id="ipArticleTypeId" name="ipArticleTypeId"> </div>
                                 </div>
                                 <div class="row">
                                     <label for="ipName" class="col-sm-3 control-label" >Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipName" name="ipName">
+                                        <input type="text" class="form-control input-sm" style="color:#000000" disabled id="ipName" name="ipName">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <label for="textareaDescription" class="col-sm-3 control-label">Beschreibung</label>
                                     <div class="col-sm-9">
-                                        <textarea rows="3" class="form-control input-sm lagerix-textColor" disabled id="textareaDescription" name="textareaDescription"></textarea>
+                                        <textarea rows="3" class="form-control input-sm" style="color:#000000" disabled id="textareaDescription" name="textareaDescription"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <label for="ipMinimumStock" class="col-sm-3 control-label">Mindestbestand</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipMinimumStock" name="ipMinimumStock">
+                                        <input type="text" class="form-control input-sm" style="color:#000000" disabled id="ipMinimumStock" name="ipMinimumStock">
                                     </div>
                                     <div class="col-sm-3" style="padding: 0px 2px 0px 0px; width: auto">
                                         <button class="btn btn-default btn-sm" id="btnChangeMinimumStock" name="btnChangeMinimumStock"><span class="glyphicon glyphicon-pencil" style="margin: 0px 5px 0px 0px"></span>Ändern</button>        
@@ -64,17 +64,15 @@
                                 <div class="row">
                                     <label for="ipCurrentStock" class="col-sm-3 control-label">Bestand</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipCurrentStock" name="ipCurrentStock">
+                                        <input type="text" class="form-control input-sm" style="color:#000000" disabled id="ipCurrentStock" name="ipCurrentStock">
                                     </div>                        
                                 </div> 
                                 <div class="row">
-                                    <label for="stockTrend" class="col-sm-3 control-label">Bestandsverlauf</label>                                  
-
-
+                                    <label for="stockTrend" class="col-sm-3 control-label">Bestandsverlauf</label>
                                     <div class="lagerix-scrollable col-sm-9" style=" max-height: 125px !important;">
                                         <table class="table table-condensed table-striped table-bordered table-hover">
                                             <thead>
-                                                <tr><th>Zeitpunkt</th><th>Buchungsrichtung</th></tr>
+                                                <tr><th>Zeitpunkt</th><th>Buchung</th><th>Best.</th></tr>
                                             </thead>
                                             <tbody id="tbodyStockTrend">
                                             </tbody>
@@ -85,11 +83,11 @@
                                 <div class="row">
                                     <label for="ipStorageName" class="col-sm-3 control-label">Artikel in Lager</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipStorageName" name="ipStorageName">
+                                        <input type="text" class="form-control input-sm" style="color:#000000" disabled id="ipStorageName" name="ipStorageName">
                                     </div>      
                                     <label for="ipStorageId" class="col-sm-2 control-label">Lager-ID</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipStorageId" name="ipStorageId">
+                                        <input type="text" class="form-control input-sm l" style="color:#000000" disabled id="ipStorageId" name="ipStorageId">
                                     </div>  
                                 </div> 
                             </form>
