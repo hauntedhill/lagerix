@@ -14,8 +14,10 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.service.dto.YardInfoDTO;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -87,7 +89,7 @@ public class AndroidService {
         StorageDTO storage = placeManager.getStorages().get(0);
         List<YardDTO> yards = placeManager.getAllYards(storage.getId());
         List<ArticleTypeDTO> articleTypes = articleManager.getAllArticleTypes(storage.getId());
-        List<Integer> occupiedYards = new LinkedList<Integer>();
+        Map<Integer, String> occupiedYards = new HashMap<Integer, String>();
         List<Integer> freeYards = new LinkedList<Integer>();
         
         for(ArticleTypeDTO articleType : articleTypes)
@@ -96,24 +98,24 @@ public class AndroidService {
             for(ArticleDTO article : articles)
             {
                 if(article.getYardID() != 0) {
-                    occupiedYards.add(article.getYardID());
+                    occupiedYards.put(article.getYardID(), articleType.getName());
                     System.out.println("Occupied Yard: "+article.getYardID());
                 }
             }
         }
         
         for(YardDTO y : yards) {
-            if(!occupiedYards.contains(y.getId())) {
+            if(!occupiedYards.containsKey(y.getId())) {
                 freeYards.add(y.getId());
                 System.out.println("Free Yard: "+y.getId());
             }
         }
         
         List<YardInfoDTO> yardList = new LinkedList<YardInfoDTO>();
-        for(Integer i : occupiedYards) {
+        for(Integer key : occupiedYards.keySet()) {
             YardInfoDTO yard = new YardInfoDTO();
-            yard.setYardId(i);
-            yard.setYardStatus("Belegt");
+            yard.setYardId(key);
+            yard.setYardStatus(occupiedYards.get(key));
             yardList.add(yard);
         }
         for(Integer i : freeYards) {
