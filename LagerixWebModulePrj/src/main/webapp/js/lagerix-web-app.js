@@ -1,12 +1,3 @@
-//$(document).on("change", "#ipArticleTypeId", function() {
-//    alert("Artikel ID hat sich geändert!!!");
-//});
-
-
-
-//$( "input[type='text']" ).change(function() {
-//// Check input( $( this ).val() ) for validity here
-//});
 
 //------------------------------------------------------------------------------
 //global settings---------------------------------------------------------------
@@ -178,7 +169,7 @@ function displayArticleType(data, textStatus, jqXHR) {
         $("#ipCurrentStock").val(data.currentStock);
         $("#tbodyStockTrend").html(displayStockTrend(data.movements));
 
-        var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
+        var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: #68838B\">" + data.name + "</span>";
         $("#panelTitelArticleTypeDescription").html(title);
 
         /*get current stock*/
@@ -200,7 +191,7 @@ function displayArticleType(data, textStatus, jqXHR) {
     }
     else
     {
-        alert("Kein Artikel zu angegebener ID gefunden!");
+        alert("Keine Artikelart zu angegebener ID gefunden!");
     }
 }
 
@@ -244,7 +235,7 @@ function displayStorage(data, textStatus, jqXHR) {
     var content = "";
     for (var i = 0; i < data.yards.length; i++) {
         var bgColor = data.yards[i].articleTypeId == 0 ? " style=\"background-color: #BCED91\"" : "";
-        var articleType = data.yards[i].articleTypeId == 0 ? "" : "Artikelart: "+ data.yards[i].articleTypeName+"<br>Artikelart-ID: "+data.yards[i].articleTypeId ;
+        var articleType = data.yards[i].articleTypeId == 0 ? "" : "<span class=\"lagerix-yard-span\">" + data.yards[i].articleTypeName + "</span><br><span class=\"lagerix-yard-span\">Artikelart-ID: " + data.yards[i].articleTypeId + "</span>";
         content += "<div class=\"well lagerix-yard\"" + bgColor + "><span style=\"font-size: 14; font-weight: bolder\">" + data.yards[i].id + "</span><br>" + articleType + "</div>";
     }
     var title = "Lagerbelegung " + data.name;
@@ -312,7 +303,12 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
         cache: false,
         dataType: "text",
         contentType: "application/x-www-form-urlencoded",
-        success: function() {
+        success: function(data, textStatus, jqXHR) {
+            if (data != 0)
+            {
+                simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
+                alert("Mindestbestand konnte nicht geändert werden!");
+            }
             $("#btnChangeMinimumStock").click();
         },
         error: function(jqXHR, textStatus, errorThrown) {

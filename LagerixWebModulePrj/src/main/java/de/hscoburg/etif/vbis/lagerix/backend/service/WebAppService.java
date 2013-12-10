@@ -146,7 +146,7 @@ public class WebAppService
             return result;
         } catch (Exception e)
         {
-            return 0;
+            return 1;
         }
     }
 

@@ -44,7 +44,7 @@
                                 //redirect to secured page
                                 window.location.replace("<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/secure/lagerix.jsp");
                             } else {
-                                alert("Login failed!");
+                                alert("Login fehlgeschlagen!");
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {

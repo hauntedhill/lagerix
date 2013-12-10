@@ -1,7 +1,7 @@
 <%-- 
     Document   : lagerix
     Created on : 25.11.2013, 16:48:14
-    Author     : Maraike
+    Author     : Tamas Ströber
 --%>
 
 <%@page contentType="text/html" pageEncoding="windows-1252"%>
@@ -32,24 +32,24 @@
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm" disabled id="ipArticleTypeId" name="ipArticleTypeId"> </div>
+                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipArticleTypeId" name="ipArticleTypeId"> </div>
                                 </div>
                                 <div class="row">
                                     <label for="ipName" class="col-sm-3 control-label" >Name</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm " disabled id="ipName" name="ipName">
+                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipName" name="ipName">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <label for="textareaDescription" class="col-sm-3 control-label">Beschreibung</label>
                                     <div class="col-sm-9">
-                                        <textarea rows="3" class="form-control input-sm " disabled id="textareaDescription" name="textareaDescription"></textarea>
+                                        <textarea rows="3" class="form-control input-sm lagerix-textColor" disabled id="textareaDescription" name="textareaDescription"></textarea>
                                     </div>
                                 </div>
                                 <div class="row">
                                     <label for="ipMinimumStock" class="col-sm-3 control-label">Mindestbestand</label>
                                     <div class="col-sm-2">
-                                        <input type="number" class="form-control input-sm " disabled id="ipMinimumStock" name="ipMinimumStock">
+                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipMinimumStock" name="ipMinimumStock">
                                     </div>
                                     <div class="col-sm-3" style="padding: 0px 2px 0px 0px; width: auto">
                                         <button class="btn btn-default btn-sm" id="btnChangeMinimumStock" name="btnChangeMinimumStock"><span class="glyphicon glyphicon-pencil" style="margin: 0px 5px 0px 0px"></span>Ändern</button>        
@@ -64,7 +64,7 @@
                                 <div class="row">
                                     <label for="ipCurrentStock" class="col-sm-3 control-label">Bestand</label>
                                     <div class="col-sm-9">
-                                        <input type="text" class="form-control input-sm " disabled id="ipCurrentStock" name="ipCurrentStock">
+                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipCurrentStock" name="ipCurrentStock">
                                     </div>                        
                                 </div> 
                                 <div class="row">
@@ -80,19 +80,16 @@
                                             </tbody>
                                         </table>  
                                     </div>
-
-
-
                                 </div>  
                                 <hr>
                                 <div class="row">
                                     <label for="ipStorageName" class="col-sm-3 control-label">Artikel in Lager</label>
                                     <div class="col-sm-5">
-                                        <input type="text" class="form-control input-sm " disabled id="ipStorageName" name="ipStorageName">
+                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipStorageName" name="ipStorageName">
                                     </div>      
                                     <label for="ipStorageId" class="col-sm-2 control-label">Lager-ID</label>
                                     <div class="col-sm-2">
-                                        <input type="text" class="form-control input-sm " disabled id="ipStorageId" name="ipStorageId">
+                                        <input type="text" class="form-control input-sm lagerix-textColor" disabled id="ipStorageId" name="ipStorageId">
                                     </div>  
                                 </div> 
                             </form>
@@ -214,16 +211,9 @@
                         </div>
                     </div>
                 </div>
-            </div> 
-
-
-
-
-
+            </div>
             <div class="row">
                 <div class="col-md-12">
-
-
                     <div class="panel-group" id="accordionStorageOccupansy" style="margin: 10px 0px">
                         <div class="panel panel-default">
                             <div class="panel-heading">
@@ -233,9 +223,6 @@
                             </div>
                             <div id="collapseStorageOccupancyOne" class="panel-collapse collapse ">
                                 <div class="panel-body">
-
-
-
                                     <div class="row">
                                         <div class="col-md-9" id="divStorage">
                                         </div>
@@ -251,23 +238,12 @@
                                             </div>
                                         </div>
                                     </div>
-
-
-
-
-
                                 </div>
                             </div>
                         </div>  
                     </div>
-
-
-
                 </div>
             </div>
-
-
-
         </div>
     </body>
 </html>
