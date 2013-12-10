@@ -15,11 +15,11 @@
         <link rel="stylesheet" type="text/css" href="./css/auth.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Lagerix Login</title>
-        <script src="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
-        <link  href="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/css/lagerix-web-app.css" rel="stylesheet" type="text/css">
-        <link href="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet" media="screen">
-        <script src="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/bootstrap.js" type="text/javascript"></script>     
-        <script src="http://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/lagerix-web-app.js" type="text/javascript"></script> 
+        <script src="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
+        <link  href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/css/lagerix-web-app.css" rel="stylesheet" type="text/css">
+        <link href="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/css/bootstrap.css" rel="stylesheet" media="screen">
+        <script src="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/bootstrap.js" type="text/javascript"></script>     
+        <script src="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/lagerix-web-app.js" type="text/javascript"></script> 
 
         <script type="text/javascript">
             $(function() {
@@ -42,7 +42,7 @@
                             //alert("success");
                             if (data == "SUCCESS") {
                                 //redirect to secured page
-                                window.location.replace("http://" + window.location.host + "<%=request.getContextPath()%>/secure/lagerix.jsp");
+                                window.location.replace("<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/secure/lagerix.jsp");
                             } else {
                                 alert("Login failed!");
                             }
@@ -65,7 +65,7 @@
     <body>
         <div class="container">
             <div class="page-header" style="margin: 10px 0px">
-                <img src="images/lagerix-logo.png" alt="Lagerix">
+                <img src="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/images/lagerix-logo.png" alt="Lagerix">
             </div>
             <div class="row">
                 <div class="col-md-4 col-md-offset-4"> 
@@ -75,7 +75,7 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-log-in" style="margin: 0px 15px 0px 0px"></span>Login</h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="loginForm" name="loginForm" action="<%=request.getContextPath()%>/services/auth/login" method="post">
+                            <form class="form-horizontal" id="loginForm" name="loginForm" action="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/services/auth/login" method="post">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 " for="email">Email</label> 
                                     <div class="col-sm-9">

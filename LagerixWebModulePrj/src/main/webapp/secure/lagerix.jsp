@@ -227,37 +227,35 @@
                     <div class="panel-group" id="accordionStorageOccupansy" style="margin: 10px 0px">
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                                <h4 class="panel-title">
+                                <h4 class="panel-title"><span class="glyphicon glyphicon-align-justify" style="margin: 0px 15px 0px 0px"></span>
                                     <a data-toggle="collapse" data-parent="#accordionStorageOccupansy" href="#collapseStorageOccupancyOne" id="aStorages">Lagerbelegung anzeigen</a>
                                 </h4>
                             </div>
                             <div id="collapseStorageOccupancyOne" class="panel-collapse collapse ">
                                 <div class="panel-body">
-                                    
-                                   
-                                    
+
+
+
                                     <div class="row">
                                         <div class="col-md-9" id="divStorage">
-                                                        
-                                    
                                         </div>
-                                          <div class="col-md-3">
-                                                       <div class="lagerix-scrollable lagerix-bodycontainer">
-                                        <table class="table table-condensed table-striped table-bordered table-hover">
-                                            <thead>
-                                                <tr><th>Lager-ID</th><th>Name</th></tr>
-                                            </thead>
-                                            <tbody id="tbodyStorages">
-                                            </tbody>
-                                        </table>  
-                                    </div>
+                                        <div class="col-md-3">
+                                            <div class="lagerix-scrollable lagerix-bodycontainer">
+                                                <table class="table table-condensed table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr><th>Lager-ID</th><th>Name</th></tr>
+                                                    </thead>
+                                                    <tbody id="tbodyStorages">
+                                                    </tbody>
+                                                </table>  
+                                            </div>
                                         </div>
                                     </div>
-                                    
-                                    
-                                     
-                                     
-              
+
+
+
+
+
                                 </div>
                             </div>
                         </div>  

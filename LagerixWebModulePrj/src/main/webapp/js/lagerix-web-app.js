@@ -38,6 +38,11 @@ $(document).on("click", "#btnLogOut", function() {
     return false;
 });
 
+function errorHandler(jqXHR, textStatus, errorThrown) {
+    window.location.replace("http://" + window.location.hostname + ":8080/lagerix");
+}
+
+
 //------------------------------------------------------------------------------
 //articletype selecting --------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -64,6 +69,9 @@ $(document).ready(function() {
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
                 $("#tbodyAdvancedSearch").html(displayArticleTypes(data, textStatus, jqXHR));
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                errorHandler(jqXHR, textStatus, errorThrown);
             }
         });
         return false;
@@ -87,6 +95,9 @@ $(document).ready(function() {
             dataType: "json",
             success: function(data, textStatus, jqXHR) {
                 $("#tbodyUnderrunMinStock").html(displayArticleTypes(data));
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                errorHandler(jqXHR, textStatus, errorThrown);
             }
         });
         return false;
@@ -102,6 +113,9 @@ function simpleSearch(pData) {
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
             displayArticleType(data, textStatus, jqXHR);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            errorHandler(jqXHR, textStatus, errorThrown);
         }
     });
 }
@@ -153,34 +167,41 @@ function formatDate(date, fmt) {
 }
 
 function displayArticleType(data, textStatus, jqXHR) {
-    $("#ipArticleTypeId").val(data.id);
-    $("#ipName").val(data.name);
-    $("#textareaDescription").val(data.description);
-    $("#ipMinimumStock").val(data.minimumStock);
-    $("#ipStorageId").val(data.storageId);
-    $("#ipStorageName").val(data.storageName);
-    $("#ipCurrentStock").val(data.currentStock);
-    $("#tbodyStockTrend").html(displayStockTrend(data.movements));
+    if (data.id !== 0)
+    {
+        $("#ipArticleTypeId").val(data.id);
+        $("#ipName").val(data.name);
+        $("#textareaDescription").val(data.description);
+        $("#ipMinimumStock").val(data.minimumStock);
+        $("#ipStorageId").val(data.storageId);
+        $("#ipStorageName").val(data.storageName);
+        $("#ipCurrentStock").val(data.currentStock);
+        $("#tbodyStockTrend").html(displayStockTrend(data.movements));
 
-    var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
-    $("#panelTitelArticleTypeDescription").html(title);
+        var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: blue\">" + data.name + "</span>";
+        $("#panelTitelArticleTypeDescription").html(title);
 
-    /*get current stock*/
-    var url = urlGlobal + "currentstock";
-    $.ajax({
-        url: url,
-        type: "GET",
-        data: "id=" + data.id,
-        cache: false,
-        dataType: "text",
-        success: function(data2, textStatus2, jqXHR2) {
-            $("#ipCurrentStock").val(data2);
-        },
-        error: function(jqXHR2, textStatus2, errorThrown2) {
-            alert("ERROR!\ntextStatus: " + textStatus2 + "\nerrorThrown: " + errorThrown2 + "\njqXHR.responseText: " + jqXHR2.responseText);
-        }
-    });
- getStorage("storageId=" + data.storageId);
+        /*get current stock*/
+        var url = urlGlobal + "currentstock";
+        $.ajax({
+            url: url,
+            type: "GET",
+            data: "id=" + data.id,
+            cache: false,
+            dataType: "text",
+            success: function(data2, textStatus2, jqXHR2) {
+                $("#ipCurrentStock").val(data2);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                errorHandler(jqXHR, textStatus, errorThrown);
+            }
+        });
+        getStorage("storageId=" + data.storageId);
+    }
+    else
+    {
+        alert("Kein Artikel zu angegebener ID gefunden!");
+    }
 }
 
 //------------------------------------------------------------------------------
@@ -212,15 +233,22 @@ function getStorage(pData) {
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
             $("#divStorage").html(displayStorage(data, textStatus, jqXHR));
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            errorHandler(jqXHR, textStatus, errorThrown);
         }
     });
 }
 
 function displayStorage(data, textStatus, jqXHR) {
-    var content ="";
-        for (var i = 0; i < data.yards.length; i++) {
-        content += "<div>" + data.yards[i].id + "</td><td>" + data.yards[i].articleTypeName + "</td></tr>";
+    var content = "";
+    for (var i = 0; i < data.yards.length; i++) {
+        var bgColor = data.yards[i].articleTypeId == 0 ? " style=\"background-color: #BCED91\"" : "";
+        var articleType = data.yards[i].articleTypeId == 0 ? "" : "Artikelart: "+ data.yards[i].articleTypeName+"<br>Artikelart-ID: "+data.yards[i].articleTypeId ;
+        content += "<div class=\"well lagerix-yard\"" + bgColor + "><span style=\"font-size: 14; font-weight: bolder\">" + data.yards[i].id + "</span><br>" + articleType + "</div>";
     }
+    var title = "Lagerbelegung " + data.name;
+    $("#aStorages").html(title);
     return content;
 }
 
@@ -233,6 +261,9 @@ function getStorages() {
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
             $("#tbodyStorages").html(displayStorages(data));
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            errorHandler(jqXHR, textStatus, errorThrown);
         }
     });
 }
@@ -283,6 +314,9 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
         contentType: "application/x-www-form-urlencoded",
         success: function() {
             $("#btnChangeMinimumStock").click();
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            errorHandler(jqXHR, textStatus, errorThrown);
         }
     });
     return false;

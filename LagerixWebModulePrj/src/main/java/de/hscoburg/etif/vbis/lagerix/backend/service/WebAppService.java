@@ -20,7 +20,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.*;
 import javax.xml.bind.annotation.XmlRootElement;
-
+import java.util.Comparator;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import java.io.Serializable;
@@ -212,10 +212,24 @@ public class WebAppService
                             yardEx.setArticleTypeId(articleType.getId());
                             yardEx.setArticleTypeName(articleType.getName());
                             storageEx.getYards().add(yardEx);
+                            yard.setId(0);
                             break;
                         }
                     }
                 }
+            }
+        }
+        for (YardDTO yard : yards)
+        {
+            if (yard.getId() != 0)
+            {
+                YardExtended yardEx = new YardExtended();
+                yardEx.setId(yard.getId());
+                yardEx.setArticleId(0);
+                yardEx.setArticleTypeId(0);
+                yardEx.setArticleTypeName("");
+                storageEx.getYards().add(yardEx);
+                yard.setId(0);
             }
         }
         return storageEx;
@@ -230,6 +244,17 @@ public class WebAppService
         return this.myPlaceBean.getAllStorages();
     }
 }
+
+//class CustomComparator implements Comparator<YardExtended> {
+//    @Override
+//    public int compare(YardExtended pYyard1, YardExtended pYard2) {
+//        if (true)
+//        {
+//            
+//        }
+//        return ;
+//    }
+//}
 
 class StorageExtended implements Serializable
 {

@@ -18,6 +18,19 @@
     max-height: 250px !important;
 }
 
+.lagerix-yard{
+    height: 50px !important;
+    margin: 2px !important;
+    padding: 3px 5px !important;
+    font-size: 10px !important;
+    text-align: center !important;
+    width: 100px !important;
+    float: left !important;
+    overflow-x: hidden !important;
+    overflow-y: hidden !important;
+    text-overflow: ellipsis-word  !important
+}
+
 /*.lagerix-gradient-background{
 background-image: -webkit-linear-gradient(white 0%, #9FBFD2 100%);
 background-image: -moz-linear-gradient(white 0%, #9FBFD2 100%); 
