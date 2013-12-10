@@ -83,6 +83,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="de.hscoburg.etif.vbis.lagerix.android.SearchFormActivity" />
         </activity>
+        <activity
+            android:name="de.hscoburg.etif.vbis.lagerix.android.StorageOverviewActivity"
+            android:label="@string/title_activity_storage_overview"
+            android:parentActivityName="de.hscoburg.etif.vbis.lagerix.android.ScanActivity"
+            android:screenOrientation="portrait" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="de.hscoburg.etif.vbis.lagerix.android.ScanActivity" />
+        </activity>
     </application>
 
 </manifest>

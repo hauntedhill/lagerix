@@ -11,12 +11,13 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.MovementDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.service.dto.StorageLocationInfoDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.service.dto.StorageOverviewDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.service.dto.YardInfoDTO;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -83,12 +84,12 @@ public class AndroidService {
     @Path("storageOverview")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public StorageOverviewDTO storageOverview() {
+    public List<YardInfoDTO> storageOverview() {
         
         StorageDTO storage = placeManager.getStorages().get(0);
         List<YardDTO> yards = placeManager.getAllYards(storage.getId());
         List<ArticleTypeDTO> articleTypes = articleManager.getAllArticleTypes(storage.getId());
-        List<Integer> occupiedYards = new LinkedList<Integer>();
+        Map<Integer, String> occupiedYards = new HashMap<Integer, String>();
         List<Integer> freeYards = new LinkedList<Integer>();
         
         for(ArticleTypeDTO articleType : articleTypes)
@@ -97,34 +98,40 @@ public class AndroidService {
             for(ArticleDTO article : articles)
             {
                 if(article.getYardID() != 0) {
-                    occupiedYards.add(article.getYardID());
+                    occupiedYards.put(article.getYardID(), articleType.getName());
                     System.out.println("Occupied Yard: "+article.getYardID());
                 }
             }
         }
         
         for(YardDTO y : yards) {
-            if(!occupiedYards.contains(y.getId())) {
+            if(!occupiedYards.containsKey(y.getId())) {
                 freeYards.add(y.getId());
                 System.out.println("Free Yard: "+y.getId());
             }
         }
         
-        List<StorageLocationInfoDTO> result = new LinkedList<StorageLocationInfoDTO>();
-        for(Integer i : occupiedYards)
-            result.add(new StorageLocationInfoDTO(i, "Belegt"));
+        List<YardInfoDTO> yardList = new LinkedList<YardInfoDTO>();
+        for(Integer key : occupiedYards.keySet()) {
+            YardInfoDTO yard = new YardInfoDTO();
+            yard.setYardId(key);
+            yard.setYardStatus(occupiedYards.get(key));
+            yardList.add(yard);
+        }
+        for(Integer i : freeYards) {
+            YardInfoDTO yard = new YardInfoDTO();
+            yard.setYardId(i);
+            yard.setYardStatus("Frei");
+            yardList.add(yard);
+        }
         
-        for(Integer i : freeYards)
-            result.add(new StorageLocationInfoDTO(i, "Frei"));
-        
-        Collections.sort(result, new Comparator<StorageLocationInfoDTO>() {
+        Collections.sort(yardList, new Comparator<YardInfoDTO>() {
             @Override
-            public int compare(StorageLocationInfoDTO o1, StorageLocationInfoDTO o2) {
+            public int compare(YardInfoDTO o1, YardInfoDTO o2) {
                 return o1.getYardId().compareTo(o2.getYardId());
             }
         });
-        
-        return new StorageOverviewDTO(result);
+        return yardList;
         
         
     }
@@ -145,3 +152,58 @@ public class AndroidService {
     }
     
 }
+
+
+//class StorageOverviewDTO {
+//    
+//    private List<YardInfoDTO> storageInfo;
+//    
+//    /**
+//     * @return the storageInfo
+//     */
+//    public List<YardInfoDTO> getStorageInfo() {
+//        return storageInfo;
+//    }
+//
+//    /**
+//     * @param storageInfo the storageInfo to set
+//     */
+//    public void setStorageInfo(List<YardInfoDTO> storageInfo) {
+//        this.storageInfo = storageInfo;
+//    }
+//}
+//
+//class YardInfoDTO {
+//    
+//    private Integer yardId;
+//    private String yardStatus;
+//
+//    /**
+//     * @return the yardId
+//     */
+//    public Integer getYardId() {
+//        return yardId;
+//    }
+//
+//    /**
+//     * @param yardId the yardId to set
+//     */
+//    public void setYardId(Integer yardId) {
+//        this.yardId = yardId;
+//    }
+//
+//    /**
+//     * @return the yardStatus
+//     */
+//    public String getYardStatus() {
+//        return yardStatus;
+//    }
+//
+//    /**
+//     * @param yardStatus the yardStatus to set
+//     */
+//    public void setYardStatus(String yardStatus) {
+//        this.yardStatus = yardStatus;
+//    }
+//    
+//}
