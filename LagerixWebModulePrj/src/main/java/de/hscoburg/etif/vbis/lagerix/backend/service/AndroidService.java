@@ -45,26 +45,40 @@ public class AndroidService {
     @EJB
     PlaceManagerEJBRemoteInterface placeManager;
     
+    
+    /**
+     * Diese Methode speichert eine Ein- oder Ausbuchung zu einer Artikel- und Orts-ID in der Datenbank
+     * @param pArticleID ID des Artikeltyps
+     * @param pLocationID ID des Lagerplatezs
+     * @param pBookedIn True, falls Artikel eingelagert wurde, sonst False
+     * @param pTimestamp Zeitstempel der Buchung
+     * @return Statuscode
+     */
     @Path("saveEntry")
     @POST
     @Consumes("application/x-www-form-urlencoded")
-    public int saveBookEntry(@FormParam("articleID") int articleID, @FormParam("locationID") int locationID, @FormParam("bookedIn") boolean bookedIn, @FormParam("timestamp") long timestamp) {
+    public int saveBookEntry(@FormParam("articleID") int pArticleID, @FormParam("locationID") int pLocationID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) {
         
         System.out.println("Method saveBookEntry() called - Received values:");
-        System.out.println("ArticleID: "+articleID);
-        System.out.println("LocationID: "+locationID);
-        System.out.println("BookedIn: "+bookedIn);
-        System.out.println("Timestamp: "+timestamp);
+        System.out.println("ArticleID: "+pArticleID);
+        System.out.println("LocationID: "+pLocationID);
+        System.out.println("BookedIn: "+pBookedIn);
+        System.out.println("Timestamp: "+pTimestamp);
         
         MovementDTO movementEntry = new MovementDTO();
-        movementEntry.setArticleID(articleID);
-        movementEntry.setBookedIn(bookedIn);
-        movementEntry.setTimestamp(timestamp);
+        movementEntry.setArticleID(pArticleID);
+        movementEntry.setBookedIn(pBookedIn);
+        movementEntry.setTimestamp(pTimestamp);
         
-        return articleManager.saveMovementEntry(movementEntry, locationID);
+        return articleManager.saveMovementEntry(movementEntry, pLocationID);
 
     }
     
+    /**
+     * Diese Methode liefert den Artikeltyp zu einer übergebenen ID zurück.
+     * @param pId ID des Artikeltyps
+     * @return Artikeltyp mit übergebener ID
+     */
     @GET
     @Path("articleType/{id}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,14 +87,44 @@ public class AndroidService {
         return articleManager.getArticleTypeByID(pId);
     }
     
+    /**
+     * Diese Methode durchsucht die Datenbank nach dem Namen und der Beschreibung eines Artikeltyps
+     * @param pName Suchkriterium "Name des Artikeltyps"
+     * @param pDescription Suchkriterium "Beschreibung des Artikeltyps"
+     * @return Liste von Artikeltypen zurück, die mit den Suchkriterien übereinstimmen.
+     */    
+    @Path("search")
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<ArticleTypeDTO> search(@QueryParam("name") String pName, @QueryParam("description") String pDescription)
+    {
+        try
+        {
+            List<ArticleTypeDTO> result = articleManager.searchArticleType(pName, pDescription, "");
+            return result;
+        } catch (Exception e)
+        {
+            return new java.util.ArrayList<ArticleTypeDTO>();
+        }
+    }
+    
+    /**
+     * Diese Methode liefert eine Liste aller Lagerplätze zurück, in denen der Artikeltyp mit der übergebenen ID eingelagert ist.
+     * @param pArticleTypeId ID des Artikeltyps
+     * @return Liste mit Lagerplätzen, in denen der Artikeltyp mit der übergebenen ID eingelagert ist.
+     */
     @Path("storageLocations")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<YardDTO> storageLocationsForArticleType(@QueryParam("articleTypeId") int articleTypeId)
+    public List<YardDTO> storageLocationsForArticleType(@QueryParam("articleTypeId") int pArticleTypeId)
     {
-        return placeManager.getYardsForArticleType(articleTypeId);
+        return placeManager.getYardsForArticleType(pArticleTypeId);
     }
     
+    /**
+     * Diese Methode liefert eine Liste mit dem Status aller Lagerplätze des Lagers zurück, das dem eingeloggten Benutzer zugeordnet ist.
+     * @return Liste mit Objekten, die die ID und den Status eines Lagerplatzes beinhalten. Ist ein Lagerplatz belegt, entspricht der Status dem Namen des eingelagerten Artikeltyps, ansonsten ist „Frei“ eingetragen.
+     */
     @Path("storageOverview")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
@@ -136,74 +180,4 @@ public class AndroidService {
         
     }
     
-    @Path("search")
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<ArticleTypeDTO> search(@QueryParam("name") String pName, @QueryParam("description") String pDescription)
-    {
-        try
-        {
-            List<ArticleTypeDTO> result = articleManager.searchArticleType(pName, pDescription, "");
-            return result;
-        } catch (Exception e)
-        {
-            return new java.util.ArrayList<ArticleTypeDTO>();
-        }
-    }
-    
 }
-
-
-//class StorageOverviewDTO {
-//    
-//    private List<YardInfoDTO> storageInfo;
-//    
-//    /**
-//     * @return the storageInfo
-//     */
-//    public List<YardInfoDTO> getStorageInfo() {
-//        return storageInfo;
-//    }
-//
-//    /**
-//     * @param storageInfo the storageInfo to set
-//     */
-//    public void setStorageInfo(List<YardInfoDTO> storageInfo) {
-//        this.storageInfo = storageInfo;
-//    }
-//}
-//
-//class YardInfoDTO {
-//    
-//    private Integer yardId;
-//    private String yardStatus;
-//
-//    /**
-//     * @return the yardId
-//     */
-//    public Integer getYardId() {
-//        return yardId;
-//    }
-//
-//    /**
-//     * @param yardId the yardId to set
-//     */
-//    public void setYardId(Integer yardId) {
-//        this.yardId = yardId;
-//    }
-//
-//    /**
-//     * @return the yardStatus
-//     */
-//    public String getYardStatus() {
-//        return yardStatus;
-//    }
-//
-//    /**
-//     * @param yardStatus the yardStatus to set
-//     */
-//    public void setYardStatus(String yardStatus) {
-//        this.yardStatus = yardStatus;
-//    }
-//    
-//}
