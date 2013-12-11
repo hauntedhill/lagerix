@@ -55,7 +55,6 @@ public class WebAppService
     @GET
     @Path("/simplesearch")
     @Produces(MediaType.APPLICATION_JSON)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
     public ArticleTypeExtended simpleSearch(@QueryParam("ipIdSimpleSearch") String pId)
     {
         try
@@ -96,7 +95,6 @@ public class WebAppService
     @GET
     @Path("/advancedsearch")
     @Produces(MediaType.APPLICATION_JSON)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<ArticleTypeDTO> advancedSearch(@QueryParam("ipNameAdvancedSearch") String pName, @QueryParam("ipNoteAdvancedSearch") String pDescription, @QueryParam("ipMinimumStockAdvancedSearch") String pMinimumStock)
     {
         try
@@ -118,7 +116,6 @@ public class WebAppService
     @GET
     @Path("/underrunminstocks")
     @Produces(MediaType.APPLICATION_JSON)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<ArticleTypeDTO> getArticleTypesWithUnderrunMinStock()
     {
         try
@@ -142,7 +139,6 @@ public class WebAppService
     @Path("/minimumstock")
     @Consumes("application/x-www-form-urlencoded")
     @Produces(MediaType.TEXT_PLAIN)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
     public int changeMinimumStock(@FormParam("id") String pId, @FormParam("ipMinimumStock") String pMinStock)
     {
         try
@@ -179,7 +175,6 @@ public class WebAppService
     @GET
     @Path("/storage")
     @Produces(MediaType.APPLICATION_JSON)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
     public StorageExtended getStorage(@QueryParam("storageId") String pId)
     {
         int storageId = Integer.parseInt(pId);
@@ -233,14 +228,13 @@ public class WebAppService
     }
 
     /**
-     * Gives all storgaes back in a list.
+     * Gives all storages back in a list.
      *
      * @return Returns a list of all storages.
      */
     @GET
     @Path("/storages")
     @Produces(MediaType.APPLICATION_JSON)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
     public List<StorageDTO> getStorages()
     {
         return this.myPlaceBean.getAllStorages();
@@ -249,6 +243,7 @@ public class WebAppService
 
 /**
  * Comparator for YardExtended objects.
+ *
  * @author Tamás Ströber
  */
 class YardComparator implements Comparator<YardExtended>
@@ -270,7 +265,9 @@ class YardComparator implements Comparator<YardExtended>
 }
 
 /**
- * A StorageExtended object is like a StorageDTO object but has instead of a List<YardDTO> a List<YardExtended> as member.
+ * A StorageExtended object is like a StorageDTO object but has instead of a
+ * List<YardDTO> a List<YardExtended> as member.
+ *
  * @author Tamás Ströber
  */
 class StorageExtended implements Serializable
@@ -315,6 +312,7 @@ class StorageExtended implements Serializable
 
 /**
  * An YardExtended object contains informations about an yard.
+ *
  * @author Tamás Ströber
  */
 class YardExtended implements Serializable
@@ -322,15 +320,17 @@ class YardExtended implements Serializable
 
     private int id;
     /**
-     * The ID of an article which is incorporated in this yard. 0 if Yard is emty.
-     */    
+     * The ID of an article which is incorporated in this yard. 0 if Yard is
+     * emty.
+     */
     private int articleId;
     /**
-     * The ID of the article type of the incorporated article. 0 if Yard is emty.
+     * The ID of the article type of the incorporated article. 0 if Yard is
+     * emty.
      */
     private int articleTypeId;
     /**
-     *  Name of the article type of the incorporated article.
+     * Name of the article type of the incorporated article.
      */
     private String articleTypeName;
 ///<editor-fold defaultstate="collapsed" desc="getter and setter">
@@ -378,7 +378,9 @@ class YardExtended implements Serializable
 }
 
 /**
- * A ArticleTypeExtended object contains basic and extended informations about an article type.
+ * A ArticleTypeExtended object contains basic and extended informations about
+ * an article type.
+ *
  * @author Tamás Ströber
  */
 class ArticleTypeExtended implements Serializable
@@ -389,7 +391,8 @@ class ArticleTypeExtended implements Serializable
     private String description;
     private int minimumStock;
     /**
-     * ID of the storage in which an article of this article type can be incorporated.
+     * ID of the storage in which an article of this article type can be
+     * incorporated.
      */
     private int storageId;
     private String storageName;
