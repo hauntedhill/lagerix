@@ -225,14 +225,21 @@
                                         <div class="col-md-9" id="divStorage">
                                         </div>
                                         <div class="col-md-3">
-                                            <div class="lagerix-scrollable lagerix-bodycontainer">
-                                                <table class="table table-condensed table-striped table-bordered table-hover">
-                                                    <thead>
-                                                        <tr><th>Lager-ID</th><th>Name</th></tr>
-                                                    </thead>
-                                                    <tbody id="tbodyStorages">
-                                                    </tbody>
-                                                </table>  
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <h3 class="panel-title">Lager auswählen</h3>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <div class="lagerix-scrollable lagerix-bodycontainer">
+                                                        <table class="table table-condensed table-striped table-bordered table-hover">
+                                                            <thead>
+                                                                <tr><th>Lager-ID</th><th>Name</th></tr>
+                                                            </thead>
+                                                            <tbody id="tbodyStorages">
+                                                            </tbody>
+                                                        </table>  
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
