@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.hscoburg.etif.vbis.lagerix.backend.service;
 
 import javax.ejb.TransactionAttribute;
@@ -115,7 +111,9 @@ public class WebAppService
 
     /**
      * Returns all article types with underrun minimum stock.
-     * @return A List of ArticleTypeDTOs containing all article types with underrun minimum stock
+     *
+     * @return A List of ArticleTypeDTOs containing all article types with
+     * underrun minimum stock
      */
     @GET
     @Path("/underrunminstocks")
@@ -135,9 +133,10 @@ public class WebAppService
 
     /**
      * Changes the minimum stock of an article type.
+     *
      * @param pId ID of the article type which is to be changed
      * @param pMinStock the new minimum stock
-     * @return 
+     * @return
      */
     @POST
     @Path("/minimumstock")
@@ -170,6 +169,13 @@ public class WebAppService
         return "Test OK";
     }
 
+    /**
+     * Gives advanced informations of a storage back.
+     *
+     * @param pId ID of the wanted storage
+     * @return Returns a StorageExtended object which advanced storage
+     * informations.
+     */
     @GET
     @Path("/storage")
     @Produces(MediaType.APPLICATION_JSON)
@@ -226,6 +232,11 @@ public class WebAppService
         return storageEx;
     }
 
+    /**
+     * Gives all storgaes back in a list.
+     *
+     * @return Returns a list of all storages.
+     */
     @GET
     @Path("/storages")
     @Produces(MediaType.APPLICATION_JSON)
@@ -236,6 +247,10 @@ public class WebAppService
     }
 }
 
+/**
+ * Comparator for YardExtended objects.
+ * @author Tamás Ströber
+ */
 class YardComparator implements Comparator<YardExtended>
 {
 
@@ -254,6 +269,10 @@ class YardComparator implements Comparator<YardExtended>
     }
 }
 
+/**
+ * A StorageExtended object is like a StorageDTO object but has instead of a List<YardDTO> a List<YardExtended> as member.
+ * @author Tamás Ströber
+ */
 class StorageExtended implements Serializable
 {
 
@@ -294,12 +313,25 @@ class StorageExtended implements Serializable
 //</editor-fold>
 }
 
+/**
+ * An YardExtended object contains informations about an yard.
+ * @author Tamás Ströber
+ */
 class YardExtended implements Serializable
 {
 
     private int id;
+    /**
+     * The ID of an article which is incorporated in this yard. 0 if Yard is emty.
+     */    
     private int articleId;
+    /**
+     * The ID of the article type of the incorporated article. 0 if Yard is emty.
+     */
     private int articleTypeId;
+    /**
+     *  Name of the article type of the incorporated article.
+     */
     private String articleTypeName;
 ///<editor-fold defaultstate="collapsed" desc="getter and setter">
 
@@ -345,6 +377,10 @@ class YardExtended implements Serializable
 //</editor-fold>
 }
 
+/**
+ * A ArticleTypeExtended object contains basic and extended informations about an article type.
+ * @author Tamás Ströber
+ */
 class ArticleTypeExtended implements Serializable
 {
 
@@ -352,9 +388,15 @@ class ArticleTypeExtended implements Serializable
     private String name;
     private String description;
     private int minimumStock;
+    /**
+     * ID of the storage in which an article of this article type can be incorporated.
+     */
     private int storageId;
     private String storageName;
     private int currentStock;
+    /**
+     * List of all movements of this article type.
+     */
     private List<MovementDTO> movements;
 ///<editor-fold defaultstate="collapsed" desc="getter and setter">
 
