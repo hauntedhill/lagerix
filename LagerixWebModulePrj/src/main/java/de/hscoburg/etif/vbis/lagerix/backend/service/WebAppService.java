@@ -1,17 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.hscoburg.etif.vbis.lagerix.backend.service;
 
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.PathParam;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.Consumes;
-import javax.ws.rs.PUT;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.GET;
@@ -19,19 +13,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.*;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.Comparator;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import javax.ejb.EJB;
 import java.util.List;
 
 /**
- * REST Web Service
+ * Contains web services for Lagerix web application
  *
- * @author Tamas
+ * @author Tamás Ströber
  */
 @Path("/secure/webApp")
 public class WebAppService
@@ -51,6 +45,13 @@ public class WebAppService
     {
     }
 
+    /**
+     * Executes a simple search by id for an article type
+     *
+     * @param pId ID of the wanted article type
+     * @return An ArticleTypeExtended object as an article type with additional
+     * informations
+     */
     @GET
     @Path("/simplesearch")
     @Produces(MediaType.APPLICATION_JSON)
@@ -73,7 +74,7 @@ public class WebAppService
             tc.setName(atDTO.getName());
             tc.setMinimumStock(atDTO.getMinimumStock());
             tc.setStorageId(atDTO.getStorageID());
-            tc.setCurrentStock(yDTOs.size());
+            tc.setCurrentStock(yfatDTOs.size());
             tc.setStorageName(this.myPlaceBean.getStorage(tc.getStorageId()).getName());
             return tc;
         } catch (Exception e)
@@ -82,6 +83,16 @@ public class WebAppService
         }
     }
 
+    /**
+     * Executes an advanced search for article types that are correspond to the
+     * given params. Supports wildcard search.
+     *
+     * @param pName string which is searched in the article type name
+     * @param pDescription string which is searched in the article type
+     * description
+     * @param pMinimumStock minimum stock of the wanted article types
+     * @return A List of ArticleTypeDTOs that are correspond to the given params
+     */
     @GET
     @Path("/advancedsearch")
     @Produces(MediaType.APPLICATION_JSON)
@@ -98,6 +109,12 @@ public class WebAppService
         }
     }
 
+    /**
+     * Returns all article types with underrun minimum stock.
+     *
+     * @return A List of ArticleTypeDTOs containing all article types with
+     * underrun minimum stock
+     */
     @GET
     @Path("/underrunminstocks")
     @Produces(MediaType.APPLICATION_JSON)
@@ -114,23 +131,13 @@ public class WebAppService
         }
     }
 
-    @GET
-    @Path("/currentstock")
-    @Produces(MediaType.TEXT_PLAIN)
-    @TransactionAttribute(TransactionAttributeType.NEVER)
-    public int currentStock(@QueryParam("id") String pId)
-    {
-        try
-        {
-            int id = Integer.parseInt(pId);
-            List<YardDTO> result = this.myPlaceBean.getYardsForArticleType(id);
-            return result.size();
-        } catch (Exception e)
-        {
-            return 0;
-        }
-    }
-
+    /**
+     * Changes the minimum stock of an article type.
+     *
+     * @param pId ID of the article type which is to be changed
+     * @param pMinStock the new minimum stock
+     * @return
+     */
     @POST
     @Path("/minimumstock")
     @Consumes("application/x-www-form-urlencoded")
@@ -150,36 +157,25 @@ public class WebAppService
         }
     }
 
-//    @GET
-//    @Path("/storage")
-//    @Produces(MediaType.APPLICATION_JSON)
-////    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-//    @TransactionAttribute(TransactionAttributeType.NEVER)
-//    public StorageDTO getStrorage(@QueryParam("ipArticleTypeInStorage") String pStorageId)
-//    {
-//        try
-//        {
-//            ArticleTypeDTO result = this.myArticleBean.getArticleTypeByID(Integer.parseInt(pId));
-////            ArticleTypeDTO result = new ArticleTypeDTO();
-////            result.setId(1);
-////            result.setName("Test Artikel");
-////            result.setDescription("Test Beschreibung des Artikels");
-////            result.setMinimumStock(12);
-//            return result;
-//        } catch (Exception e)
-//        {
-//            return new ArticleTypeDTO();
-//        }
-//    }
+    /**
+     * Only for testing REST service
+     *
+     * @return "Test OK" when it works
+     */
     @GET
     @Path("/test")
-//    @Produces("application/xml")
-//    @Consumes("application/xml")
     public String test()
     {
         return "Test OK";
     }
 
+    /**
+     * Gives advanced informations of a storage back.
+     *
+     * @param pId ID of the wanted storage
+     * @return Returns a StorageExtended object which advanced storage
+     * informations.
+     */
     @GET
     @Path("/storage")
     @Produces(MediaType.APPLICATION_JSON)
@@ -232,9 +228,15 @@ public class WebAppService
                 yard.setId(0);
             }
         }
+        Collections.sort(storageEx.getYards(), new YardComparator());
         return storageEx;
     }
 
+    /**
+     * Gives all storgaes back in a list.
+     *
+     * @return Returns a list of all storages.
+     */
     @GET
     @Path("/storages")
     @Produces(MediaType.APPLICATION_JSON)
@@ -245,17 +247,32 @@ public class WebAppService
     }
 }
 
-//class CustomComparator implements Comparator<YardExtended> {
-//    @Override
-//    public int compare(YardExtended pYyard1, YardExtended pYard2) {
-//        if (true)
-//        {
-//            
-//        }
-//        return ;
-//    }
-//}
+/**
+ * Comparator for YardExtended objects.
+ * @author Tamás Ströber
+ */
+class YardComparator implements Comparator<YardExtended>
+{
 
+    @Override
+    public int compare(YardExtended pYard1, YardExtended pYard2)
+    {
+        if (pYard1.getId() < pYard2.getId())
+        {
+            return -1;
+        }
+        if (pYard1.getId() == pYard2.getId())
+        {
+            return 0;
+        }
+        return 1;
+    }
+}
+
+/**
+ * A StorageExtended object is like a StorageDTO object but has instead of a List<YardDTO> a List<YardExtended> as member.
+ * @author Tamás Ströber
+ */
 class StorageExtended implements Serializable
 {
 
@@ -296,12 +313,25 @@ class StorageExtended implements Serializable
 //</editor-fold>
 }
 
+/**
+ * An YardExtended object contains informations about an yard.
+ * @author Tamás Ströber
+ */
 class YardExtended implements Serializable
 {
 
     private int id;
+    /**
+     * The ID of an article which is incorporated in this yard. 0 if Yard is emty.
+     */    
     private int articleId;
+    /**
+     * The ID of the article type of the incorporated article. 0 if Yard is emty.
+     */
     private int articleTypeId;
+    /**
+     *  Name of the article type of the incorporated article.
+     */
     private String articleTypeName;
 ///<editor-fold defaultstate="collapsed" desc="getter and setter">
 
@@ -347,6 +377,10 @@ class YardExtended implements Serializable
 //</editor-fold>
 }
 
+/**
+ * A ArticleTypeExtended object contains basic and extended informations about an article type.
+ * @author Tamás Ströber
+ */
 class ArticleTypeExtended implements Serializable
 {
 
@@ -354,9 +388,15 @@ class ArticleTypeExtended implements Serializable
     private String name;
     private String description;
     private int minimumStock;
+    /**
+     * ID of the storage in which an article of this article type can be incorporated.
+     */
     private int storageId;
     private String storageName;
     private int currentStock;
+    /**
+     * List of all movements of this article type.
+     */
     private List<MovementDTO> movements;
 ///<editor-fold defaultstate="collapsed" desc="getter and setter">
 
