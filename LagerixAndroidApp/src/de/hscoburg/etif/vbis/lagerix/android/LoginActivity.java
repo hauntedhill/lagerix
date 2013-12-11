@@ -63,7 +63,7 @@ public class LoginActivity extends Activity {
 
 		setContentView(R.layout.activity_login);
 		
-		PreferenceManager.setDefaultValues(this, R.xml.pref_general, false);
+		PreferenceManager.setDefaultValues(this, R.layout.activity_settings, false);
 
 		// Set up the login form.
 		mEmailView = (EditText) findViewById(R.id.email);

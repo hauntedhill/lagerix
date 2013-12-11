@@ -84,7 +84,7 @@ public class SettingsActivity extends PreferenceActivity {
 		// use the older PreferenceActivity APIs.
 
 		// Add 'general' preferences.
-		addPreferencesFromResource(R.xml.pref_general);
+		addPreferencesFromResource(R.layout.activity_settings);
 
 		// Bind the summaries of EditText preferences to
 		// their values. When their values change, their summaries are updated
@@ -124,7 +124,7 @@ public class SettingsActivity extends PreferenceActivity {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void onBuildHeaders(List<Header> target) {
 		if (!isSimplePreferences(this)) {
-			loadHeadersFromResource(R.xml.pref_headers, target);
+			loadHeadersFromResource(R.layout.activity_settings_tablet, target);
 		}
 	}
 
@@ -174,7 +174,7 @@ public class SettingsActivity extends PreferenceActivity {
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-			addPreferencesFromResource(R.xml.pref_general);
+			addPreferencesFromResource(R.layout.activity_settings);
 
 			// Bind the summaries of EditText/List/Dialog/Ringtone preferences
 			// to their values. When their values change, their summaries are

@@ -27,16 +27,6 @@ public class SearchFormActivity extends Activity {
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
-
-	/**
-	 * Initializer method for the action bar
-	 */
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search_form, menu);
-		return true;
-	}
 	
 	/**
 	 * Listener method for the action bar buttons
