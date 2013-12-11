@@ -72,13 +72,6 @@ public class SearchResultActivity extends ListActivity {
 		if(articleTypes.size() == 0)
 			searchArticleTypes(articleName, articleDescription);
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.search_result, menu);
-		return true;
-	}
 	
 	/**
 	 * Listener method for the action bar buttons
