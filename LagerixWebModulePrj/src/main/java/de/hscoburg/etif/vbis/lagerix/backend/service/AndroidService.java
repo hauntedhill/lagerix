@@ -48,7 +48,7 @@ public class AndroidService {
     
     /**
      * Diese Methode speichert eine Ein- oder Ausbuchung zu einer Artikel- und Orts-ID in der Datenbank
-     * @param pArticleID ID des Artikeltyps
+     * @param pArticleID ID der Artikelart
      * @param pLocationID ID des Lagerplatezs
      * @param pBookedIn True, falls Artikel eingelagert wurde, sonst False
      * @param pTimestamp Zeitstempel der Buchung
@@ -75,9 +75,9 @@ public class AndroidService {
     }
     
     /**
-     * Diese Methode liefert den Artikeltyp zu einer übergebenen ID zurück.
-     * @param pId ID des Artikeltyps
-     * @return Artikeltyp mit übergebener ID
+     * Diese Methode liefert die Artikelart zu einer übergebenen ID zurück.
+     * @param pId ID der Artikelart
+     * @return Artikelart mit übergebener ID
      */
     @GET
     @Path("articleType/{id}")
@@ -88,10 +88,10 @@ public class AndroidService {
     }
     
     /**
-     * Diese Methode durchsucht die Datenbank nach dem Namen und der Beschreibung eines Artikeltyps
-     * @param pName Suchkriterium "Name des Artikeltyps"
-     * @param pDescription Suchkriterium "Beschreibung des Artikeltyps"
-     * @return Liste von Artikeltypen zurück, die mit den Suchkriterien übereinstimmen.
+     * Diese Methode durchsucht die Datenbank nach dem Namen und der Beschreibung einer Artikelart
+     * @param pName Suchkriterium "Name der Artikelart"
+     * @param pDescription Suchkriterium "Beschreibung der Artikelart"
+     * @return Liste von Artikelarten, die mit den Suchkriterien übereinstimmen.
      */    
     @Path("search")
     @GET
@@ -109,9 +109,9 @@ public class AndroidService {
     }
     
     /**
-     * Diese Methode liefert eine Liste aller Lagerplätze zurück, in denen der Artikeltyp mit der übergebenen ID eingelagert ist.
-     * @param pArticleTypeId ID des Artikeltyps
-     * @return Liste mit Lagerplätzen, in denen der Artikeltyp mit der übergebenen ID eingelagert ist.
+     * Diese Methode liefert eine Liste aller Lagerplätze zurück, in denen die Artikelart mit der übergebenen ID eingelagert ist.
+     * @param pArticleTypeId ID der Artikelart
+     * @return Liste mit Lagerplätzen, in denen die Artikelart mit der übergebenen ID eingelagert ist.
      */
     @Path("storageLocations")
     @GET
@@ -123,7 +123,7 @@ public class AndroidService {
     
     /**
      * Diese Methode liefert eine Liste mit dem Status aller Lagerplätze des Lagers zurück, das dem eingeloggten Benutzer zugeordnet ist.
-     * @return Liste mit Objekten, die die ID und den Status eines Lagerplatzes beinhalten. Ist ein Lagerplatz belegt, entspricht der Status dem Namen des eingelagerten Artikeltyps, ansonsten ist „Frei“ eingetragen.
+     * @return Liste mit Objekten, die die ID und den Status eines Lagerplatzes beinhalten. Ist ein Lagerplatz belegt, entspricht der Status dem Namen der eingelagerten Artikelart, ansonsten ist „Frei“ eingetragen.
      */
     @Path("storageOverview")
     @GET
