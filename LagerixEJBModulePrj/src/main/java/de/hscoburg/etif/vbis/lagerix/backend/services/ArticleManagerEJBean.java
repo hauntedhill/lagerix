@@ -43,7 +43,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      *
      * @param entry - An DTO with alle information like the articleId and the movement type
      * @param yardID - the Id of the yard where the article should be released or incorporated
-     * @return 0 if success, 1 on failure
+     * @return 0 if success, 1 if article or yard not found, 2 on release and article is not in yard, 3 article already stored, 4 yard already full
      */
     @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
     public int saveMovementEntry(MovementDTO entry, int yardID) {
@@ -60,8 +60,11 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
 
         Movement m = new Movement();
         if (entry.isBookedIn()) {
-            if (article.getYard() != null || yard.getArticle() != null) {
-                return 2;
+            if (article.getYard() != null) {
+                return 3;
+            }
+            if (yard.getArticle() != null) {
+                return 4;
             }
             m.setMovement(Movements.INCORPORATE);
             article.setYard(yard);
