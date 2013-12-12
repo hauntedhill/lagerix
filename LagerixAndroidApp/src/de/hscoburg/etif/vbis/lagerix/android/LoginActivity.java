@@ -86,6 +86,9 @@ public class LoginActivity extends Activity {
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+		
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
@@ -94,16 +97,6 @@ public class LoginActivity extends Activity {
 						attemptLogin();
 					}
 				});
-	}
-	
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 	}
 
 	/**

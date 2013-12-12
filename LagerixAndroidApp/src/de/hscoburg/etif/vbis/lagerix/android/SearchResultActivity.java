@@ -53,15 +53,6 @@ public class SearchResultActivity extends ListActivity {
 
 		adapter = new ArrayAdapter<ArticleTypeDTO>(this,android.R.layout.simple_list_item_1 ,articleTypes);
 		setListAdapter(adapter);
-
-	}
-
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
@@ -71,6 +62,7 @@ public class SearchResultActivity extends ListActivity {
 		String articleDescription = intent.getStringExtra("ARTICLE_DESCRIPTION");
 		if(articleTypes.size() == 0)
 			searchArticleTypes(articleName, articleDescription);
+
 	}
 	
 	/**

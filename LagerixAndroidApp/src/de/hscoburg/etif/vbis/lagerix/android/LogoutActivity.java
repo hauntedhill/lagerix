@@ -49,14 +49,7 @@ public class LogoutActivity extends Activity {
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 		
 		mLogoutStatusView = findViewById(R.id.logout_status);
-	}
-	
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	public void onStart() {
-		super.onStart();
+		
 		logout();
 	}
 	

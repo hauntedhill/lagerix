@@ -38,18 +38,10 @@ public class StorageOverviewActivity extends Activity {
 
 		yardIdView = (TextView) findViewById(R.id.label_yardIDResult);
 		yardStatusView = (TextView) findViewById(R.id.label_yardStatusResult);
-	}
-
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
+		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 		getStorageOverview();
-
 	}
 
 	/**

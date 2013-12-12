@@ -55,14 +55,7 @@ public class ScanActivity extends Activity {
 		
 		spinner = (ProgressBar) findViewById(R.id.activityIndicator_restRequest);
 		spinner.setVisibility(View.INVISIBLE);
-	}
-
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
+		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 	}

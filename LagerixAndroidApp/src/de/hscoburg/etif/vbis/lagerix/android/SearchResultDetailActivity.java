@@ -53,15 +53,6 @@ public class SearchResultDetailActivity extends Activity {
 		articleNameView = (TextView) findViewById(R.id.label_articleName_value);
 		articleDescriptionView = (TextView) findViewById(R.id.label_articleDescription_value);
 		storageLocationsView = (TextView) findViewById(R.id.label_storageLocations_value);
-
-	}
-
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
@@ -76,6 +67,7 @@ public class SearchResultDetailActivity extends Activity {
 		articleDescriptionView.setText(articleDescription);
 		
 		getStorageLocations(articleTypeId);
+
 	}
 	
 	/**
