@@ -4,7 +4,7 @@
 //------------------------------------------------------------------------------
 
 var urlGlobal = "";
-
+var selectedStorageId = "";
 $(document).ready(function() {
     urlGlobal = $(document.forms["formArticleTypeDescription"]).attr("action");
     $("input[name='ipMinimumStock']").attr('disabled', 'disabled');
@@ -237,6 +237,12 @@ $(document).on("click", ".storageRow", function() {
     getStorage("storageId=" + $(this).children(".storageId").html());
 });
 
+//refresh display of storages
+$(document).on("click", "#btnRefreshStorages", function(){
+    getStorages();
+    getStorage("storageId=" + selectedStorageId);
+});
+
 //requests a storage using ajax
 function getStorage(pData) {
     $.ajax({
@@ -246,7 +252,7 @@ function getStorage(pData) {
         cache: false,
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
-            $("#divStorage").html(displayStorage(data, textStatus, jqXHR));
+            displayStorage(data, textStatus, jqXHR);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             errorHandler(jqXHR, textStatus, errorThrown);
@@ -264,7 +270,8 @@ function displayStorage(data, textStatus, jqXHR) {
     }
     var title = "Lagerbelegung " + data.name;
     $("#aStorages").html(title);
-    return content;
+    $("#divStorage").html( content);
+    selectedStorageId=data.id;
 }
 
 //requests all storages using ajax

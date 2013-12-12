@@ -225,6 +225,7 @@
                                         <div class="col-md-9" id="divStorage">
                                         </div>
                                         <div class="col-md-3">
+                                            <button type="submit" class="btn btn-default btn-sm" id="btnRefreshStorages" style="margin: 0px 0px 10px 0px"><span class="glyphicon glyphicon-refresh" style="margin: 0px 10px 0px 0px"></span>Anzeige aktualisieren</button>
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
                                                     <h3 class="panel-title">Lager auswählen</h3>
