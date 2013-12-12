@@ -2,12 +2,12 @@
 
     <EditTextPreference
         android:capitalize="words"
-        android:defaultValue="@string/pref_ip_defaultValue"
+        android:defaultValue="@string/pref_ipAddress_defaultValue"
         android:inputType="textCapWords"
         android:key="server_ip"
         android:maxLines="1"
         android:selectAllOnFocus="true"
         android:singleLine="true"
-        android:title="@string/pref_ip_name" />
+        android:title="@string/pref_ipAddress_name" />
 
 </PreferenceScreen>

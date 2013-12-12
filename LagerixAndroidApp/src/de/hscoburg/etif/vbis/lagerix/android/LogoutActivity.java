@@ -29,10 +29,10 @@ import android.view.View;
 public class LogoutActivity extends Activity {
 
 	private View mLogoutStatusView;
-	
+
 	//Result of logout call
 	String logoutResult = "";
-	
+
 	//IP address from settings
 	String baseURL;
 
@@ -44,71 +44,58 @@ public class LogoutActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_logout);
-		
+
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
-		
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
+
 		mLogoutStatusView = findViewById(R.id.logout_status);
-	}
-	
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	public void onStart() {
-		super.onStart();
+
 		logout();
 	}
-	
+
 	/**
 	 * Sends a REST request to perform a logout
 	 */
 	public void logout() {
 		showProgress(true);
-			
-		LagerixRestClient.get(baseURL+"/lagerix/services/auth/logout", new JsonHttpResponseHandler() {
 
-			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
-				try {
-					Log.d("JSONObject", response.toString());
-	                logoutResult = response.getString("status");
-	                Log.d("JSONResult", logoutResult);
-	                
-	                // Logout was successful, forward the user to the login activity
-	                if(logoutResult.equals("SUCCESS")) {
-	                	showProgress(false);
-    					Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-    			    	startActivity(intent);
-    			    	finish();
-	                }
+		LagerixRestClient.get(baseURL+getString(R.string.restURI_logout), new TextHttpResponseHandler() {
 
-	                // Logout failed, send the user back to the scan activity
-	                else {
-	    				Log.e("LogoutActivity", "Error logging out");
-	    				showProgress(false);
-    					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
-    			    	startActivity(intent);
-    			    	finish();
+			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
+				Log.d("logout(): REST-Request", "Response: "+responseBody);
+				Log.d("logout(): REST-Request", "Statuscode: "+statusCode);
+				logoutResult = responseBody;
 
-	                }
-	        			
-				} catch (JSONException e) {
-    				showProgress(false);
-					e.printStackTrace();
+				// Logout was successful, forward the user to the login activity
+				if(logoutResult.equals("SUCCESS")) {
+					showProgress(false);
+					Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+					startActivity(intent);
+					finish();
+				}
+
+				// Logout failed, send the user back to the scan activity
+				else {
+					Log.e("LogoutActivity", "Error logging out");
+					showProgress(false);
+					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+					startActivity(intent);
+					finish();
+
 				}
 			}
-			
-			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
-				Log.e("Logout REST-Request", "Error: "+responseBody);
-				Log.e("Logout REST-Request", "Statuscode: "+statusCode);
+
+			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
+				Log.e("logout(): REST-Request", "Error: "+responseBody);
+				Log.e("logout(): REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
 
 			}
 		});		
-		
-		
+
+
 	}
-	
+
 	/**
 	 * Shows the progress UI and hides the logout form.
 	 */
@@ -123,14 +110,14 @@ public class LogoutActivity extends Activity {
 
 			mLogoutStatusView.setVisibility(View.VISIBLE);
 			mLogoutStatusView.animate().setDuration(shortAnimTime)
-					.alpha(show ? 1 : 0)
-					.setListener(new AnimatorListenerAdapter() {
-						@Override
-						public void onAnimationEnd(Animator animation) {
-							mLogoutStatusView.setVisibility(show ? View.VISIBLE
-									: View.GONE);
-						}
-					});
+			.alpha(show ? 1 : 0)
+			.setListener(new AnimatorListenerAdapter() {
+				@Override
+				public void onAnimationEnd(Animator animation) {
+					mLogoutStatusView.setVisibility(show ? View.VISIBLE
+							: View.GONE);
+				}
+			});
 		} else {
 			// The ViewPropertyAnimator APIs are not available, so simply show
 			// and hide the relevant UI components.

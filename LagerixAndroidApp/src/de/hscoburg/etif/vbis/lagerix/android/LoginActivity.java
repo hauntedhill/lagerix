@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -85,6 +86,9 @@ public class LoginActivity extends Activity {
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
+		
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
@@ -93,16 +97,6 @@ public class LoginActivity extends Activity {
 						attemptLogin();
 					}
 				});
-	}
-	
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
 	}
 
 	/**
@@ -234,13 +228,13 @@ public class LoginActivity extends Activity {
 
 		// This first REST request checks if the supplied credentials are valid.
 		// It is required because the actual login request doesn't return a proper status.
-		LagerixRestClient.post(baseURL+"/lagerix/services/auth/login", restParams, new TextHttpResponseHandler() {
+		LagerixRestClient.post(baseURL+getString(R.string.restURI_login1), restParams, new TextHttpResponseHandler() {
 
 			// The first REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 	                loginResult = responseBody;
-	                Log.d("First REST-Request", "Response: "+responseBody);
-					Log.d("First REST-Request", "Statuscode: "+statusCode);
+	                Log.d("login(): First REST-Request", "Response: "+responseBody);
+					Log.d("login(): First REST-Request", "Statuscode: "+statusCode);
 	                
 	                // The user provided valid credentials.
 	                if(loginResult.equals("SUCCESS")) {
@@ -249,12 +243,12 @@ public class LoginActivity extends Activity {
 	        			loginParams.put("j_password", mPassword);
 	        			
 	        			// This second REST request performs the actual login.
-	        			LagerixRestClient.post(baseURL+"/lagerix/secure/j_security_check", loginParams, new TextHttpResponseHandler() {
+	        			LagerixRestClient.post(baseURL+getString(R.string.restURI_login2), loginParams, new TextHttpResponseHandler() {
 	        				// The second REST request was successful. The first REST request already checked the user credentials, so we can forward to the main application.
 	        				@Override
 	        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
-	        	                Log.d("Second REST-Request", "Response: "+responseBody);
-	        					Log.d("Second REST-Request", "Statuscode: "+statusCode);
+	        	                Log.d("login(): Second REST-Request", "Response: "+responseBody);
+	        					Log.d("login(): Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
 	        					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
 	        			    	startActivity(intent);
@@ -262,9 +256,10 @@ public class LoginActivity extends Activity {
 	        				}
 	        				// The second REST request failed due to a server error.
 	        				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
-	        					Log.e("Second REST-Request", "Error: "+responseBody);
-	        					Log.e("Second REST-Request", "Statuscode: "+statusCode);
+	        					Log.e("login(): Second REST-Request", "Error: "+responseBody);
+	        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
+	        					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 	        				}
 	        			});
 	                }
@@ -279,9 +274,10 @@ public class LoginActivity extends Activity {
 			
 			//The first REST request failed due to a server error.
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
-				Log.e("First REST-Request", "Error: "+responseBody);
-				Log.e("First REST-Request", "Statuscode: "+statusCode);
+				Log.e("login(): First REST-Request", "Error: "+responseBody);
+				Log.e("login(): First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
+				Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
 
 			}
 		});		

@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +34,7 @@ public class ScanActivity extends Activity {
 	TextView article_result;
 	TextView location_result;
 	RadioButton bookedIn;
-	TextView restResult;
+	ProgressBar spinner;
 
 	//IP address from settings
 	String baseURL;
@@ -50,19 +52,12 @@ public class ScanActivity extends Activity {
 		location_result = (TextView) findViewById(R.id.label_storageIDResult);
 
 		bookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
-
-		restResult = (TextView) findViewById(R.id.label_restResult);
-
-	}
-
-	/**
-	 * Gets called every time the activity appears on screen
-	 */
-	@Override
-	protected void onStart() {
-		super.onStart();
+		
+		spinner = (ProgressBar) findViewById(R.id.activityIndicator_restRequest);
+		spinner.setVisibility(View.INVISIBLE);
+		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 	}
 
 	/**
@@ -115,7 +110,7 @@ public class ScanActivity extends Activity {
 		try {
 
 			Intent intent = new Intent(
-					"com.google.zxing.client.android.SCAN");
+					"de.hscoburg.etif.vbis.lagerix.android.barcode.SCAN");
 			// Tell the barcode scanner to return immediately after the barcode has been scanned
 			intent.putExtra("RESULT_DISPLAY_DURATION_MS", 0l);
 			startActivityForResult(intent, 0);
@@ -166,17 +161,48 @@ public class ScanActivity extends Activity {
 			else
 				params.put("bookedIn", "false");
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
+			
+			spinner.setVisibility(View.VISIBLE);
 
 			// Call the REST helper class and send the request
-			LagerixRestClient.post(baseURL+"/lagerix/services/secure/android/saveEntry", params, new TextHttpResponseHandler() {
+			LagerixRestClient.post(baseURL+getString(R.string.restURI_bookEntry), params, new TextHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
-					restResult.setText("Erfolg!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody);
+					Log.d("sendEntry(): REST-Request", "Request successful");
+					Log.d("sendEntry(): REST-Request", "Response: "+responseBody);
+					Log.d("sendEntry(): REST-Request", "Statuscode: "+statusCode);
+					
+					spinner.setVisibility(View.INVISIBLE);
+					
+					try {
+						if(Integer.parseInt(responseBody) == 0)
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_successful), Toast.LENGTH_LONG).show();
+						else if(Integer.parseInt(responseBody) == 1)
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_doesNotExist), Toast.LENGTH_LONG).show();
+						else if(Integer.parseInt(responseBody) == 2)
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_articleNotStoredInYard), Toast.LENGTH_LONG).show();
+						else if(Integer.parseInt(responseBody) == 3)
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_articleAlreadyStored), Toast.LENGTH_LONG).show();
+						else if(Integer.parseInt(responseBody) == 4)
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_yardOccupied), Toast.LENGTH_LONG).show();
+						else
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_unexpected_result), Toast.LENGTH_LONG).show();
+					} catch (NumberFormatException e) {
+						Toast.makeText(getApplicationContext(), getString(R.string.status_book_unexpected_result), Toast.LENGTH_LONG).show();
+						Log.e("sendEntry REST-Request", "Unexpected server response");
+					}
+					
 				}
 
 				@Override
 				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
-					restResult.setText("Fehler!!!\nStatuscode: "+statusCode+"\nResponse: \n"+responseBody+"\nError: "+error);
+					Log.e("sendEntry(): REST-Request", "Request failed");
+					Log.e("sendEntry(): REST-Request", "Response: "+responseBody);
+					Log.e("sendEntry(): REST-Request", "Statuscode: "+statusCode);
+					
+					spinner.setVisibility(View.INVISIBLE);
+					
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 				}
 			});
 		}

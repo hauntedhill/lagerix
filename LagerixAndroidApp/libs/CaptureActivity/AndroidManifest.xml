@@ -15,7 +15,7 @@
  limitations under the License.
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.google.zxing.client.android"
+          package="de.hscoburg.etif.vbis.lagerix.android.barcode"
           android:versionName="4.3.2"
           android:versionCode="88"
           android:installLocation="auto">
@@ -69,7 +69,7 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
       <intent-filter>
-        <action android:name="com.google.zxing.client.android.SCAN"/>
+        <action android:name="de.hscoburg.etif.vbis.lagerix.android.barcode.SCAN"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
       <!-- Allow web apps to launch Barcode Scanner by linking to http://zxing.appspot.com/scan. -->
@@ -108,7 +108,7 @@
     <activity android:name=".encode.EncodeActivity"
               android:stateNotNeeded="true">
       <intent-filter>
-        <action android:name="com.google.zxing.client.android.ENCODE"/>
+        <action android:name="de.hscoburg.etif.vbis.lagerix.android.barcode.ENCODE"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
       <!-- This allows us to handle the Share button in Contacts. -->
@@ -130,7 +130,7 @@
               android:screenOrientation="landscape"
               android:configChanges="orientation|keyboardHidden">
       <intent-filter>
-        <action android:name="com.google.zxing.client.android.SEARCH_BOOK_CONTENTS"/>
+        <action android:name="de.hscoburg.etif.vbis.lagerix.android.barcode.SEARCH_BOOK_CONTENTS"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
@@ -139,7 +139,7 @@
               android:screenOrientation="user"
               android:theme="@android:style/Theme.Light">
       <intent-filter>
-        <action android:name="com.google.zxing.client.android.SHARE"/>
+        <action android:name="de.hscoburg.etif.vbis.lagerix.android.barcode.SHARE"/>
         <category android:name="android.intent.category.DEFAULT"/>
       </intent-filter>
     </activity>
