@@ -2,6 +2,7 @@
 <resources>
 
     <!-- Global strings -->
+    <string name="app_name">Lagerix</string>
     <string name="status_communication_error">Kommunikation mit dem Server fehlgeschlagen Bitte prüfen Sie Ihre Einstellungen.</string>
 
     <!-- Action bar strings -->
@@ -60,7 +61,7 @@
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Lagerübersicht</string>
-    <string name="label_yardID">Lagerplatz-ID</string>
-    <string name="label_yardStatus">Lagerplatz-Status</string>
+    <string name="label_yardID"><u>Lagerplatz-ID</u></string>
+    <string name="label_yardStatus"><u>Lagerplatz-Status</u></string>
 
 </resources>

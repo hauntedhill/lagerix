@@ -72,7 +72,7 @@
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Storage overview</string>
-    <string name="label_yardID">Yard ID</string>
-    <string name="label_yardStatus">Yard status</string>
+    <string name="label_yardID"><u>Yard ID</u></string>
+    <string name="label_yardStatus"><u>Yard status</u></string>
 
 </resources>
