@@ -4,12 +4,13 @@
 //------------------------------------------------------------------------------
 
 var urlGlobal = "";
-
+var selectedStorageId = "";
 $(document).ready(function() {
     urlGlobal = $(document.forms["formArticleTypeDescription"]).attr("action");
     $("input[name='ipMinimumStock']").attr('disabled', 'disabled');
 });
 
+//logout routine
 $(document).on("click", "#btnLogOut", function() {
     var urli = "https://" + window.location.host + "/lagerix/services/auth/logout";
     $.ajax({
@@ -29,6 +30,7 @@ $(document).on("click", "#btnLogOut", function() {
     return false;
 });
 
+//global error handler
 function errorHandler(jqXHR, textStatus, errorThrown) {
     window.location.replace("http://" + window.location.hostname + ":8080/lagerix");
 }
@@ -38,18 +40,22 @@ function errorHandler(jqXHR, textStatus, errorThrown) {
 //articletype selecting --------------------------------------------------------
 //------------------------------------------------------------------------------
 
+//select article type in advanced search result table
 $(document).on("click", ".articleTypeRow", function() {
     simpleSearch("ipIdSimpleSearch=" + $(this).children(".articleTypeId").html());
 });
 
+//change cursor on enter row in advanced search result table
 $(document).on("mouseenter", ".articleTypeRow", function() {
     $(this).css('cursor', 'pointer');
 });
 
+//change cursor on leave row in advanced search result table
 $(document).on("mouseleave", ".articleTypeRow", function() {
     $(this).css('cursor', 'auto');
 });
 
+//advanced search for article types
 $(document).ready(function() {
     $(document.forms['advancedSearchForm']).submit(function() {
         $.ajax({
@@ -69,6 +75,7 @@ $(document).ready(function() {
     });
 });
 
+//prompt a simple search after ID for article types
 $(document).ready(function() {
     $(document.forms['simpleSearchForm']).submit(function() {
         simpleSearch($("#simpleSearchForm").serialize());
@@ -76,6 +83,7 @@ $(document).ready(function() {
     });
 });
 
+//search for article types with underrun minimum stock
 $(document).ready(function() {
     $(document.forms['formRefreshMinUnderrun']).submit(function() {
         $.ajax({
@@ -95,6 +103,13 @@ $(document).ready(function() {
     });
 });
 
+//refresh article type display
+$(document).on("click","#btnRefreshArticleType",function(){
+        simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
+        return false;
+});
+
+//execute a simple search in an ajax request
 function simpleSearch(pData) {
     $.ajax({
         url: urlGlobal + "simplesearch",
@@ -111,6 +126,7 @@ function simpleSearch(pData) {
     });
 }
 
+//displays the founded article types of an advanced or minimum stock underrun search
 function displayArticleTypes(data) {
     var rows = "";
     for (var i = 0; i < data.length; i++) {
@@ -119,20 +135,34 @@ function displayArticleTypes(data) {
     return rows;
 }
 
+//displays the stock trend of an selected article type in a table
 function displayStockTrend(data) {
     var rows = "";
     var bookingDirection = "";
+    var stock = 0;
+    var stockInsert = "";
     for (var i = 0; i < data.length; i++) {
         if (data[i].bookedIn) {
             bookingDirection = "Einbuchung";
+            stock++;
         } else {
             bookingDirection = "Ausbuchung";
+            stock--;
         }
-        rows += "<tr><td>" + formatDate(new Date(data[i].timestamp), '%d.%M.%Y - %H:%m:%s') + "</td><td>" + bookingDirection + "</td></tr>";
+        if (stock < parseInt($("#ipMinimumStock").val()))
+        {
+            stockInsert = "<span style=\"color:#ff0000\">" + stock + "</span>";
+        }
+        else
+        {
+            stockInsert = stock;
+        }
+        rows += "<tr><td>" + formatDate(new Date(data[i].timestamp), '%d.%M.%Y - %H:%m:%s') + "</td><td>" + bookingDirection + "</td><td>" + stockInsert + "</td></tr>";
     }
     return rows;
 }
 
+//date format function
 function formatDate(date, fmt) {
     function pad(value) {
         return (value.toString().length < 2) ? '0' + value : value;
@@ -157,6 +187,7 @@ function formatDate(date, fmt) {
     });
 }
 
+//displayes a selected article type
 function displayArticleType(data, textStatus, jqXHR) {
     if (data.id !== 0)
     {
@@ -172,21 +203,14 @@ function displayArticleType(data, textStatus, jqXHR) {
         var title = "<span class=\"glyphicon glyphicon-info-sign\" style=\"margin: 0px 15px 0px 0px\"></span>Informationen zu Artikelart: <span id=\"spanItemPanelTitle\"  style=\"font-weight: bold; color: #68838B\">" + data.name + "</span>";
         $("#panelTitelArticleTypeDescription").html(title);
 
-        /*get current stock*/
-        var url = urlGlobal + "currentstock";
-        $.ajax({
-            url: url,
-            type: "GET",
-            data: "id=" + data.id,
-            cache: false,
-            dataType: "text",
-            success: function(data2, textStatus2, jqXHR2) {
-                $("#ipCurrentStock").val(data2);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                errorHandler(jqXHR, textStatus, errorThrown);
-            }
-        });
+        if (parseInt($("#ipMinimumStock").val()) > parseInt($("#ipCurrentStock").val()))
+        {
+            $("#ipCurrentStock").css("color", "#ff0000");
+        }
+        else
+        {
+            $("#ipCurrentStock").css("color", "#000000");
+        }
         getStorage("storageId=" + data.storageId);
     }
     else
@@ -199,22 +223,33 @@ function displayArticleType(data, textStatus, jqXHR) {
 //storrage display--------------------------------------------------------------
 //------------------------------------------------------------------------------
 
+//change cursor on entering a row in storage table
 $(document).on("mouseenter", ".storageRow", function() {
     $(this).css('cursor', 'pointer');
 });
 
+//change cursor on leaving a row in storage table
 $(document).on("mouseleave", ".storageRow", function() {
     $(this).css('cursor', 'auto');
 });
 
+//expand and collapse storage view
 $(document).on("click", "#aStorages", function() {
     getStorages();
 });
 
+//prompt the display of a storage after selecting in storage table
 $(document).on("click", ".storageRow", function() {
     getStorage("storageId=" + $(this).children(".storageId").html());
 });
 
+//refresh display of storages
+$(document).on("click", "#btnRefreshStorages", function(){
+    getStorages();
+    getStorage("storageId=" + selectedStorageId);
+});
+
+//requests a storage using ajax
 function getStorage(pData) {
     $.ajax({
         url: urlGlobal + "storage",
@@ -223,7 +258,7 @@ function getStorage(pData) {
         cache: false,
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
-            $("#divStorage").html(displayStorage(data, textStatus, jqXHR));
+            displayStorage(data, textStatus, jqXHR);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             errorHandler(jqXHR, textStatus, errorThrown);
@@ -231,6 +266,7 @@ function getStorage(pData) {
     });
 }
 
+//displays a selected storage
 function displayStorage(data, textStatus, jqXHR) {
     var content = "";
     for (var i = 0; i < data.yards.length; i++) {
@@ -240,9 +276,11 @@ function displayStorage(data, textStatus, jqXHR) {
     }
     var title = "Lagerbelegung " + data.name;
     $("#aStorages").html(title);
-    return content;
+    $("#divStorage").html( content);
+    selectedStorageId=data.id;
 }
 
+//requests all storages using ajax
 function getStorages() {
     $.ajax({
         url: urlGlobal + "storages",
@@ -259,6 +297,7 @@ function getStorages() {
     });
 }
 
+//displays all storages
 function displayStorages(data) {
     var rows = "";
     for (var i = 0; i < data.length; i++) {
@@ -271,6 +310,7 @@ function displayStorages(data) {
 //minimum stock functions-------------------------------------------------------
 //------------------------------------------------------------------------------
 
+//implementation of user-friendly minimum stock changing in gui
 $(document).on("click", "#btnChangeMinimumStock", function() {
     if ($("#ipArticleTypeId").val() > 0)
     {
@@ -292,7 +332,7 @@ $(document).on("click", "#btnChangeMinimumStock", function() {
     return false;
 });
 
-
+//changes minimum stock of an article type using ajax
 $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
     var articleTypeId = $("#ipArticleTypeId").val();
     var newMinStock = $("#ipMinimumStock").val();
@@ -306,9 +346,9 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
         success: function(data, textStatus, jqXHR) {
             if (data != 0)
             {
-                simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
                 alert("Mindestbestand konnte nicht geändert werden!");
             }
+            simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
             $("#btnChangeMinimumStock").click();
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -318,6 +358,7 @@ $(document).on("click", "#btnChangeMinimumStockConfirm", function() {
     return false;
 });
 
+//abort minimum stock changing
 $(document).on("click", "#btnChangeMinimumStockAbort", function() {
     $("#btnChangeMinimumStock").click();
     simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());

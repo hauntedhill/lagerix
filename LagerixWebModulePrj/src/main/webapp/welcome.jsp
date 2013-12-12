@@ -83,7 +83,7 @@
                                     </div>
                                 </div>
                                 <div class="row" >
-                                    <label class="control-label col-sm-3 " for="password">Password</label> 
+                                    <label class="control-label col-sm-3 " for="password">Passwort</label> 
                                     <div class="col-sm-9">
                                         <input  class="form-control input-sm"  type="password" id="password" name="password"/>
                                     </div>
@@ -100,5 +100,4 @@
             </div>
         </div>
     </body>
-
 </html>

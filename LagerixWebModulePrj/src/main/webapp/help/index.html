@@ -1,0 +1,231 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Lagerix webservice specification</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+        <style type="text/css">
+th {font-weight: bolder;}
+</style>
+    </head>
+    <body>
+        <h1>Lagerix WebAppService specification</h1>
+        <table border="1" cellpadding="0" cellspacing="0">
+    <tbody>
+        <tr>
+            <th valign="top" width="243">
+                    URI-Templates
+            </th>
+            <th valign="top" width="65">
+                    Verb
+            </th>
+            <th valign="top" width="120">
+                    Request Type
+            </th>
+            <th valign="top" width="120">
+                    Response Type
+            </th>
+            <th valign="top" width="500">
+                    Description
+            </th>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /help
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>GET</p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>"text/html"</p>
+            </td>
+            <td valign="top" width="500">
+                <p>Specification of web service.</p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/simplesearch? ipIdSimpleSearch={val}
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    GET
+                </p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "application/json"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Executes a simple search by id for an article type.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/advancedsearch? ipNameAdvancedSearch={val}&amp;ipNoteAdvancedSearch={val}&amp;ipMinimumStockAdvancedSearch={val}
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    GET
+                </p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "application/json"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Executes an advanced search for article types that are correspond to the given params. Supports wildcard search.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/underrunminstocks
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    GET
+                </p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "application/json"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Returns all article types with underrun minimum stock.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/minimumstock
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    POST
+                </p>
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "application/x-www-form-urlencoded"
+                </p>
+                <p>
+                    ipMinimumStock={val}
+                </p>
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "text/plain"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Changes the minimum stock of an article type.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/storage?storageId={val}
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    GET
+                </p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "application/json"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Gives advanced informations of a storage back.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/test
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    GET
+                </p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "text/plain"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Only for testing REST service.
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" width="243">
+                <p>
+                    /secure/webApp/storages
+                </p>
+            </td>
+            <td valign="top" width="65">
+                <p>
+                    GET
+                </p>
+            </td>
+            <td valign="top" width="120">
+            </td>
+            <td valign="top" width="120">
+                <p>
+                    "application/json"
+                </p>
+            </td>
+            <td valign="top" width="500">
+                <p>
+                    Gives all storages back in a list.
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+    </body>
+</html>

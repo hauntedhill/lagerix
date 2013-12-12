@@ -52,13 +52,6 @@ public class StorageOverviewActivity extends Activity {
 
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.storage_overview, menu);
-		return true;
-	}
-
 	/**
 	 * Listener method for the action bar buttons
 	 */

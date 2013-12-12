@@ -17,7 +17,7 @@
 }
 
 .lagerix-yard{
-    height: 50px !important;
+    height: 60px !important;
     margin: 2px !important;
     padding: 3px 5px !important;
     font-size: 10px !important;
@@ -29,8 +29,8 @@
     text-overflow: ellipsis-word  !important
 }
 
-.lagerix-textColor{
-    color: #000000 !important
+.lagerix-textColorFF0000{
+    color: #FF0000 
 }
 
 .lagerix-yard-span{
