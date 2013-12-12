@@ -44,7 +44,6 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="status_login_error">Login error. Check your credentials.</string>
 
     <!-- Strings related to logout -->
     <string name="title_activity_logout">Sign out</string>
@@ -59,16 +58,16 @@
 
     <!-- Strings related to search form -->
     <string name="label_search_intro">Enter a search key to search for articles:</string>
-    <string name="label_search_articleName">Article name:</string>
-    <string name="label_search_articleDescription">Article description:</string>
+    <string name="label_search_articleName">Article type name:</string>
+    <string name="label_search_articleDescription">Article type description:</string>
     <string name="title_activity_search_form">Article search</string>
     <string name="title_activity_search_result">Result</string>
 
     <!-- Strings related to search results -->
     <string name="label_loading_results">Loading results&#8230;</string>
-    <string name="label_article_id">Article ID:</string>
-    <string name="label_article_name">Article name:</string>
-    <string name="label_article_description">Article description:</string>
+    <string name="label_article_id">Article type ID:</string>
+    <string name="label_article_name">Article type name:</string>
+    <string name="label_article_description">Article type description:</string>
     <string name="label_storageLocations">Storage Locations:</string>
 
     <!-- Strings related to storage overview -->

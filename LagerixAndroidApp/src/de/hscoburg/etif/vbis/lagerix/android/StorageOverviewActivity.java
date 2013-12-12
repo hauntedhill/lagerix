@@ -64,7 +64,6 @@ public class StorageOverviewActivity extends Activity {
 	public void getStorageOverview() {
 
 		//Submit the storage overview REST request
-		Log.d("Overview REST-Request", "URL: "+baseURL+getString(R.string.restURI_storageOverview));
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_storageOverview), new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
