@@ -9,13 +9,14 @@
         android:layout_width="fill_parent"
         android:layout_height="80dp"
         android:gravity="center"
-        android:orientation="vertical">
-	    <ImageView
-	        android:id="@+id/image_lagerix_scan"
-	        android:layout_width="match_parent"
-	        android:layout_height="wrap_content"
-	        android:src="@drawable/lagerix_logo" />
-	</LinearLayout>
+        android:orientation="vertical" >
+
+        <ImageView
+            android:id="@+id/image_lagerix_scan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/lagerix_logo" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/button_scan"
@@ -79,9 +80,9 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0.5"
+            android:checked="true"
             android:gravity="center"
             android:text="@string/book_in"
-            android:checked="true"
             android:textColor="@android:color/black" />
 
         <RadioButton
@@ -102,9 +103,12 @@
         android:text="@string/send_data"
         android:textColor="@android:color/black" />
 
-    <TextView
-        android:id="@+id/label_restResult"
+    <ProgressBar
+        android:id="@+id/activityIndicator_restRequest"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:indeterminateOnly="true"
+        android:keepScreenOn="true" />
 
 </LinearLayout>

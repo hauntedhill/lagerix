@@ -49,10 +49,15 @@ public class AndroidService {
     /**
      * Diese Methode speichert eine Ein- oder Ausbuchung zu einer Artikel- und Orts-ID in der Datenbank
      * @param pArticleID ID der Artikelart
-     * @param pLocationID ID des Lagerplatezs
+     * @param pLocationID ID des Lagerplatzes
      * @param pBookedIn True, falls Artikel eingelagert wurde, sonst False
      * @param pTimestamp Zeitstempel der Buchung
-     * @return Statuscode
+     * @return Statuscode:
+     *                      0: Kein Fehler
+     *                      1: Artikel- oder Lagerplatz-ID existiert nicht
+     *                      2: Ausbuchung nicht möglich, da Artikel nicht im entsprechend Lagerplatz liegt
+     *                      3: Einbuchung nicht möglich, da Artikel bereits in einem anderen Lagerplatz liegt
+     *                      4: Einbuchung nicht möglich, da Lagerplatz bereits belegt ist
      */
     @Path("saveEntry")
     @POST
