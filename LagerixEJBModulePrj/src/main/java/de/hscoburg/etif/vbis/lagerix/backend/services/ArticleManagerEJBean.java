@@ -60,9 +60,15 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
 
         Movement m = new Movement();
         if (entry.isBookedIn()) {
+            if (article.getYard() != null || yard.getArticle() != null) {
+                return 2;
+            }
             m.setMovement(Movements.INCORPORATE);
             article.setYard(yard);
         } else {
+            if (article.getYard().equals(yard)) {
+                return 2;
+            }
             m.setMovement(Movements.RELEASE);
             article.setYard(null);
 
