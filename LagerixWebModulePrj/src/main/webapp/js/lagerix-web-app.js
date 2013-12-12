@@ -103,6 +103,12 @@ $(document).ready(function() {
     });
 });
 
+//refresh article type display
+$(document).on("click","#btnRefreshArticleType",function(){
+        simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
+        return false;
+});
+
 //execute a simple search in an ajax request
 function simpleSearch(pData) {
     $.ajax({

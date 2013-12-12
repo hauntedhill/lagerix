@@ -31,8 +31,11 @@
                             <form class="form-horizontal" id="formArticleTypeDescription" name="formArticleTypeDescription" action="https://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/services/secure/webApp/" autocomplete="off">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 "  for="ipArticleTypeId">Artikel-ID</label>  
-                                    <div class="col-sm-9">
+                                    <div class="col-sm-4">
                                         <input type="text" class="form-control input-sm" style="color:#000000" disabled id="ipArticleTypeId" name="ipArticleTypeId"> </div>
+                                        <div class="col-sm-4"  style="padding: 0px 5px 0px 0px; width: auto">
+                                        <button type="submit" class="btn btn-default btn-sm" id="btnRefreshArticleType"><span class="glyphicon glyphicon-refresh" style="margin: 0px 10px 0px 0px"></span>Anzeige aktualisieren</button>
+                                        </div>
                                 </div>
                                 <div class="row">
                                     <label for="ipName" class="col-sm-3 control-label" >Name</label>
