@@ -64,7 +64,7 @@ public class ScanActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 	}
 
 	/**
@@ -172,7 +172,7 @@ public class ScanActivity extends Activity {
 			spinner.setVisibility(View.VISIBLE);
 
 			// Call the REST helper class and send the request
-			LagerixRestClient.post(baseURL+"/lagerix/services/secure/android/saveEntry", params, new TextHttpResponseHandler() {
+			LagerixRestClient.post(baseURL+getString(R.string.restURI_bookEntry), params, new TextHttpResponseHandler() {
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 					Log.d("sendEntry(): REST-Request", "Request successful");
@@ -183,19 +183,19 @@ public class ScanActivity extends Activity {
 					
 					try {
 						if(Integer.parseInt(responseBody) == 0)
-							Toast.makeText(getApplicationContext(), R.string.status_book_successful, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_successful), Toast.LENGTH_LONG).show();
 						else if(Integer.parseInt(responseBody) == 1)
-							Toast.makeText(getApplicationContext(), R.string.status_book_failed_doesNotExist, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_doesNotExist), Toast.LENGTH_LONG).show();
 						else if(Integer.parseInt(responseBody) == 2)
-							Toast.makeText(getApplicationContext(), R.string.status_book_failed_articleNotStoredInYard, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_articleNotStoredInYard), Toast.LENGTH_LONG).show();
 						else if(Integer.parseInt(responseBody) == 3)
-							Toast.makeText(getApplicationContext(), R.string.status_book_failed_articleAlreadyStored, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_articleAlreadyStored), Toast.LENGTH_LONG).show();
 						else if(Integer.parseInt(responseBody) == 4)
-							Toast.makeText(getApplicationContext(), R.string.status_book_failed_yardOccupied, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_yardOccupied), Toast.LENGTH_LONG).show();
 						else
-							Toast.makeText(getApplicationContext(), R.string.status_book_unexpected_result, Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_book_unexpected_result), Toast.LENGTH_LONG).show();
 					} catch (NumberFormatException e) {
-						Toast.makeText(getApplicationContext(), R.string.status_book_unexpected_result, Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), getString(R.string.status_book_unexpected_result), Toast.LENGTH_LONG).show();
 						Log.e("sendEntry REST-Request", "Unexpected server response");
 					}
 					
@@ -209,7 +209,7 @@ public class ScanActivity extends Activity {
 					
 					spinner.setVisibility(View.INVISIBLE);
 					
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 				}
 			});
 		}

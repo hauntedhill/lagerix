@@ -46,7 +46,7 @@ public class LogoutActivity extends Activity {
 		setContentView(R.layout.activity_logout);
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 		
 		mLogoutStatusView = findViewById(R.id.logout_status);
 	}
@@ -66,7 +66,7 @@ public class LogoutActivity extends Activity {
 	public void logout() {
 		showProgress(true);
 			
-		LagerixRestClient.get(baseURL+"/lagerix/services/auth/logout", new JsonHttpResponseHandler() {
+		LagerixRestClient.get(baseURL+getString(R.string.restURI_logout), new JsonHttpResponseHandler() {
 
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONObject response) {
 				try {

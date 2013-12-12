@@ -103,7 +103,7 @@ public class LoginActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 	}
 
 	/**
@@ -235,7 +235,7 @@ public class LoginActivity extends Activity {
 
 		// This first REST request checks if the supplied credentials are valid.
 		// It is required because the actual login request doesn't return a proper status.
-		LagerixRestClient.post(baseURL+"/lagerix/services/auth/login", restParams, new TextHttpResponseHandler() {
+		LagerixRestClient.post(baseURL+getString(R.string.restURI_login1), restParams, new TextHttpResponseHandler() {
 
 			// The first REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
@@ -250,7 +250,7 @@ public class LoginActivity extends Activity {
 	        			loginParams.put("j_password", mPassword);
 	        			
 	        			// This second REST request performs the actual login.
-	        			LagerixRestClient.post(baseURL+"/lagerix/secure/j_security_check", loginParams, new TextHttpResponseHandler() {
+	        			LagerixRestClient.post(baseURL+getString(R.string.restURI_login2), loginParams, new TextHttpResponseHandler() {
 	        				// The second REST request was successful. The first REST request already checked the user credentials, so we can forward to the main application.
 	        				@Override
 	        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
@@ -266,7 +266,7 @@ public class LoginActivity extends Activity {
 	        					Log.e("login(): Second REST-Request", "Error: "+responseBody);
 	        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
-	        					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+	        					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 	        				}
 	        			});
 	                }

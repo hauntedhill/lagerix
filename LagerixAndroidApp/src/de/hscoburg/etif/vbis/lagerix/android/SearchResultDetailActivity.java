@@ -64,7 +64,7 @@ public class SearchResultDetailActivity extends Activity {
 		super.onStart();
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", "localhost:8080");
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 		
 		Intent intent = getIntent();
 		int articleTypeId = intent.getIntExtra("ARTICLE_TYPE_ID", 0);
@@ -98,7 +98,7 @@ public class SearchResultDetailActivity extends Activity {
 	private void getStorageLocations(int articleTypeId) {
 
 		//Submit the search REST request
-		LagerixRestClient.get(baseURL+"/lagerix/services/secure/android/storageLocations?articleTypeId="+articleTypeId, new JsonHttpResponseHandler() {
+		LagerixRestClient.get(baseURL+getString(R.string.restURI_storageLocations)+"?articleTypeId="+articleTypeId, new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {

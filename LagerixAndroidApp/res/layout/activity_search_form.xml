@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/label_searchIntro" />
+        android:text="@string/label_search_intro" />
 
     <LinearLayout
         android:id="@+id/layout_searchArticleName"
@@ -22,7 +22,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".40"
-            android:text="Artikelname:"
+            android:text="@string/label_search_articleName"
             android:textColor="@android:color/black" />
 
         <EditText
@@ -45,7 +45,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight=".40"
-            android:text="Artikelbeschreibung"
+            android:text="@string/label_search_articleDescription"
             android:textColor="@android:color/black" />
 
         <EditText
