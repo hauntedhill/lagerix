@@ -68,12 +68,14 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
             }
             m.setMovement(Movements.INCORPORATE);
             article.setYard(yard);
+            yard.setArticle(article);
         } else {
             if (!yard.equals(article.getYard())) {
                 return 2;
             }
             m.setMovement(Movements.RELEASE);
             article.setYard(null);
+            yard.setArticle(null);
             
             if (getArticleTypeStock(article.getArticleType()) - 1 < article.getArticleType().getMinimumStock()) {
                 try {
@@ -102,7 +104,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
         
         save(m);
         merge(article);
-        
+        merge(yard);
         return 0;
         
     }
