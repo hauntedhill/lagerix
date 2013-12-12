@@ -69,7 +69,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
             m.setMovement(Movements.INCORPORATE);
             article.setYard(yard);
         } else {
-            if (article.getYard().equals(yard)) {
+            if (!article.getYard().equals(yard)) {
                 return 2;
             }
             m.setMovement(Movements.RELEASE);
