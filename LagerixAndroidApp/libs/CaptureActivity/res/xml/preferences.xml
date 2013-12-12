@@ -102,7 +102,7 @@
      -->
   </PreferenceCategory>
   <PreferenceCategory android:title="@string/preferences_try_bsplus">
-    <com.google.zxing.client.android.pref.BSPlusPreference
+    <de.hscoburg.etif.vbis.lagerix.android.barcode.pref.BSPlusPreference
         android:title="@string/preferences_try_bsplus"
         android:summary="@string/preferences_try_bsplus_summary"/>
   </PreferenceCategory>

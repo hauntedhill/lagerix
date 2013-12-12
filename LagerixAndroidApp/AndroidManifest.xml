@@ -34,12 +34,12 @@
             android:screenOrientation="portrait" >
         </activity>
         <activity
-            android:name="com.google.zxing.client.android.CaptureActivity"
+            android:name="de.hscoburg.etif.vbis.lagerix.android.barcode.CaptureActivity"
             android:screenOrientation="landscape"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
             android:windowSoftInputMode="stateAlwaysHidden" >
             <intent-filter>
-                <action android:name="com.google.zxing.client.android.SCAN" />
+                <action android:name="de.hscoburg.etif.vbis.lagerix.android.barcode.SCAN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

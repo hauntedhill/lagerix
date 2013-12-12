@@ -117,7 +117,7 @@ public class ScanActivity extends Activity {
 		try {
 
 			Intent intent = new Intent(
-					"com.google.zxing.client.android.SCAN");
+					"de.hscoburg.etif.vbis.lagerix.android.barcode.SCAN");
 			// Tell the barcode scanner to return immediately after the barcode has been scanned
 			intent.putExtra("RESULT_DISPLAY_DURATION_MS", 0l);
 			startActivityForResult(intent, 0);

@@ -28,9 +28,9 @@
 -keep public class com.android.vending.licensing.ILicensingService
 
 # ADDED
--keep class com.google.zxing.client.android.camera.open.**
-#-keep class com.google.zxing.client.android.camera.exposure.**
--keep class com.google.zxing.client.android.common.executor.**
+-keep class de.hscoburg.etif.vbis.lagerix.android.barcode.camera.open.**
+#-keep class de.hscoburg.etif.vbis.lagerix.android.barcode.camera.exposure.**
+-keep class de.hscoburg.etif.vbis.lagerix.android.barcode.common.executor.**
 
 # ADDED 
 -dontobfuscate
