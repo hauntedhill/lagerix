@@ -15,6 +15,7 @@ Autor: zuch1000-->
       <property name="eclipselink.logging.level" value="FINE"/>
       <!-- also log of the values of the parameters used for the query -->
       <property name="eclipselink.logging.parameters" value="true"/>
+      <property name="eclipselink.cache.shared.default" value="false"/>
     </properties>
   </persistence-unit>
 </persistence>
