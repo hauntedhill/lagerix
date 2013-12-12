@@ -29,8 +29,9 @@
             android:id="@+id/field_searchArticleName"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".60" />
-            <requestFocus />
+            android:layout_weight=".60"
+            android:maxLines="1"
+            android:singleLine="true" />
     </LinearLayout>
 
     <LinearLayout
@@ -52,9 +53,11 @@
             android:id="@+id/field_searchArticleDescription"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".60" />
+            android:layout_weight=".60"
+            android:maxLines="1"
+            android:singleLine="true" />
     </LinearLayout>
-    
+
     <Button
         android:id="@+id/button_sendSearch"
         android:layout_width="fill_parent"

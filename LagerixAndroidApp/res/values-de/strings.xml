@@ -57,7 +57,7 @@
     <string name="label_article_id">Artikelart-ID:</string>
     <string name="label_article_name">Artikelart Name:</string>
     <string name="label_article_description">Artikelart Beschreibung:</string>
-    <string name="label_storageLocations">Lagerplätze:</string>
+    <string name="label_storageLocations"><u>Lagerplätze</u></string>
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Lagerübersicht</string>

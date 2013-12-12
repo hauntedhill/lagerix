@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.EditText;
 
 /**
@@ -15,7 +16,9 @@ import android.widget.EditText;
  */
 public class SearchFormActivity extends Activity {
 
-
+	//UI elements
+	EditText searchNameView;
+	EditText searchDescriptionView;
 	/**
 	 * Initializer method for the activity
 	 * Gets called on first launch
@@ -24,6 +27,22 @@ public class SearchFormActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_form);
+		
+		searchNameView = (EditText) findViewById(R.id.field_searchArticleName);
+		searchDescriptionView = (EditText) findViewById(R.id.field_searchArticleDescription);
+		
+		// Show the keyboard if the first text field has focus
+		searchNameView.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+		    @Override
+		    public void onFocusChange(View v, boolean hasFocus) {
+		        if (hasFocus) {
+		            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+		        }
+		    }
+		});
+		
+		// Request focus to bring up the keyboard
+		searchNameView.requestFocus();
 		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
@@ -47,10 +66,8 @@ public class SearchFormActivity extends Activity {
 	
 	public void sendSearch(View view) {
     	Intent intent = new Intent(this, SearchResultActivity.class);
-    	EditText articleName = (EditText) findViewById(R.id.field_searchArticleName);
-    	EditText articleDescription = (EditText) findViewById(R.id.field_searchArticleDescription);
-    	intent.putExtra("ARTICLE_NAME", articleName.getText().toString());
-    	intent.putExtra("ARTICLE_DESCRIPTION", articleDescription.getText().toString());
+    	intent.putExtra("ARTICLE_NAME", searchNameView.getText().toString());
+    	intent.putExtra("ARTICLE_DESCRIPTION", searchDescriptionView.getText().toString());
     	startActivity(intent);
 	}
 

@@ -68,7 +68,7 @@
     <string name="label_article_id">Article type ID:</string>
     <string name="label_article_name">Article type name:</string>
     <string name="label_article_description">Article type description:</string>
-    <string name="label_storageLocations">Storage Locations:</string>
+    <string name="label_storageLocations"><u>Storage Locations</u></string>
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Storage overview</string>
