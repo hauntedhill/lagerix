@@ -50,7 +50,7 @@ public class BaseService {
      * @param obj
      */
     public void save(Object obj) {
-        if (obj.getClass().isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
+        if (SecureEntity.class.isAssignableFrom(obj.getClass()) && !scxt.isCallerInRole("ADMINISTRATOR") && !scxt.isCallerInRole("EINKAEUFER")) {
             SecureEntity a = (SecureEntity) obj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return;
@@ -91,7 +91,7 @@ public class BaseService {
     public <T> T findById(Class<T> obj, Integer id) {
 
         T dbObj = em.find(obj, id);
-        if (obj.isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
+        if (SecureEntity.class.isAssignableFrom(obj) && !scxt.isCallerInRole("ADMINISTRATOR") && !scxt.isCallerInRole("EINKAEUFER")) {
             SecureEntity a = (SecureEntity) dbObj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return null;
@@ -107,7 +107,7 @@ public class BaseService {
      * @param obj
      */
     public void remove(Object obj) {
-        if (obj.getClass().isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
+        if (SecureEntity.class.isAssignableFrom(obj.getClass()) && !scxt.isCallerInRole("ADMINISTRATOR") && !scxt.isCallerInRole("EINKAEUFER")) {
             SecureEntity a = (SecureEntity) obj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return;
@@ -124,7 +124,7 @@ public class BaseService {
      * @param obj
      */
     public void merge(Object obj) {
-        if (obj.getClass().isAssignableFrom(SecureEntity.class) && !scxt.isCallerInRole("ADMINISTRATOR")) {
+        if (SecureEntity.class.isAssignableFrom(obj.getClass()) && !scxt.isCallerInRole("ADMINISTRATOR") && !scxt.isCallerInRole("EINKAEUFER")) {
             SecureEntity a = (SecureEntity) obj;
             if (!checkStoragePermission(a.getStorageForObject())) {
                 return;
@@ -303,17 +303,16 @@ public class BaseService {
      * Returns all User by group and storage
      *
      * @param g - The group of the User
-     * @param s - The storage of the user
      * @return A list with all found users
      */
-    public List<User> findAllUsersByGroupAndStorage(Group g, Storage s) {
+    public List<User> findAllUsersByGroup(Group g) {
 
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<User> cq = cb.createQuery(User.class);
         Root<User> pet = cq.from(User.class);
         Join<User, Groups> groupsRoot = pet.join(User_.groups);
-        Join<Groups, Storage> storageRoot = groupsRoot.join(Groups_.storage);
-        cq.select(pet).where(cb.and(cb.equal(groupsRoot.get(Groups_.groups), g), cb.equal(storageRoot.get(Storage_.id), s.getId())));
+        //Join<Groups, Storage> storageRoot = groupsRoot.join(Groups_.storage);
+        cq.select(pet).where(cb.and(cb.equal(groupsRoot.get(Groups_.groups), g)));
         TypedQuery<User> q = em.createQuery(cq);
 
         return q.getResultList();

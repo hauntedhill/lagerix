@@ -4,10 +4,10 @@ import de.hscoburg.etif.vbis.lagerix.backend.entity.Article;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.ArticleType;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Movement;
-import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Yard;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Movements;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
@@ -33,6 +33,9 @@ public class DTOConverter {
      * @return The created movmentDTO class
      */
     public static MovementDTO convert(Movement m) {
+        if (m == null) {
+            return null;
+        }
         MovementDTO dto = new MovementDTO();
 
         dto.setArticleID(m.getArticle().getId());
@@ -68,6 +71,9 @@ public class DTOConverter {
      * @return The created articleTypeDTO class
      */
     public static ArticleTypeDTO convert(ArticleType at) {
+        if (at == null) {
+            return null;
+        }
         ArticleTypeDTO dto = new ArticleTypeDTO();
 
         dto.setId(at.getId());
@@ -104,7 +110,9 @@ public class DTOConverter {
      * @return The created articleDTO
      */
     public static ArticleDTO convert(Article a) {
-
+        if (a == null) {
+            return null;
+        }
         ArticleDTO dto = new ArticleDTO();
 
         dto.setArticleTypeID(a.getArticleType() != null ? a.getArticleType().getId() : 0);
@@ -123,7 +131,9 @@ public class DTOConverter {
      */
     public static YardDTO convert(Yard y) {
         YardDTO dto = new YardDTO();
-
+        if (y == null) {
+            return null;
+        }
         dto.setId(y.getId());
         dto.setStorageID(y.getStorage() != null ? y.getStorage().getId() : 0);
 
@@ -156,7 +166,9 @@ public class DTOConverter {
      */
     public static StorageDTO convert(Storage s) {
         StorageDTO dto = new StorageDTO();
-
+        if (s == null) {
+            return null;
+        }
         dto.setId(s.getId());
         dto.setName(s.getName());
         List<YardDTO> yardResult = new ArrayList<YardDTO>();
@@ -197,7 +209,9 @@ public class DTOConverter {
      */
     public static UserDTO convert(User u) {
         UserDTO dto = new UserDTO();
-
+        if (u == null) {
+            return null;
+        }
         dto.setEmail(u.getEmail());
         dto.setFname(u.getFirstName());
         dto.setLname(u.getLastName());
