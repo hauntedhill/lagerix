@@ -12,6 +12,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +40,8 @@ public class SearchResultDetailActivity extends Activity {
 	TextView articleNameView;
 	TextView articleDescriptionView;
 	TextView storageLocationsView;
+	ProgressBar spinner;
+	LinearLayout resultLayout;
 	
 	/**
 	 * Initializer method for the activity
@@ -66,6 +70,10 @@ public class SearchResultDetailActivity extends Activity {
 		articleIdView.setText(""+articleTypeId);
 		articleNameView.setText(articleName);
 		articleDescriptionView.setText(articleDescription);
+		
+		spinner = new ProgressBar(this);		
+		resultLayout = (LinearLayout) findViewById(R.id.layout_searchResultDetailResult);
+		resultLayout.addView(spinner, 0);
 		
 		getStorageLocations(articleTypeId);
 
@@ -97,6 +105,7 @@ public class SearchResultDetailActivity extends Activity {
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
 				Log.d("Search REST-Request", "Response: "+response);
 				Log.d("Search REST-Request", "Statuscode: "+statusCode);
+				resultLayout.removeView(spinner);
 				String storageLocations = "";
 				try {
 					for(int i = 0; i < response.length(); i++) {
@@ -116,19 +125,21 @@ public class SearchResultDetailActivity extends Activity {
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("getStorageLocations() REST-Request", "Error: "+errorResponse);
 				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
+				resultLayout.removeView(spinner);
 				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("getStorageLocations() REST-Request", "Error: "+responseBody);
 				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
+				resultLayout.removeView(spinner);
 				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 		});
 	}

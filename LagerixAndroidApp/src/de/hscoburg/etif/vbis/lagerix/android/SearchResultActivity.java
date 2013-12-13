@@ -12,11 +12,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -128,19 +127,23 @@ public class SearchResultActivity extends ListActivity {
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+errorResponse);
 				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
+				LinearLayout resultLayout = (LinearLayout) findViewById(R.id.layout_resultList);
+				resultLayout.setVisibility(View.INVISIBLE);
 				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+responseBody);
 				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
+				LinearLayout resultLayout = (LinearLayout) findViewById(R.id.layout_resultList);
+				resultLayout.setVisibility(View.INVISIBLE);
 				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 		});
 	}

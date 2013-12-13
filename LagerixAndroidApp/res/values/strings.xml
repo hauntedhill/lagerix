@@ -65,7 +65,6 @@
     <string name="title_activity_search_result">Result</string>
 
     <!-- Strings related to search results -->
-    <string name="label_loading_results">Loading results&#8230;</string>
     <string name="label_article_id">Article type ID:</string>
     <string name="label_article_name">Article type name:</string>
     <string name="label_article_description">Article type description:</string>

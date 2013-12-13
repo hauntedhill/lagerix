@@ -265,9 +265,9 @@ public class LoginActivity extends Activity {
 	        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
 	        					if(statusCode == 403)
-	        						Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+	        						Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 	        					else
-	        						Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();	
+	        						Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();	
 	        				}
 	        			});
 	                }
@@ -286,9 +286,9 @@ public class LoginActivity extends Activity {
 				Log.e("login(): First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
 				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 
 			}
 		});		

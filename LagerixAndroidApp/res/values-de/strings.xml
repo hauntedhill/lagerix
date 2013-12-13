@@ -54,7 +54,6 @@
     <string name="title_activity_search_result">Ergebnis</string>
 
     <!-- Strings related to search results -->
-    <string name="label_loading_results">Lade Ergebnisse&#8230;</string>
     <string name="label_article_id">Artikelart-ID:</string>
     <string name="label_article_name">Artikelart Name:</string>
     <string name="label_article_description">Artikelart Beschreibung:</string>
