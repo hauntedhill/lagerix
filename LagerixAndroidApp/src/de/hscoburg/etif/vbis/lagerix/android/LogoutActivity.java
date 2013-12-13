@@ -1,26 +1,21 @@
 package de.hscoburg.etif.vbis.lagerix.android;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.loopj.android.http.JsonHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
-import com.loopj.android.http.TextHttpResponseHandler;
-
-import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
-import android.os.Build;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.Toast;
+
+import com.loopj.android.http.TextHttpResponseHandler;
+
+import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
 
 /**
  * Activity which logs the user out of the application and sends him back to the login screen
@@ -95,6 +90,10 @@ public class LogoutActivity extends Activity {
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
+				
+				Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+				startActivity(intent);
+				finish();
 
 			}
 		});		

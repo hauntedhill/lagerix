@@ -4,9 +4,6 @@ import java.security.KeyStore;
 
 import org.apache.http.client.params.ClientPNames;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.MySSLSocketFactory;

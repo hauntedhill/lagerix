@@ -34,6 +34,7 @@
     <string name="status_book_failed_articleAlreadyStored">Article is already stored in another yard</string>
     <string name="status_book_failed_articleNotStoredInYard">Article is not stored in this yard</string>
     <string name="status_book_unexpected_result">Unexpected server response</string>
+    <string name="status_barcodeScan_failed">Error scanning barcode</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>

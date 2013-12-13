@@ -23,6 +23,7 @@
     <string name="status_book_failed_articleAlreadyStored">Artikel ist bereits in einem anderen Lagerplatz eingelagert</string>
     <string name="status_book_failed_articleNotStoredInYard">Artikel ist in diesem Lagerplatz nicht eingelagert</string>
     <string name="status_book_unexpected_result">Unerwartete Serverantwort</string>
+    <string name="status_barcodeScan_failed">Fehler beim Scannen des Barcodes</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
