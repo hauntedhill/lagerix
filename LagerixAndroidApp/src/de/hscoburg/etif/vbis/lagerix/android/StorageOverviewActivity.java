@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class StorageOverviewActivity extends Activity {
 
@@ -68,8 +69,8 @@ public class StorageOverviewActivity extends Activity {
 
 			// The REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
-				Log.d("Overview REST-Request", "Response: "+response);
-				Log.d("Overview REST-Request", "Statuscode: "+statusCode);
+				Log.d("getStorageOverview() REST-Request", "Response: "+response);
+				Log.d("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
 				String yardIDs = "";
 				String yardStatus = "";
 				try {
@@ -92,8 +93,21 @@ public class StorageOverviewActivity extends Activity {
 			}
 
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
-				Log.e("Overview REST-Request", "Error: "+errorResponse);
-				Log.e("Overview REST-Request", "Statuscode: "+statusCode);
+				Log.e("getStorageOverview() REST-Request", "Error: "+errorResponse);
+				Log.e("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+			}
+			
+			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
+				Log.e("getStorageOverview() REST-Request", "Error: "+responseBody);
+				Log.e("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
 			}
 		});
 	}
