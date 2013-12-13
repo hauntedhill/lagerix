@@ -31,9 +31,9 @@ import de.hscoburg.etif.vbis.lagerix.android.helper.LagerixRestClient;
 public class ScanActivity extends Activity {
 
 	//UI elements
-	TextView article_result;
-	TextView location_result;
-	RadioButton bookedIn;
+	TextView articleResultView;
+	TextView storageLocationResultView;
+	RadioButton isBookedIn;
 	ProgressBar spinner;
 
 	//IP address from settings
@@ -48,10 +48,10 @@ public class ScanActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_scan);
 
-		article_result = (TextView) findViewById(R.id.label_articleIDResult);
-		location_result = (TextView) findViewById(R.id.label_storageIDResult);
+		articleResultView = (TextView) findViewById(R.id.label_articleIDResult);
+		storageLocationResultView = (TextView) findViewById(R.id.label_storageIDResult);
 
-		bookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
+		isBookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
 		
 		spinner = (ProgressBar) findViewById(R.id.activityIndicator_restRequest);
 		spinner.setVisibility(View.INVISIBLE);
@@ -99,6 +99,23 @@ public class ScanActivity extends Activity {
 			return super.onOptionsItemSelected(item);
 		}
 	}
+	
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		
+		outState.putCharSequence("articleResultView", articleResultView.getText().toString());
+		outState.putCharSequence("storageLocationResultView", storageLocationResultView.getText().toString());
+		outState.putBoolean("isBookedIn", isBookedIn.isChecked());
+	}
+	
+	protected void onRestoreInstanceState(Bundle savedState) {		
+		super.onRestoreInstanceState(savedState);
+		
+		articleResultView.setText(savedState.getCharSequence("articleResultView"));
+		storageLocationResultView.setText(savedState.getCharSequence("storageLocationResultView"));
+		isBookedIn.setChecked(savedState.getBoolean("isBookedIn"));
+
+	}
 
 	/**
 	 * Opens the barcode scanning activity
@@ -135,11 +152,11 @@ public class ScanActivity extends Activity {
 
 				//Article barcodes start with the letter 'A', so we check the first character
 				if(result.charAt(0) == 'A')
-					article_result.setText(result.substring(1));
+					articleResultView.setText(result.substring(1));
 
 				//Storage barcodes start withe the letter 'S'
 				else if(result.charAt(0) == 'S')
-					location_result.setText(result.substring(1));
+					storageLocationResultView.setText(result.substring(1));
 			}
 		}
 	}
@@ -150,16 +167,16 @@ public class ScanActivity extends Activity {
 	 * @param view
 	 */
 	public void sendEntry(View view) {
-		if(article_result.getText().length() != 0 && location_result.getText().length() != 0) {
+		if(articleResultView.getText().length() != 0 && storageLocationResultView.getText().length() != 0) {
 
 			// Create parameters for the REST request
 			RequestParams params = new RequestParams();
-			params.put("articleID", article_result.getText().toString());
-			params.put("locationID", location_result.getText().toString());
-			if(bookedIn.isChecked())
-				params.put("bookedIn", "true");
+			params.put("articleID", articleResultView.getText().toString());
+			params.put("locationID", storageLocationResultView.getText().toString());
+			if(isBookedIn.isChecked())
+				params.put("isBookedIn", "true");
 			else
-				params.put("bookedIn", "false");
+				params.put("isBookedIn", "false");
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
 			
 			spinner.setVisibility(View.VISIBLE);

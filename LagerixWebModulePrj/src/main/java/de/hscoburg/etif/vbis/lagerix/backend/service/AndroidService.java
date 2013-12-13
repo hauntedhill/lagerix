@@ -62,7 +62,8 @@ public class AndroidService {
     @Path("saveEntry")
     @POST
     @Consumes("application/x-www-form-urlencoded")
-    public int saveBookEntry(@FormParam("articleID") int pArticleID, @FormParam("locationID") int pLocationID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) {
+    public int saveBookEntry(@FormParam("articleID") int pArticleID, @FormParam("locationID") int pLocationID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) 
+    {
         
         System.out.println("Method saveBookEntry() called - Received values:");
         System.out.println("ArticleID: "+pArticleID);
@@ -77,19 +78,6 @@ public class AndroidService {
         
         return articleManager.saveMovementEntry(movementEntry, pLocationID);
 
-    }
-    
-    /**
-     * Diese Methode liefert die Artikelart zu einer übergebenen ID zurück.
-     * @param pId ID der Artikelart
-     * @return Artikelart mit übergebener ID
-     */
-    @GET
-    @Path("articleType/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ArticleTypeDTO simpleSearch(@PathParam("id") int pId)
-    {
-        return articleManager.getArticleTypeByID(pId);
     }
     
     /**
@@ -133,7 +121,8 @@ public class AndroidService {
     @Path("storageOverview")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<YardInfoDTO> storageOverview() {
+    public List<YardInfoDTO> storageOverview() 
+    {
         
         StorageDTO storage = placeManager.getStorages().get(0);
         List<YardDTO> yards = placeManager.getAllYards(storage.getId());

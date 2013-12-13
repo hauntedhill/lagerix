@@ -6,7 +6,7 @@
     <string name="status_communication_error">Communication with server failed. Please check your settings.</string>
     <string name="ipAddress_default">localhost:8080</string>
     
-    <!--  REST ressource URIs -->
+    <!--  REST resource URIs -->
     <string name="restURI_login1">/lagerix/services/auth/login</string>
     <string name="restURI_login2">/lagerix/secure/j_security_check</string>
     <string name="restURI_logout">/lagerix/services/auth/logout</string>
@@ -68,11 +68,11 @@
     <string name="label_article_id">Article type ID:</string>
     <string name="label_article_name">Article type name:</string>
     <string name="label_article_description">Article type description:</string>
-    <string name="label_storageLocations">Storage Locations:</string>
+    <string name="label_storageLocations"><u>Storage Locations</u></string>
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Storage overview</string>
-    <string name="label_yardID">Yard ID</string>
-    <string name="label_yardStatus">Yard status</string>
+    <string name="label_yardID"><u>Yard ID</u></string>
+    <string name="label_yardStatus"><u>Yard status</u></string>
 
 </resources>
