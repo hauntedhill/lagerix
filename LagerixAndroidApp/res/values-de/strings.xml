@@ -23,6 +23,7 @@
     <string name="status_book_failed_articleAlreadyStored">Artikel ist bereits in einem anderen Lagerplatz eingelagert</string>
     <string name="status_book_failed_articleNotStoredInYard">Artikel ist in diesem Lagerplatz nicht eingelagert</string>
     <string name="status_book_unexpected_result">Unerwartete Serverantwort</string>
+    <string name="status_barcodeScan_failed">Fehler beim Scannen des Barcodes</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -54,7 +55,6 @@
     <string name="title_activity_search_result">Ergebnis</string>
 
     <!-- Strings related to search results -->
-    <string name="label_loading_results">Lade Ergebnisse&#8230;</string>
     <string name="label_article_id">Artikelart-ID:</string>
     <string name="label_article_name">Artikelart Name:</string>
     <string name="label_article_description">Artikelart Beschreibung:</string>

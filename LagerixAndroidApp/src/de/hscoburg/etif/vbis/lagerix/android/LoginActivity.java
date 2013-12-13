@@ -1,8 +1,5 @@
 package de.hscoburg.etif.vbis.lagerix.android;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
@@ -19,14 +16,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -265,9 +260,9 @@ public class LoginActivity extends Activity {
 	        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
 	        					if(statusCode == 403)
-	        						Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+	        						Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 	        					else
-	        						Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();	
+	        						Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();	
 	        				}
 	        			});
 	                }
@@ -286,9 +281,9 @@ public class LoginActivity extends Activity {
 				Log.e("login(): First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
 				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
-					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 
 			}
 		});		

@@ -3,7 +3,6 @@ package de.hscoburg.etif.vbis.lagerix.android;
 import java.util.Calendar;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -134,9 +133,9 @@ public class ScanActivity extends Activity {
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-			Toast.makeText(getApplicationContext(), "ERROR:" + e, 1).show();
-
+			Log.e("scanBarcode()", "Error scanning barcode");
+			Log.e("scanBarcode()", e.toString());
+			Toast.makeText(getApplicationContext(), getString(R.string.status_barcodeScan_failed), Toast.LENGTH_LONG).show();
 		}
 	}
 
@@ -220,9 +219,9 @@ public class ScanActivity extends Activity {
 					spinner.setVisibility(View.INVISIBLE);
 					
 					if(statusCode == 403)
-						Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 					else
-						Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 				}
 			});
 		}
