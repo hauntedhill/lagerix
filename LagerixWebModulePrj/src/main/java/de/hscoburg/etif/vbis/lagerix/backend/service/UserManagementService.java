@@ -24,7 +24,8 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 @Path("/auth")
 @Produces(MediaType.TEXT_PLAIN)
 @Stateless
-public class UserManagementService {
+public class UserManagementService
+{
 
     @EJB
     private UserManagerEJBRemoteInterface userBean;
@@ -33,27 +34,39 @@ public class UserManagementService {
     @Path("login")
     @Produces(MediaType.TEXT_PLAIN)
     public String login(@FormParam("email") String email, @FormParam("password") String password,
-            @Context HttpServletRequest req) {
+            @Context HttpServletRequest req)
+    {
 
         //only login if not already logged in...
-        if (req.getUserPrincipal() == null) {
-            try {
+        if (req.getUserPrincipal() == null)
+        {
+            try
+            {
                 req.login(email, password);
                 req.getServletContext().log("Authentication Demo: successfully logged in " + email);
-            } catch (ServletException e) {
+            } catch (ServletException e)
+            {
                 e.printStackTrace();
                 return "FAILED";
             }
-        } else {
+        } else
+        {
             req.getServletContext().log("Skip logged because already logged in: " + email);
         }
-        
+
         req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
-        
+
         return "SUCCESS";
     }
-
-     @POST
+    
+    /**
+     * Login method especially for lagerix web application. Ensures that only only user with role 'EINKAEUFER' can login.
+     * @param email users email
+     * @param password users password
+     * @param req
+     * @return Whether login was successful or not.
+     */
+    @POST
     @Path("loginwebapp")
     @Produces(MediaType.TEXT_PLAIN)
     public String loginWebApp(@FormParam("email") String email, @FormParam("password") String password,
@@ -87,16 +100,19 @@ public class UserManagementService {
             return "FAILED";
         }
     }
-    
+
     @GET
     @Path("logout")
     @Produces(MediaType.TEXT_PLAIN)
-    public String logout(@Context HttpServletRequest req) {
+    public String logout(@Context HttpServletRequest req)
+    {
 
-        try {
+        try
+        {
             req.logout();
             req.getSession().invalidate();
-        } catch (ServletException e) {
+        } catch (ServletException e)
+        {
             e.printStackTrace();
             return "FAILED";
         }
