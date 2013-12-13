@@ -9,7 +9,7 @@ Autor: zuch1000
          id="WebApp_ID" version="3.0">
     <display-name>Authentication</display-name>
     <welcome-file-list>
-       <welcome-file>lagerix.jsp</welcome-file>
+        <welcome-file>lagerix.jsp</welcome-file>
         <welcome-file>welcome.jsp</welcome-file> 
         <welcome-file>index.html</welcome-file>
         <welcome-file>index.htm</welcome-file>
@@ -38,19 +38,41 @@ Autor: zuch1000
       <location>/not-authorized.html</location>
     </error-page>
     -->
-   
+
+    
     <security-constraint>
   
         <!-- everything below /secure/* and /services/secure/* requires authentication -->
         <web-resource-collection>
-            <web-resource-name>Secured Content</web-resource-name>
+            <web-resource-name>WebApp</web-resource-name>
             <url-pattern>/secure/*</url-pattern>
-            <url-pattern>/services/secure/*</url-pattern>
+            <url-pattern>/services/secure/webApp/*</url-pattern>
         </web-resource-collection>
       
         <!-- only users with at least one of these roles are allowed to access the secured content -->
         <auth-constraint>
             <role-name>EINKAEUFER</role-name>
+        </auth-constraint>
+  
+        <!-- we always want https! -->
+        <user-data-constraint>
+            <description>highest supported transport security level</description>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+  
+    </security-constraint>
+   
+    <security-constraint>
+  
+        <!-- everything below /secure/* and /services/secure/* requires authentication -->
+        <web-resource-collection>
+            <web-resource-name>Android</web-resource-name>
+            <url-pattern>/secure/*</url-pattern>
+            <url-pattern>/services/secure/android/*</url-pattern>
+        </web-resource-collection>
+      
+        <!-- only users with at least one of these roles are allowed to access the secured content -->
+        <auth-constraint>
             <role-name>LAGERARBEITER</role-name>
         </auth-constraint>
   
@@ -61,7 +83,6 @@ Autor: zuch1000
         </user-data-constraint>
   
     </security-constraint>
-  
     
    
     <session-config>
