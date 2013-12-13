@@ -142,7 +142,7 @@ public class BaseService {
      * @return The Predicate o be add to the where cause
      */
     private Predicate addPermissionCheckForArticleType(From<?, ArticleType> join, CriteriaBuilder cb) {
-        if (!scxt.isCallerInRole("ADMINISTRATOR")) {
+        if (!scxt.isCallerInRole("ADMINISTRATOR") && !scxt.isCallerInRole("EINKAEUFER")) {
             Join<ArticleType, Storage> storageRoot = join.join(ArticleType_.storage, JoinType.LEFT);
 
             return addPermissionCheckForStorage(storageRoot, cb);
@@ -161,7 +161,7 @@ public class BaseService {
      */
     private Predicate addPermissionCheckForStorage(From<?, Storage> join, CriteriaBuilder cb) {
 
-        if (!scxt.isCallerInRole("ADMINISTRATOR")) {
+        if (!scxt.isCallerInRole("ADMINISTRATOR") && !scxt.isCallerInRole("EINKAEUFER")) {
             Join<Storage, Groups> groupRoot = join.join(Storage_.group, JoinType.LEFT);
             Join<Groups, User> userRoot = groupRoot.join(Groups_.user, JoinType.LEFT);
             return cb.equal(userRoot.get(User_.email), scxt.getCallerPrincipal().getName());
