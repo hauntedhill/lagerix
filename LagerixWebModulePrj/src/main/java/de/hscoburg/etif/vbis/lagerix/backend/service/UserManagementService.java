@@ -15,6 +15,7 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
+import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 //import de.hscoburg.etif.vbis.lagerix.backend.dao.UserBean;
@@ -52,6 +53,41 @@ public class UserManagementService {
         return "SUCCESS";
     }
 
+     @POST
+    @Path("loginwebapp")
+    @Produces(MediaType.TEXT_PLAIN)
+    public String loginWebApp(@FormParam("email") String email, @FormParam("password") String password,
+            @Context HttpServletRequest req)
+    {
+        //only login if not already logged in...
+        if (req.getUserPrincipal() == null)
+        {
+            try
+            {
+                req.login(email, password);
+                req.getServletContext().log("Authentication Demo: successfully logged in " + email);
+            } catch (ServletException e)
+            {
+                e.printStackTrace();
+                return "FAILED";
+            }
+        } else
+        {
+            req.getServletContext().log("Skip logged because already logged in: " + email);
+        }
+
+        req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
+        //ensure that only EINKAEUFER role is logged in
+        if (userBean.isInGroup(GroupType.EINKAEUFER))
+        {
+            return "SUCCESS";
+        } else
+        {
+            logout(req);
+            return "FAILED";
+        }
+    }
+    
     @GET
     @Path("logout")
     @Produces(MediaType.TEXT_PLAIN)

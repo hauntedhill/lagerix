@@ -75,7 +75,7 @@
                             <h3 class="panel-title" id="panelTitelArticleTypeDescription"><span class="glyphicon glyphicon-log-in" style="margin: 0px 15px 0px 0px"></span>Login</h3>                     
                         </div>
                         <div class="panel-body" >
-                            <form class="form-horizontal" id="loginForm" name="loginForm" action="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/services/auth/login" method="post">
+                            <form class="form-horizontal" id="loginForm" name="loginForm" action="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/services/auth/loginwebapp" method="post">
                                 <div class="row" >
                                     <label class="control-label col-sm-3 " for="email">Email</label> 
                                     <div class="col-sm-9">
