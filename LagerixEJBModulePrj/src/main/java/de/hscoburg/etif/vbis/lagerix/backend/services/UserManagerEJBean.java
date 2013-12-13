@@ -35,7 +35,7 @@ public class UserManagerEJBean extends BaseService implements UserManagerEJBRemo
      * @param email - The email of the user
      * @return The data of the user or null if it not exists
      */
-    @RolesAllowed({"ADMINISTRATOR", "EINKAEUFER"})
+    @RolesAllowed({"ADMINISTRATOR"})
     public UserDTO find(String email) {
         User u = findUser(email);
         if (u != null) {
