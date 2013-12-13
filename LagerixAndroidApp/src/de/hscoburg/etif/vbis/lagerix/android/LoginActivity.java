@@ -19,7 +19,9 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -131,7 +133,6 @@ public class LoginActivity extends Activity {
 	 * errors are presented and no actual login attempt is made.
 	 */
 	public void attemptLogin() {
-
 		// Reset errors.
 		mEmailView.setError(null);
 		mPasswordView.setError(null);
@@ -218,6 +219,10 @@ public class LoginActivity extends Activity {
 	 */
 	public void login() {
 		
+		//Hide the keyboard
+		InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm.hideSoftInputFromWindow(mEmailView.getWindowToken(), 0);
+		
 		// Create parameters for the REST request
 		RequestParams restParams = new RequestParams();
 		restParams.put("email", mEmail);
@@ -259,7 +264,10 @@ public class LoginActivity extends Activity {
 	        					Log.e("login(): Second REST-Request", "Error: "+responseBody);
 	        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
 	        					showProgress(false);
-	        					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
+	        					if(statusCode == 403)
+	        						Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+	        					else
+	        						Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();	
 	        				}
 	        			});
 	                }
@@ -277,7 +285,10 @@ public class LoginActivity extends Activity {
 				Log.e("login(): First REST-Request", "Error: "+responseBody);
 				Log.e("login(): First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
-				Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
 
 			}
 		});		

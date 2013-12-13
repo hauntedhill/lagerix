@@ -44,6 +44,7 @@
     <string name="error_invalid_email">This email address is invalid</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
+    <string name="status_not_authorized">You have no permission to access this application</string>
 
     <!-- Strings related to logout -->
     <string name="title_activity_logout">Sign out</string>

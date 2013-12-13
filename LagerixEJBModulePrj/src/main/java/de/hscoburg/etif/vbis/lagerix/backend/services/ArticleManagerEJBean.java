@@ -45,7 +45,7 @@ public class ArticleManagerEJBean extends BaseService implements ArticleManagerE
      * @param yardID - the Id of the yard where the article should be released or incorporated
      * @return 0 if success, 1 if article or yard not found, 2 on release and article is not in yard, 3 article already stored, 4 yard already full
      */
-    @RolesAllowed({"EINKAEUFER", "LAGERARBEITER"})
+    @RolesAllowed({"LAGERARBEITER"})
     public int saveMovementEntry(MovementDTO entry, int yardID) {
         
         Message msg = new MimeMessage(mailSession);
