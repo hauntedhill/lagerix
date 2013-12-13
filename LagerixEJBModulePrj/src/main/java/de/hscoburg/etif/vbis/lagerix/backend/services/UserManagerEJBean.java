@@ -1,9 +1,9 @@
 package de.hscoburg.etif.vbis.lagerix.backend.services;
 
-import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Groups;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.Storage;
 import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
+import de.hscoburg.etif.vbis.lagerix.backend.entity.base.Group;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
@@ -35,7 +35,7 @@ public class UserManagerEJBean extends BaseService implements UserManagerEJBRemo
      * @param email - The email of the user
      * @return The data of the user or null if it not exists
      */
-    @RolesAllowed({"ADMINISTRATOR"})
+    @RolesAllowed({"ADMINISTRATOR", "EINKAEUFER"})
     public UserDTO find(String email) {
         User u = findUser(email);
         if (u != null) {
