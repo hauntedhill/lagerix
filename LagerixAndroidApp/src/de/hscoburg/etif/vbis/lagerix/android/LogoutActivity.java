@@ -20,6 +20,7 @@ import android.content.SharedPreferences;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.Toast;
 
 /**
  * Activity which logs the user out of the application and sends him back to the login screen
@@ -89,6 +90,11 @@ public class LogoutActivity extends Activity {
 				Log.e("logout(): REST-Request", "Error: "+responseBody);
 				Log.e("logout(): REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
+				
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
 
 			}
 		});		

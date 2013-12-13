@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -125,8 +126,21 @@ public class SearchResultActivity extends ListActivity {
 			}
 			
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
-				Log.e("Search REST-Request", "Error: "+errorResponse);
-				Log.e("Search REST-Request", "Statuscode: "+statusCode);
+				Log.e("searchArticleTypes() REST-Request", "Error: "+errorResponse);
+				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+			}
+			
+			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
+				Log.e("searchArticleTypes() REST-Request", "Error: "+responseBody);
+				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
 			}
 		});
 	}

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -113,8 +114,21 @@ public class SearchResultDetailActivity extends Activity {
 			}
 			
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
-				Log.e("Search REST-Request", "Error: "+errorResponse);
-				Log.e("Search REST-Request", "Statuscode: "+statusCode);
+				Log.e("getStorageLocations() REST-Request", "Error: "+errorResponse);
+				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
+			}
+			
+			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
+				Log.e("getStorageLocations() REST-Request", "Error: "+responseBody);
+				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
+				if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), R.string.status_not_authorized, Toast.LENGTH_LONG).show();
+				else
+					Toast.makeText(getApplicationContext(), R.string.status_communication_error, Toast.LENGTH_LONG).show();
 			}
 		});
 	}
