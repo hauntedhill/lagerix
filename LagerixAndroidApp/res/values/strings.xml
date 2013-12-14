@@ -7,7 +7,7 @@
     <string name="ipAddress_default">localhost:8080</string>
     
     <!--  REST resource URIs -->
-    <string name="restURI_login1">/lagerix/services/auth/login</string>
+    <string name="restURI_login1">/lagerix/services/auth/loginAndroid</string>
     <string name="restURI_login2">/lagerix/secure/j_security_check</string>
     <string name="restURI_logout">/lagerix/services/auth/logout</string>
     <string name="restURI_bookEntry">/lagerix/services/secure/android/saveEntry</string>
