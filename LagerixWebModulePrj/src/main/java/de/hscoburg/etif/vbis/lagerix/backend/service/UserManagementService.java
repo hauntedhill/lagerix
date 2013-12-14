@@ -30,37 +30,10 @@ public class UserManagementService
     @EJB
     private UserManagerEJBRemoteInterface userBean;
 
-    @POST
-    @Path("login")
-    @Produces(MediaType.TEXT_PLAIN)
-    public String login(@FormParam("email") String email, @FormParam("password") String password,
-            @Context HttpServletRequest req)
-    {
-
-        //only login if not already logged in...
-        if (req.getUserPrincipal() == null)
-        {
-            try
-            {
-                req.login(email, password);
-                req.getServletContext().log("Authentication Demo: successfully logged in " + email);
-            } catch (ServletException e)
-            {
-                e.printStackTrace();
-                return "FAILED";
-            }
-        } else
-        {
-            req.getServletContext().log("Skip logged because already logged in: " + email);
-        }
-
-        req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
-
-        return "SUCCESS";
-    }
-    
     /**
-     * Login method especially for lagerix web application. Ensures that only only user with role 'EINKAEUFER' can login.
+     * Login method especially for lagerix web application. Ensures that only
+     * only user with role 'EINKAEUFER' can login.
+     *
      * @param email users email
      * @param password users password
      * @param req
@@ -100,9 +73,11 @@ public class UserManagementService
             return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
-    
+
     /**
-     * Login method especially for lagerix android application. Ensures that only only user with role 'LAGERARBEITER' can login.
+     * Login method especially for lagerix android application. Ensures that
+     * only only user with role 'LAGERARBEITER' can login.
+     *
      * @param email users email
      * @param password users password
      * @param req
