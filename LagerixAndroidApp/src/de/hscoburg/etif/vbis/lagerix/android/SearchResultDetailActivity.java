@@ -62,19 +62,17 @@ public class SearchResultDetailActivity extends Activity {
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 		
 		Intent intent = getIntent();
-		int articleTypeId = intent.getIntExtra("ARTICLE_TYPE_ID", 0);
-		String articleName = intent.getStringExtra("ARTICLE_NAME");
-		String articleDescription = intent.getStringExtra("ARTICLE_DESCRIPTION");
+		ArticleTypeDTO articleType = (ArticleTypeDTO) intent.getSerializableExtra("articleType");
 
-		articleIdView.setText(""+articleTypeId);
-		articleNameView.setText(articleName);
-		articleDescriptionView.setText(articleDescription);
+		articleIdView.setText(""+articleType.getId());
+		articleNameView.setText(articleType.getName());
+		articleDescriptionView.setText(articleType.getDescription());
 		
 		spinner = new ProgressBar(this);		
 		resultLayout = (LinearLayout) findViewById(R.id.layout_searchResultDetailResult);
 		resultLayout.addView(spinner, 0);
 		
-		getYards(articleTypeId);
+		getYards(articleType.getId());
 
 	}
 	
@@ -101,6 +99,7 @@ public class SearchResultDetailActivity extends Activity {
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_yards)+"?articleTypeId="+articleTypeId, new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
+			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
 				Log.d("Search REST-Request", "Response: "+response);
 				Log.d("Search REST-Request", "Statuscode: "+statusCode);
@@ -121,6 +120,7 @@ public class SearchResultDetailActivity extends Activity {
 				
 			}
 			
+			@Override
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("getStorageLocations() REST-Request", "Error: "+errorResponse);
 				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
@@ -131,6 +131,7 @@ public class SearchResultDetailActivity extends Activity {
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
+			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("getStorageLocations() REST-Request", "Error: "+responseBody);
 				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);

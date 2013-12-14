@@ -76,6 +76,7 @@ public class StorageOverviewActivity extends Activity {
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_storageOverview), new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
+			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
 				Log.d("getStorageOverview() REST-Request", "Response: "+response);
 				Log.d("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
@@ -101,6 +102,7 @@ public class StorageOverviewActivity extends Activity {
 
 			}
 
+			@Override
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("getStorageOverview() REST-Request", "Error: "+errorResponse);
 				Log.e("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
@@ -111,6 +113,7 @@ public class StorageOverviewActivity extends Activity {
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
+			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("getStorageOverview() REST-Request", "Error: "+responseBody);
 				Log.e("getStorageOverview() REST-Request", "Statuscode: "+statusCode);

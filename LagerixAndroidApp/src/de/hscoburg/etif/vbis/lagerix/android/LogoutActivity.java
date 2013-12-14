@@ -57,6 +57,7 @@ public class LogoutActivity extends Activity {
 
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_logout), new TextHttpResponseHandler() {
 
+			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 				Log.d("logout(): REST-Request", "Response: "+responseBody);
 				Log.d("logout(): REST-Request", "Statuscode: "+statusCode);
@@ -81,6 +82,7 @@ public class LogoutActivity extends Activity {
 				}
 			}
 
+			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 				Log.e("logout(): REST-Request", "Error: "+responseBody);
 				Log.e("logout(): REST-Request", "Statuscode: "+statusCode);

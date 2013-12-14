@@ -99,7 +99,7 @@ public class UserManagementService
             } catch (ServletException e)
             {
                 e.printStackTrace();
-                return Response.ok("FAILED").build();
+                return Response.status(Response.Status.UNAUTHORIZED).build();
             }
         } else
         {
@@ -110,7 +110,7 @@ public class UserManagementService
         //ensure that only EINKAEUFER role is logged in
         if (userBean.isInGroup(GroupType.LAGERARBEITER))
         {
-            return Response.ok("SUCCESS").build();
+            return Response.ok().build();
         } else
         {
             logout(req);

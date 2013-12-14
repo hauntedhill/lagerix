@@ -173,9 +173,9 @@ public class ScanActivity extends Activity {
 			params.put("articleID", articleResultView.getText().toString());
 			params.put("yardID", storageLocationResultView.getText().toString());
 			if(isBookedIn.isChecked())
-				params.put("isBookedIn", "true");
+				params.put("bookedIn", "true");
 			else
-				params.put("isBookedIn", "false");
+				params.put("bookedIn", "false");
 			params.put("timestamp", ""+Calendar.getInstance().getTimeInMillis());
 			
 			spinner.setVisibility(View.VISIBLE);

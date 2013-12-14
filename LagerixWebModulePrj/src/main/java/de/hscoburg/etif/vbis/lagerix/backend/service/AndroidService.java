@@ -47,7 +47,7 @@ public class AndroidService {
     
     
     /**
-     * This method saves a bookEntry to a corresponding article and location ID in the database.
+     * This method saves a book entry to a corresponding article and location ID in the database.
      * @param pArticleID ID of the article
      * @param pYardID ID of the yard
      * @param pBookedIn "true" if the article is booked in, "false" if the article is booked out
@@ -62,7 +62,7 @@ public class AndroidService {
     @Path("saveEntry")
     @POST
     @Consumes("application/x-www-form-urlencoded")
-    public int saveBookEntry(@FormParam("articleID") int pArticleID, @FormParam("yardID") int pYardID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) 
+    public int saveEntry(@FormParam("articleID") int pArticleID, @FormParam("yardID") int pYardID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) 
     {
         
         System.out.println("Method saveBookEntry() called - Received values:");
@@ -89,7 +89,7 @@ public class AndroidService {
     @Path("search")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<ArticleTypeDTO> search(@QueryParam("name") String pName, @QueryParam("description") String pDescription)
+    public List<ArticleTypeDTO> searchForArticleTypes(@QueryParam("name") String pName, @QueryParam("description") String pDescription)
     {
         try
         {
@@ -109,7 +109,7 @@ public class AndroidService {
     @Path("yards")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<YardDTO> yardsForArticleType(@QueryParam("articleTypeId") int pArticleTypeId)
+    public List<YardDTO> getYardsForArticleType(@QueryParam("articleTypeId") int pArticleTypeId)
     {
         return placeManager.getYardsForArticleType(pArticleTypeId);
     }
@@ -121,7 +121,7 @@ public class AndroidService {
     @Path("storageOverview")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<YardInfoDTO> storageOverview() 
+    public List<YardInfoDTO> getStorageOverview() 
     {
         
         StorageDTO storage = placeManager.getStorages().get(0);

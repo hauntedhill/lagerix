@@ -1,7 +1,13 @@
 package de.hscoburg.etif.vbis.lagerix.android.dto;
 
-public class ArticleTypeDTO {
+import java.io.Serializable;
+
+public class ArticleTypeDTO implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int id;
 	private String name;
 	private String description;

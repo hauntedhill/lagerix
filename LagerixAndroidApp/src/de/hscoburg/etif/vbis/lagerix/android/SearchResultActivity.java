@@ -86,9 +86,7 @@ public class SearchResultActivity extends ListActivity {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		ArticleTypeDTO articleType = (ArticleTypeDTO) getListView().getAdapter().getItem(position);
 		Intent intent = new Intent(this, SearchResultDetailActivity.class);
-    	intent.putExtra("ARTICLE_TYPE_ID", articleType.getId());
-    	intent.putExtra("ARTICLE_NAME", articleType.getName());
-    	intent.putExtra("ARTICLE_DESCRIPTION", articleType.getDescription());
+		intent.putExtra("articleType", articleType);
     	startActivity(intent);
 	}
 	
@@ -104,6 +102,7 @@ public class SearchResultActivity extends ListActivity {
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_search)+"?name="+articleName+"&description="+articleDescription, new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
+			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
 				Log.d("Search REST-Request", "Response: "+response);
 				Log.d("Search REST-Request", "Statuscode: "+statusCode);
@@ -124,6 +123,7 @@ public class SearchResultActivity extends ListActivity {
 				
 			}
 			
+			@Override
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+errorResponse);
 				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
@@ -135,6 +135,7 @@ public class SearchResultActivity extends ListActivity {
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
+			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+responseBody);
 				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);

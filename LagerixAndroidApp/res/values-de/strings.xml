@@ -20,7 +20,7 @@
     <string name="status_book_successful">Buchung erfolgreich</string>
     <string name="status_book_failed_doesNotExist">Artikel oder Lagerplatz existiert nicht</string>
     <string name="status_book_failed_yardOccupied">Lagerplatz bereits belegt</string>
-    <string name="status_book_failed_articleAlreadyStored">Artikel ist bereits in einem anderen Lagerplatz eingelagert</string>
+    <string name="status_book_failed_articleAlreadyStored">Artikel ist bereits in einem Lagerplatz eingelagert</string>
     <string name="status_book_failed_articleNotStoredInYard">Artikel ist in diesem Lagerplatz nicht eingelagert</string>
     <string name="status_book_unexpected_result">Unerwartete Serverantwort</string>
     <string name="status_barcodeScan_failed">Fehler beim Scannen des Barcodes</string>
@@ -32,7 +32,7 @@
     <string name="action_sign_in_short">Anmelden</string>
     <string name="login_progress_signing_in">Anmelden&#8230;</string>
     <string name="error_invalid_email">Die E-Mail-Adresse ist ungültig</string>
-    <string name="error_incorrect_password">Das Passwort ist falsch</string>
+    <string name="error_incorrect_credentials">Benutzername oder Passwort falsch</string>
     <string name="error_field_required">Dieses Feld muss ausgefüllt werden</string>
     <string name="status_not_authorized">Sie haben keine Berechtigung auf diese Anwendung zuzugreifen</string>
 

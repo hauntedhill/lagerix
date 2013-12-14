@@ -31,7 +31,7 @@
     <string name="status_book_successful">Book successful</string>
     <string name="status_book_failed_doesNotExist">Article or yard does not exist</string>
     <string name="status_book_failed_yardOccupied">Yard already occupied</string>
-    <string name="status_book_failed_articleAlreadyStored">Article is already stored in another yard</string>
+    <string name="status_book_failed_articleAlreadyStored">Article is already stored in a yard</string>
     <string name="status_book_failed_articleNotStoredInYard">Article is not stored in this yard</string>
     <string name="status_book_unexpected_result">Unexpected server response</string>
     <string name="status_barcodeScan_failed">Error scanning barcode</string>
@@ -43,7 +43,7 @@
     <string name="action_sign_in_short">Sign in</string>
     <string name="login_progress_signing_in">Signing in&#8230;</string>
     <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_incorrect_credentials">Username or password incorrect</string>
     <string name="error_field_required">This field is required</string>
     <string name="status_not_authorized">You have no permission to access this application</string>
 

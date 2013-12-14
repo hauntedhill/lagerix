@@ -230,58 +230,55 @@ public class LoginActivity extends Activity {
 		// It is required because the actual login request doesn't return a proper status.
 		LagerixRestClient.post(baseURL+getString(R.string.restURI_login1), restParams, new TextHttpResponseHandler() {
 
-			// The first REST request was successful.
+			// The first REST request was successful. The user provided valid credentials.
+			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 	                loginResult = responseBody;
 	                Log.d("login(): First REST-Request", "Response: "+responseBody);
 					Log.d("login(): First REST-Request", "Statuscode: "+statusCode);
 	                
-	                // The user provided valid credentials.
-	                if(loginResult.equals("SUCCESS")) {
-	        			RequestParams loginParams = new RequestParams();
-	        			loginParams.put("j_username", mEmail);
-	        			loginParams.put("j_password", mPassword);
+        			RequestParams loginParams = new RequestParams();
+        			loginParams.put("j_username", mEmail);
+        			loginParams.put("j_password", mPassword);
 	        			
-	        			// This second REST request performs the actual login.
-	        			LagerixRestClient.post(baseURL+getString(R.string.restURI_login2), loginParams, new TextHttpResponseHandler() {
-	        				// The second REST request was successful. The first REST request already checked the user credentials, so we can forward to the main application.
-	        				@Override
-	        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
-	        	                Log.d("login(): Second REST-Request", "Response: "+responseBody);
-	        					Log.d("login(): Second REST-Request", "Statuscode: "+statusCode);
-	        					showProgress(false);
-	        					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
-	        			    	startActivity(intent);
-	        			    	finish();
-	        				}
-	        				// The second REST request failed due to a server error.
-	        				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
-	        					Log.e("login(): Second REST-Request", "Error: "+responseBody);
-	        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
-	        					showProgress(false);
-	        					if(statusCode == 403)
-	        						Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
-	        					else
-	        						Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();	
-	        				}
-	        			});
-	                }
-	                
-	                // The user provided invalid credentials.
-	                else {
-	    				showProgress(false);
-	    				mPasswordView.setError(getString(R.string.error_incorrect_password));
-	    				mPasswordView.requestFocus();
-	                }
+        			// The second REST request performs the actual login.
+        			LagerixRestClient.post(baseURL+getString(R.string.restURI_login2), loginParams, new TextHttpResponseHandler() {
+        				// The second REST request was successful. The first REST request already checked the user credentials, so we can forward to the main application.
+        				@Override
+        				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
+        	                Log.d("login(): Second REST-Request", "Response: "+responseBody);
+        					Log.d("login(): Second REST-Request", "Statuscode: "+statusCode);
+        					showProgress(false);
+        					Intent intent = new Intent(getApplicationContext(), ScanActivity.class);
+        			    	startActivity(intent);
+        			    	finish();
+        				}
+        				// The second REST request failed. This should never happen but is handled nevertheless as a precaution.
+        				@Override
+        				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
+        					Log.e("login(): Second REST-Request", "Error: "+responseBody);
+        					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
+        					showProgress(false);
+        					if(statusCode == 401)
+        						Toast.makeText(getApplicationContext(), getString(R.string.error_incorrect_credentials), Toast.LENGTH_LONG).show();
+        					else if(statusCode == 403)
+        						Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();	
+        					else
+        						Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();	
+        				}
+        			});
 			}
 			
-			//The first REST request failed due to a server error.
+			//The first REST request failed due to a server error or invalid credentials.
+			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 				Log.e("login(): First REST-Request", "Error: "+responseBody);
 				Log.e("login(): First REST-Request", "Statuscode: "+statusCode);
 				showProgress(false);
-				if(statusCode == 403)
-					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
+				if(statusCode == 401)
+					Toast.makeText(getApplicationContext(), getString(R.string.error_incorrect_credentials), Toast.LENGTH_LONG).show();
+				else if(statusCode == 403)
+					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();	
 				else
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 
