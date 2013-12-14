@@ -55,7 +55,7 @@
                             }
                             else if (jqXHR.status == "401")
                             {
-                                alert("Login fehlgeschlagen!\nUser nicht bekannt. Bitte User und Passwort prüfen!");
+                                alert("Login fehlgeschlagen!\nUser nicht bekannt oder Passwort falsch!");
                             }
                             else
                             {
