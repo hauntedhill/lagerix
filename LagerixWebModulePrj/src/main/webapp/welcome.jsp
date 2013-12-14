@@ -43,12 +43,24 @@
                             if (data == "SUCCESS") {
                                 //redirect to secured page
                                 window.location.replace("<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/secure/lagerix.jsp");
-                            } else {
+                            }
+                            else {
                                 alert("Login fehlgeschlagen!");
                             }
                         },
                         error: function(jqXHR, textStatus, errorThrown) {
-                            alert("error - HTTP STATUS: " + jqXHR.status);
+                            if (jqXHR.status == "403")
+                            {
+                                alert("Der eingegebene User hat keine Berechtigung!");
+                            }
+                            else if (jqXHR.status == "401")
+                            {
+                                alert("Login fehlgeschlagen!\nUser nicht bekannt. Bitte User und Passwort prüfen!");
+                            }
+                            else
+                            {
+                                alert("error - HTTP STATUS: " + jqXHR.status);
+                            }
                         },
                         complete: function(jqXHR, textStatus) {
                             //alert("complete");

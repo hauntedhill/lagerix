@@ -82,7 +82,7 @@ public class UserManagementService
             } catch (ServletException e)
             {
                 e.printStackTrace();
-                return Response.ok("FAILED").build();
+                return Response.status(Response.Status.UNAUTHORIZED).build();
             }
         } else
         {
