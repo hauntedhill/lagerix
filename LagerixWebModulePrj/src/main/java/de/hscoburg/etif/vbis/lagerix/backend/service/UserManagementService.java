@@ -14,8 +14,8 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
+import javax.ws.rs.core.Response;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.Group;
 //import de.hscoburg.etif.vbis.lagerix.backend.entity.User;
 //import de.hscoburg.etif.vbis.lagerix.backend.dao.UserBean;
@@ -69,7 +69,7 @@ public class UserManagementService
     @POST
     @Path("loginwebapp")
     @Produces(MediaType.TEXT_PLAIN)
-    public String loginWebApp(@FormParam("email") String email, @FormParam("password") String password,
+    public Response loginWebApp(@FormParam("email") String email, @FormParam("password") String password,
             @Context HttpServletRequest req)
     {
         //only login if not already logged in...
@@ -82,7 +82,7 @@ public class UserManagementService
             } catch (ServletException e)
             {
                 e.printStackTrace();
-                return "FAILED";
+                return Response.ok("FAILED").build();
             }
         } else
         {
@@ -93,11 +93,53 @@ public class UserManagementService
         //ensure that only EINKAEUFER role is logged in
         if (userBean.isInGroup(GroupType.EINKAEUFER))
         {
-            return "SUCCESS";
+            return Response.ok("SUCCESS").build();
         } else
         {
             logout(req);
-            return "FAILED";
+            return Response.status(Response.Status.FORBIDDEN).build();
+        }
+    }
+    
+    /**
+     * Login method especially for lagerix android application. Ensures that only only user with role 'LAGERARBEITER' can login.
+     * @param email users email
+     * @param password users password
+     * @param req
+     * @return Whether login was successful or not.
+     */
+    @POST
+    @Path("loginAndroid")
+    @Produces(MediaType.TEXT_PLAIN)
+    public Response loginAndroid(@FormParam("email") String email, @FormParam("password") String password,
+            @Context HttpServletRequest req)
+    {
+        //only login if not already logged in...
+        if (req.getUserPrincipal() == null)
+        {
+            try
+            {
+                req.login(email, password);
+                req.getServletContext().log("Authentication Demo: successfully logged in " + email);
+            } catch (ServletException e)
+            {
+                e.printStackTrace();
+                return Response.ok("FAILED").build();
+            }
+        } else
+        {
+            req.getServletContext().log("Skip logged because already logged in: " + email);
+        }
+
+        req.getServletContext().log("Authentication Demo: successfully retrieved User Profile from DB for " + email);
+        //ensure that only EINKAEUFER role is logged in
+        if (userBean.isInGroup(GroupType.LAGERARBEITER))
+        {
+            return Response.ok("SUCCESS").build();
+        } else
+        {
+            logout(req);
+            return Response.status(Response.Status.FORBIDDEN).build();
         }
     }
 
