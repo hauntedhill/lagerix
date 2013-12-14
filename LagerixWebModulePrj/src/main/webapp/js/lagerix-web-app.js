@@ -55,6 +55,10 @@ $(document).on("mouseleave", ".articleTypeRow", function() {
     $(this).css('cursor', 'auto');
 });
 
+$(document).on("click", "#aMinUnderrun", function(){
+    refreshMinUnderrun();
+});
+
 //advanced search for article types
 $(document).ready(function() {
     $(document.forms['advancedSearchForm']).submit(function() {
@@ -86,27 +90,15 @@ $(document).ready(function() {
 //search for article types with underrun minimum stock
 $(document).ready(function() {
     $(document.forms['formRefreshMinUnderrun']).submit(function() {
-        $.ajax({
-            url: urlGlobal + "underrunminstocks",
-            type: "GET",
-            data: "",
-            cache: false,
-            dataType: "json",
-            success: function(data, textStatus, jqXHR) {
-                $("#tbodyUnderrunMinStock").html(displayArticleTypes(data));
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                errorHandler(jqXHR, textStatus, errorThrown);
-            }
-        });
+        refreshMinUnderrun();
         return false;
     });
 });
 
 //refresh article type display
-$(document).on("click","#btnRefreshArticleType",function(){
-        simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
-        return false;
+$(document).on("click", "#btnRefreshArticleType", function() {
+    simpleSearch("ipIdSimpleSearch=" + $("#ipArticleTypeId").val());
+    return false;
 });
 
 //execute a simple search in an ajax request
@@ -119,6 +111,23 @@ function simpleSearch(pData) {
         dataType: "json",
         success: function(data, textStatus, jqXHR) {
             displayArticleType(data, textStatus, jqXHR);
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            errorHandler(jqXHR, textStatus, errorThrown);
+        }
+    });
+}
+
+//Refreshes the display of the article types with underrun minimum stock
+function refreshMinUnderrun() {
+    $.ajax({
+        url: urlGlobal + "underrunminstocks",
+        type: "GET",
+        data: "",
+        cache: false,
+        dataType: "json",
+        success: function(data, textStatus, jqXHR) {
+            $("#tbodyUnderrunMinStock").html(displayArticleTypes(data));
         },
         error: function(jqXHR, textStatus, errorThrown) {
             errorHandler(jqXHR, textStatus, errorThrown);
@@ -244,7 +253,7 @@ $(document).on("click", ".storageRow", function() {
 });
 
 //refresh display of storages
-$(document).on("click", "#btnRefreshStorages", function(){
+$(document).on("click", "#btnRefreshStorages", function() {
     getStorages();
     getStorage("storageId=" + selectedStorageId);
 });
@@ -276,8 +285,8 @@ function displayStorage(data, textStatus, jqXHR) {
     }
     var title = "Lagerbelegung " + data.name;
     $("#aStorages").html(title);
-    $("#divStorage").html( content);
-    selectedStorageId=data.id;
+    $("#divStorage").html(content);
+    selectedStorageId = data.id;
 }
 
 //requests all storages using ajax

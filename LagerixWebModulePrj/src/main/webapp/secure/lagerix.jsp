@@ -181,7 +181,7 @@
                         <div class="panel panel-default">
                             <div class="panel-heading">
                                 <h4 class="panel-title">
-                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree">
+                                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" id="aMinUnderrun">
                                         <span class="glyphicon glyphicon-exclamation-sign" style="margin: 0px 15px 0px 0px"></span> Artikelarten mit unterschrittenem Mindestbestand
                                     </a>
                                 </h4>
