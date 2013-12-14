@@ -12,7 +12,6 @@
 
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="./css/auth.css" />
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Lagerix Login</title>
         <script src="<%=request.getScheme()%>://<%=request.getServerName()%>:<%=request.getLocalPort()%><%=request.getContextPath()%>/js/jquery/jquery-1.10.2.min.js" type="text/javascript"></script>
