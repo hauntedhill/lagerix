@@ -280,7 +280,7 @@ function displayStorage(data, textStatus, jqXHR) {
     var content = "";
     for (var i = 0; i < data.yards.length; i++) {
         var bgColor = data.yards[i].articleTypeId == 0 ? " style=\"background-color: #BCED91\"" : "";
-        var articleType = data.yards[i].articleTypeId == 0 ? "" : "<span class=\"lagerix-yard-span\">" + data.yards[i].articleTypeName + "</span><br><span class=\"lagerix-yard-span\">Artikelart-ID: " + data.yards[i].articleTypeId + "</span>";
+        var articleType = data.yards[i].articleTypeId == 0 ? "" : "<span class=\"lagerix-yard-span\">" + data.yards[i].articleTypeName + "</span><br><span class=\"lagerix-yard-span\">Artikelart-ID: " + data.yards[i].articleTypeId + "</span><br><span class=\"lagerix-yard-span\">Artikel-ID: " + data.yards[i].articleId + "</span>";
         content += "<div class=\"well lagerix-yard\"" + bgColor + "><span style=\"font-size: 14; font-weight: bolder\">" + data.yards[i].id + "</span><br>" + articleType + "</div>";
     }
     var title = "Lagerbelegung " + data.name;
