@@ -171,7 +171,7 @@ public class ScanActivity extends Activity {
 			// Create parameters for the REST request
 			RequestParams params = new RequestParams();
 			params.put("articleID", articleResultView.getText().toString());
-			params.put("locationID", storageLocationResultView.getText().toString());
+			params.put("yardID", storageLocationResultView.getText().toString());
 			if(isBookedIn.isChecked())
 				params.put("isBookedIn", "true");
 			else

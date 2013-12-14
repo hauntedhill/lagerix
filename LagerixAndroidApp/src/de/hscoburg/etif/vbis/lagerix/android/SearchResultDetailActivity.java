@@ -74,7 +74,7 @@ public class SearchResultDetailActivity extends Activity {
 		resultLayout = (LinearLayout) findViewById(R.id.layout_searchResultDetailResult);
 		resultLayout.addView(spinner, 0);
 		
-		getStorageLocations(articleTypeId);
+		getYards(articleTypeId);
 
 	}
 	
@@ -95,10 +95,10 @@ public class SearchResultDetailActivity extends Activity {
 	    }
 	}
 
-	private void getStorageLocations(int articleTypeId) {
+	private void getYards(int articleTypeId) {
 
 		//Submit the search REST request
-		LagerixRestClient.get(baseURL+getString(R.string.restURI_storageLocations)+"?articleTypeId="+articleTypeId, new JsonHttpResponseHandler() {
+		LagerixRestClient.get(baseURL+getString(R.string.restURI_yards)+"?articleTypeId="+articleTypeId, new JsonHttpResponseHandler() {
 
 			// The REST request was successful.
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {

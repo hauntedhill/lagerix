@@ -12,7 +12,7 @@
     <string name="restURI_logout">/lagerix/services/auth/logout</string>
     <string name="restURI_bookEntry">/lagerix/services/secure/android/saveEntry</string>
     <string name="restURI_search">/lagerix/services/secure/android/search</string>
-    <string name="restURI_storageLocations">/lagerix/services/secure/android/storageLocations</string>
+    <string name="restURI_yards">/lagerix/services/secure/android/yards</string>
     <string name="restURI_storageOverview">/lagerix/services/secure/android/storageOverview</string>
     
 

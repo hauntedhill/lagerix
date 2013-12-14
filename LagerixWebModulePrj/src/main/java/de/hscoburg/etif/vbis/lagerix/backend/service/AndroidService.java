@@ -47,27 +47,27 @@ public class AndroidService {
     
     
     /**
-     * Diese Methode speichert eine Ein- oder Ausbuchung zu einer Artikel- und Orts-ID in der Datenbank
-     * @param pArticleID ID der Artikelart
-     * @param pLocationID ID des Lagerplatzes
-     * @param pBookedIn True, falls Artikel eingelagert wurde, sonst False
-     * @param pTimestamp Zeitstempel der Buchung
-     * @return Statuscode:
-     *                      0: Kein Fehler
-     *                      1: Artikel- oder Lagerplatz-ID existiert nicht
-     *                      2: Ausbuchung nicht möglich, da Artikel nicht im entsprechend Lagerplatz liegt
-     *                      3: Einbuchung nicht möglich, da Artikel bereits in einem anderen Lagerplatz liegt
-     *                      4: Einbuchung nicht möglich, da Lagerplatz bereits belegt ist
+     * This method saves a bookEntry to a corresponding article and location ID in the database.
+     * @param pArticleID ID of the article
+     * @param pYardID ID of the yard
+     * @param pBookedIn "true" if the article is booked in, "false" if the article is booked out
+     * @param pTimestamp timestamp of the bookEntry
+     * @return statuscode with one of the following values:
+     *                      0: No error
+     *                      1: Article id or yard id does not exist
+     *                      2: Release not possible, because the article is not stored in the specified yard
+     *                      3: Incorporation not possible, because the article is already stored in another yard
+     *                      4: Incorporation not possible, because the yard is occupied
      */
     @Path("saveEntry")
     @POST
     @Consumes("application/x-www-form-urlencoded")
-    public int saveBookEntry(@FormParam("articleID") int pArticleID, @FormParam("locationID") int pLocationID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) 
+    public int saveBookEntry(@FormParam("articleID") int pArticleID, @FormParam("yardID") int pYardID, @FormParam("bookedIn") boolean pBookedIn, @FormParam("timestamp") long pTimestamp) 
     {
         
         System.out.println("Method saveBookEntry() called - Received values:");
         System.out.println("ArticleID: "+pArticleID);
-        System.out.println("LocationID: "+pLocationID);
+        System.out.println("LocationID: "+pYardID);
         System.out.println("BookedIn: "+pBookedIn);
         System.out.println("Timestamp: "+pTimestamp);
         
@@ -76,15 +76,15 @@ public class AndroidService {
         movementEntry.setBookedIn(pBookedIn);
         movementEntry.setTimestamp(pTimestamp);
         
-        return articleManager.saveMovementEntry(movementEntry, pLocationID);
+        return articleManager.saveMovementEntry(movementEntry, pYardID);
 
     }
     
     /**
-     * Diese Methode durchsucht die Datenbank nach dem Namen und der Beschreibung einer Artikelart
-     * @param pName Suchkriterium "Name der Artikelart"
-     * @param pDescription Suchkriterium "Beschreibung der Artikelart"
-     * @return Liste von Artikelarten, die mit den Suchkriterien übereinstimmen.
+     * This method searches the database for name and description of an article type
+     * @param pName name of the article type
+     * @param pDescription description of the article type
+     * @return list of article types, that match the search criterias
      */    
     @Path("search")
     @GET
@@ -102,21 +102,21 @@ public class AndroidService {
     }
     
     /**
-     * Diese Methode liefert eine Liste aller Lagerplätze zurück, in denen die Artikelart mit der übergebenen ID eingelagert ist.
-     * @param pArticleTypeId ID der Artikelart
-     * @return Liste mit Lagerplätzen, in denen die Artikelart mit der übergebenen ID eingelagert ist.
+     * This methods returns a list of yards, where the article type with the specified ID is stored in
+     * @param pArticleTypeId ID of the article type
+     * @return list of yards, where articles of the specified article type are stored in
      */
-    @Path("storageLocations")
+    @Path("yards")
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<YardDTO> storageLocationsForArticleType(@QueryParam("articleTypeId") int pArticleTypeId)
+    public List<YardDTO> yardsForArticleType(@QueryParam("articleTypeId") int pArticleTypeId)
     {
         return placeManager.getYardsForArticleType(pArticleTypeId);
     }
     
     /**
-     * Diese Methode liefert eine Liste mit dem Status aller Lagerplätze des Lagers zurück, das dem eingeloggten Benutzer zugeordnet ist.
-     * @return Liste mit Objekten, die die ID und den Status eines Lagerplatzes beinhalten. Ist ein Lagerplatz belegt, entspricht der Status dem Namen der eingelagerten Artikelart, ansonsten ist „Frei“ eingetragen.
+     * This method returns a list with the status of all yards from the storage, that is related to the logged in users
+     * @return List of objects, that consist of the yard id and the corresponding status. If a yard is occupied, the status is equal to the name of the stored article type, else the status is "Frei".
      */
     @Path("storageOverview")
     @GET
