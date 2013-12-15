@@ -13,8 +13,8 @@
 
     <!-- Strings related to barcode scanning -->
     <string name="scan_barcode">Barcode scannen</string>
-    <string name="identified_barcode_article">Erkannter Artikel:</string>
-    <string name="identified_barcode_storage">Erkannter Lagerort:</string>
+    <string name="identified_barcode_article">Erkannte Artikel-ID:</string>
+    <string name="identified_barcode_storage">Erkannte Lagerplatz-ID:</string>
     <string name="book_in">Einbuchung</string>
     <string name="book_out">Ausbuchung</string>
     <string name="send_data">Daten absenden</string>
@@ -44,7 +44,7 @@
     <!-- Strings related to settings -->
     <string name="title_activity_settings">Einstellungen</string>
     <string name="pref_header_general">Allgemein</string>
-    <string name="pref_ipAddress_name">IP Adresse</string>
+    <string name="pref_ipAddress_name">Serveradresse</string>
     <string name="pref_ipAddress_defaultValue">https://10.185.45.1:8181</string>
 
     <!-- Strings related to search form -->

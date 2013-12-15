@@ -23,8 +23,8 @@
 
     <!-- Strings related to barcode scanning -->
     <string name="scan_barcode">Scan barcode</string>
-    <string name="identified_barcode_article">Identified Article:</string>
-    <string name="identified_barcode_storage">Identified Storage:</string>
+    <string name="identified_barcode_article">Identified article ID:</string>
+    <string name="identified_barcode_storage">Identified storage location ID:</string>
     <string name="book_in">Book In</string>
     <string name="book_out">Book Out</string>
     <string name="send_data">Send data</string>
@@ -54,7 +54,7 @@
     <!-- Strings related to settings -->
     <string name="title_activity_settings">Settings</string>
     <string name="pref_header_general">General</string>
-    <string name="pref_ipAddress_name">IP address</string>
+    <string name="pref_ipAddress_name">Server address</string>
     <string name="pref_ipAddress_defaultValue">https://10.185.45.1:8181</string>
 
     <!-- Strings related to search form -->
