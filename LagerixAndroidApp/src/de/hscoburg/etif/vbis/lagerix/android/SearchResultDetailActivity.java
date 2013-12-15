@@ -113,6 +113,8 @@ public class SearchResultDetailActivity extends Activity {
 					}
 				} catch(JSONException e) {
 					Log.e("JSON-Exception", e.toString());
+					
+					Toast.makeText(getApplicationContext(), getString(R.string.status_unexpected_result), Toast.LENGTH_LONG).show();
 				}
 
 				storageLocationsView.setText(storageLocations);

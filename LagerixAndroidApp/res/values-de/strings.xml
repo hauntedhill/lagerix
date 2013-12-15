@@ -4,6 +4,7 @@
     <!-- Global strings -->
     <string name="app_name">Lagerix</string>
     <string name="status_communication_error">Kommunikation mit dem Server fehlgeschlagen. Bitte prüfen Sie Ihre Einstellungen.</string>
+    <string name="status_unexpected_result">Unerwartete Serverantwort</string>
 
     <!-- Action bar strings -->
     <string name="action_settings">Einstellungen</string>
@@ -22,7 +23,6 @@
     <string name="status_book_failed_yardOccupied">Lagerplatz bereits belegt</string>
     <string name="status_book_failed_articleAlreadyStored">Artikel ist bereits in einem Lagerplatz eingelagert</string>
     <string name="status_book_failed_articleNotStoredInYard">Artikel ist in diesem Lagerplatz nicht eingelagert</string>
-    <string name="status_book_unexpected_result">Unerwartete Serverantwort</string>
     <string name="status_barcodeScan_failed">Fehler beim Scannen des Barcodes</string>
 
     <!-- Strings related to login -->
@@ -59,6 +59,7 @@
     <string name="label_article_name">Artikelart Name:</string>
     <string name="label_article_description">Artikelart Beschreibung:</string>
     <string name="label_storageLocations"><u>Lagerplätze</u></string>
+    <string name="status_no_searchResults">Die Suche lieferte keine Ergebnisse</string>
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Lagerübersicht</string>

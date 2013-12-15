@@ -202,9 +202,9 @@ public class ScanActivity extends Activity {
 						else if(Integer.parseInt(responseBody) == 4)
 							Toast.makeText(getApplicationContext(), getString(R.string.status_book_failed_yardOccupied), Toast.LENGTH_LONG).show();
 						else
-							Toast.makeText(getApplicationContext(), getString(R.string.status_book_unexpected_result), Toast.LENGTH_LONG).show();
+							Toast.makeText(getApplicationContext(), getString(R.string.status_unexpected_result), Toast.LENGTH_LONG).show();
 					} catch (NumberFormatException e) {
-						Toast.makeText(getApplicationContext(), getString(R.string.status_book_unexpected_result), Toast.LENGTH_LONG).show();
+						Toast.makeText(getApplicationContext(), getString(R.string.status_unexpected_result), Toast.LENGTH_LONG).show();
 						Log.e("sendEntry REST-Request", "Unexpected server response");
 					}
 					

@@ -4,9 +4,10 @@
     <!-- Global strings -->
     <string name="app_name">Lagerix</string>
     <string name="status_communication_error">Communication with server failed. Please check your settings.</string>
+    <string name="status_unexpected_result">Unexpected server response</string>
     <string name="ipAddress_default">localhost:8080</string>
-    
-    <!--  REST resource URIs -->
+
+    <!-- REST resource URIs -->
     <string name="restURI_login1">/lagerix/services/auth/loginAndroid</string>
     <string name="restURI_login2">/lagerix/secure/j_security_check</string>
     <string name="restURI_logout">/lagerix/services/auth/logout</string>
@@ -14,7 +15,6 @@
     <string name="restURI_search">/lagerix/services/secure/android/search</string>
     <string name="restURI_yards">/lagerix/services/secure/android/yards</string>
     <string name="restURI_storageOverview">/lagerix/services/secure/android/storageOverview</string>
-    
 
     <!-- Action bar strings -->
     <string name="action_settings">Settings</string>
@@ -33,7 +33,6 @@
     <string name="status_book_failed_yardOccupied">Yard already occupied</string>
     <string name="status_book_failed_articleAlreadyStored">Article is already stored in a yard</string>
     <string name="status_book_failed_articleNotStoredInYard">Article is not stored in this yard</string>
-    <string name="status_book_unexpected_result">Unexpected server response</string>
     <string name="status_barcodeScan_failed">Error scanning barcode</string>
 
     <!-- Strings related to login -->
@@ -70,6 +69,7 @@
     <string name="label_article_name">Article type name:</string>
     <string name="label_article_description">Article type description:</string>
     <string name="label_storageLocations"><u>Storage Locations</u></string>
+    <string name="status_no_searchResults">The search returned no results</string>
 
     <!-- Strings related to storage overview -->
     <string name="title_activity_storage_overview">Storage overview</string>

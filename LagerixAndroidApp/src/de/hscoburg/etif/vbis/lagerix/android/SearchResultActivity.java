@@ -38,6 +38,8 @@ public class SearchResultActivity extends ListActivity {
 	//IP address from settings
 	String baseURL;
 	
+	//UI elements
+	LinearLayout resultLayout;
 	/**
 	 * Initializer method for the activity
 	 * Gets called on first launch
@@ -48,6 +50,8 @@ public class SearchResultActivity extends ListActivity {
 		setContentView(R.layout.activity_search_result);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+		resultLayout = (LinearLayout) findViewById(R.id.layout_resultList);
 
 		articleTypes = new LinkedList<ArticleTypeDTO>();
 
@@ -106,19 +110,36 @@ public class SearchResultActivity extends ListActivity {
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
 				Log.d("Search REST-Request", "Response: "+response);
 				Log.d("Search REST-Request", "Statuscode: "+statusCode);
-				try {
-					for(int i = 0; i < response.length(); i++) {
-						JSONObject object = response.getJSONObject(i);
-						int id = object.getInt("id");
-						String name = object.getString("name");
-						String description = object.getString("description");
-						articleTypes.add(new ArticleTypeDTO(id, name, description));
+				if(response.length() > 0) {
+					// The search returned objects matching the search criterias.
+					try {
+						for(int i = 0; i < response.length(); i++) {
+							JSONObject object = response.getJSONObject(i);
+							int id = object.getInt("id");
+							String name = object.getString("name");
+							String description = object.getString("description");
+							articleTypes.add(new ArticleTypeDTO(id, name, description));
+						}
+					} catch(JSONException e) {
+						Log.e("JSON-Exception", e.toString());
+						
+						// Hide the progess indicator
+						resultLayout.setVisibility(View.INVISIBLE);
+						
+						Toast.makeText(getApplicationContext(), getString(R.string.status_unexpected_result), Toast.LENGTH_LONG).show();
 					}
-				} catch(JSONException e) {
-					Log.e("JSON-Exception", e.toString());
+					
+					// Update the list view
+					adapter.notifyDataSetChanged();
 				}
-
-				adapter.notifyDataSetChanged();
+				else {
+					// The search returned no results
+					// Hide the progess indicator
+					resultLayout.setVisibility(View.INVISIBLE);
+					
+					Toast.makeText(getApplicationContext(), getString(R.string.status_no_searchResults), Toast.LENGTH_LONG).show();
+					
+				}
 
 				
 			}
@@ -127,8 +148,10 @@ public class SearchResultActivity extends ListActivity {
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+errorResponse);
 				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
-				LinearLayout resultLayout = (LinearLayout) findViewById(R.id.layout_resultList);
+				
+				// Hide the progess indicator
 				resultLayout.setVisibility(View.INVISIBLE);
+				
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
@@ -139,8 +162,10 @@ public class SearchResultActivity extends ListActivity {
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+responseBody);
 				Log.e("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
-				LinearLayout resultLayout = (LinearLayout) findViewById(R.id.layout_resultList);
+				
+				// Hide the progess indicator
 				resultLayout.setVisibility(View.INVISIBLE);
+				
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
