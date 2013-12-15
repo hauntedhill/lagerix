@@ -83,9 +83,6 @@ public class LoginActivity extends Activity {
 		mLoginFormView = findViewById(R.id.login_form);
 		mLoginStatusView = findViewById(R.id.login_status);
 		mLoginStatusMessageView = (TextView) findViewById(R.id.login_status_message);
-		
-		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 
 		findViewById(R.id.sign_in_button).setOnClickListener(
 				new View.OnClickListener() {
@@ -94,6 +91,17 @@ public class LoginActivity extends Activity {
 						attemptLogin();
 					}
 				});
+	}
+	
+	/**
+	 * Gets called every time the activity appears on screen
+	 */
+	@Override
+	protected void onStart() {
+		super.onStart();
+		
+		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
 	}
 
 	/**
@@ -228,6 +236,7 @@ public class LoginActivity extends Activity {
 
 		// This first REST request checks if the supplied credentials are valid.
 		// It is required because the actual login request doesn't return a proper status.
+		Log.d("login() REST-Request", "Sending REST request to: "+baseURL+getString(R.string.restURI_login1));
 		LagerixRestClient.post(baseURL+getString(R.string.restURI_login1), restParams, new TextHttpResponseHandler() {
 
 			// The first REST request was successful. The user provided valid credentials.

@@ -44,9 +44,8 @@ public class StorageOverviewActivity extends Activity {
 		yardIdView = (TextView) findViewById(R.id.label_yardIDResult);
 		yardStatusView = (TextView) findViewById(R.id.label_yardStatusResult);
 		
-		spinner = new ProgressBar(this);		
+		spinner = (ProgressBar) findViewById(R.id.activityIndicator_storageOverview);
 		resultLayout = (LinearLayout) findViewById(R.id.layout_storageOverviewResult);
-		resultLayout.addView(spinner, 1);
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
@@ -77,6 +76,7 @@ public class StorageOverviewActivity extends Activity {
 	public void getStorageOverview() {
 
 		//Submit the storage overview REST request
+		Log.d("getStorageOverview() REST-Request", "Sending REST request to: "+baseURL+getString(R.string.restURI_storageOverview));
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_storageOverview), new JsonHttpResponseHandler() {
 
 			// The REST request was successful.

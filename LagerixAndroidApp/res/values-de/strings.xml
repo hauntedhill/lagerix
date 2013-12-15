@@ -46,7 +46,6 @@
     <string name="title_activity_settings">Einstellungen</string>
     <string name="pref_header_general">Allgemein</string>
     <string name="pref_ipAddress_name">Serveradresse</string>
-    <string name="pref_ipAddress_defaultValue">https://10.185.45.1:8181</string>
 
     <!-- Strings related to search form -->
     <string name="label_search_intro">Geben Sie ein Suchkriterium ein um nach Artikelarten zu suchen:</string>
