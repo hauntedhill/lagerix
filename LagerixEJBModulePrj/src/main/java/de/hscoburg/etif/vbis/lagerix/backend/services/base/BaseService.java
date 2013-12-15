@@ -188,7 +188,7 @@ public class BaseService {
         // Address.country is a ManyToOne
         Join<Article, ArticleType> articleTypeRoot = articelRoot.join(Article_.articleType);
 
-        movementCriteria.select(movementRoot).where(cb.and(cb.equal(articleTypeRoot.get(ArticleType_.id), articleTypeId), addPermissionCheckForArticleType(articleTypeRoot, cb))).orderBy(cb.desc(movementRoot.get(Movement_.time)));
+        movementCriteria.select(movementRoot).where(cb.and(cb.equal(articleTypeRoot.get(ArticleType_.id), articleTypeId), addPermissionCheckForArticleType(articleTypeRoot, cb))).orderBy(cb.asc(movementRoot.get(Movement_.time)));
         TypedQuery<Movement> q = em.createQuery(movementCriteria);
 
         return q.getResultList();
