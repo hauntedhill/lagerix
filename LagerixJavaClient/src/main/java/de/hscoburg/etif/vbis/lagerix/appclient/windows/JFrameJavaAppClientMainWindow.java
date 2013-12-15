@@ -69,6 +69,7 @@ import javax.swing.table.DefaultTableModel;
  * @author tima0900
  */
 public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
+    private String prefixPath;
     private JPanelStockManagerArticles jPanelStockManagerArticletypes = null;
     private ArticleManagerEJBRemoteInterface articleManager = null;
     private UserManagerEJBRemoteInterface userManager = null;
@@ -83,9 +84,10 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    public JFrameJavaAppClientMainWindow() {
+    public JFrameJavaAppClientMainWindow(String prefixPath) {
         initComponents();
         initDone = true;
+        this.prefixPath = prefixPath;
     }
 
     final Integer busyLock = 1;
@@ -337,12 +339,12 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
                     Properties environment = new Properties();
                     
                     boolean configLoaded = false;
-                    File f = new File("server.conf");
+                    File f = new File(prefixPath + "server.conf");
                     if(f.exists()) 
                     {
                         try
                         {
-                            BufferedReader br = new BufferedReader(new FileReader("server.conf"));
+                            BufferedReader br = new BufferedReader(new FileReader(prefixPath + "server.conf"));
                             try {
                                 StringBuilder sb = new StringBuilder();
                                 String line = br.readLine();
@@ -408,7 +410,7 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
                     }
                     
                     System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout","10000");//10 seconds timeout for connection to glassfish ever, doesn't always work
-                    System.setProperty("java.security.auth.login.config", "auth.conf");
+                    System.setProperty("java.security.auth.login.config", prefixPath + "auth.conf");
                 
                     InitialContext ctx = new InitialContext(environment);
                     

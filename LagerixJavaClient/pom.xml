@@ -60,7 +60,7 @@
                         <manifest>          
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>dependency-jars/</classpathPrefix>                  
-                            <mainClass>de.hscoburg.etif.vbis.lagerixjavaclient.Main</mainClass>
+                            <mainClass>de.hscoburg.etif.vbis.lagerix.appclient.main.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
