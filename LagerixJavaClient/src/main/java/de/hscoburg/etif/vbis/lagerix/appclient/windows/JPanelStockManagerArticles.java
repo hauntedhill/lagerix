@@ -10,10 +10,16 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontMetrics;
+import java.awt.Graphics2D;
 import java.awt.event.ComponentAdapter;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -863,8 +869,11 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
             try {
                 bitMatrix = new Code128Writer().encode("A" + id, BarcodeFormat.CODE_128, width, height, null);
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
-                MatrixToImageWriter.writeToStream(bitMatrix, "png", streamMemoryStream);
 
+                BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+                BufferedImage barcodeAndText = process(buffImage, "A" + id);
+                ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
+                
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
 
@@ -879,6 +888,23 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         createJTableStockManagerArticles();
     }//GEN-LAST:event_jButtonStockManagerArticleNewArticleActionPerformed
 
+           private BufferedImage process(BufferedImage old, String text) {
+        int w = old.getWidth();
+        int h = old.getHeight() + 50;
+        BufferedImage img = new BufferedImage(
+            w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2d = img.createGraphics();
+        g2d.drawImage(old, 0, 0, null);
+        g2d.setPaint(Color.BLACK);
+        g2d.setFont(new Font("Serif", Font.BOLD, 20));
+        FontMetrics fm = g2d.getFontMetrics();
+        int x = (img.getWidth() - fm.stringWidth(text)) / 2;
+        int y = h - fm.getHeight();
+        g2d.drawString(text, x, y);
+        g2d.dispose();
+        return img;
+    }
+    
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
 
     }//GEN-LAST:event_jComboBox1ActionPerformed
@@ -930,8 +956,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
             try {
                 bitMatrix = new Code128Writer().encode("A" + id, BarcodeFormat.CODE_128, width, height, null);
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
-                MatrixToImageWriter.writeToStream(bitMatrix, "png", streamMemoryStream);
-
+                BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
+                BufferedImage barcodeAndText = process(buffImage, "A" + id);
+                ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
 
