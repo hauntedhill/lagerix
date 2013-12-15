@@ -1,6 +1,6 @@
-package de.hscoburg.etif.vbis.lagerixjavaclient;
+package de.hscoburg.etif.vbis.lagerix.appclient.main;
 
-import de.hscoburg.etif.vbis.lagerix.appclient.windows.MainWindow;
+import de.hscoburg.etif.vbis.lagerix.appclient.windows.JFrameJavaAppClientMainWindow;
 import java.io.File;
 import java.io.PrintWriter;
 
@@ -52,9 +52,7 @@ public class Main {
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                System.out.println( "window" );
-                new MainWindow().setVisible(true);
-                System.out.println( "window opened" );
+                new JFrameJavaAppClientMainWindow().setVisible(true);
             }
         });
     }

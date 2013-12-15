@@ -10,6 +10,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteI
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
+import java.awt.event.ComponentAdapter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -24,6 +25,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
@@ -31,64 +33,75 @@ import javax.swing.table.DefaultTableModel;
 
 /**
  * GUI Class for all Article and Articletype operations
+ *
  * @author tima0900
  */
-public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
+public class JPanelStockManagerArticles extends javax.swing.JPanel {
+
     private ArticleManagerEJBRemoteInterface articleManager = null;
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private Integer articleTypeId = null;
     private PrintService selectedPrintService = null;
     private PrintService pss[] = null;
+    private JFrameJavaAppClientMainWindow mainWindow = null;
     
     /**
      * Creates new form JPanelStockManagerArticletypes
+     *
      * @param articleManager
      * @param placeManager
      */
-    public JPanelStockManagerArticletypes(ArticleManagerEJBRemoteInterface articleManager, PlaceManagerEJBRemoteInterface placeManager) {
+    public JPanelStockManagerArticles(ArticleManagerEJBRemoteInterface articleManager, PlaceManagerEJBRemoteInterface placeManager, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.articleManager = articleManager;
         this.placeManager = placeManager;
-        
-        
+        this.mainWindow = mainWindow;
+
         jTextFieldStockManagerSearchName.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {
-              createJTableStockManagerArticletypes();
+            public void changedUpdate(DocumentEvent e) {                
+                createJTableStockManagerArticletypesInGUIThread();
             }
+
             public void removeUpdate(DocumentEvent e) {
-              createJTableStockManagerArticletypes();
+                createJTableStockManagerArticletypesInGUIThread();
             }
+
             public void insertUpdate(DocumentEvent e) {
-              createJTableStockManagerArticletypes();
+                createJTableStockManagerArticletypesInGUIThread();
             }
-       });
-        
-        
-      jTextFieldStockManagerArticleSearchDescription.getDocument().addDocumentListener(new DocumentListener() {
+        });
+
+        jTextFieldStockManagerArticleSearchDescription.getDocument().addDocumentListener(new DocumentListener() {
             public void changedUpdate(DocumentEvent e) {
-              createJTableStockManagerArticletypes();
+                createJTableStockManagerArticletypesInGUIThread();
             }
+
             public void removeUpdate(DocumentEvent e) {
-              createJTableStockManagerArticletypes();
+                createJTableStockManagerArticletypesInGUIThread();
             }
+
             public void insertUpdate(DocumentEvent e) {
-              createJTableStockManagerArticletypes();
+                createJTableStockManagerArticletypesInGUIThread();
             }
-       });
-        
+        });
+
         jTableStockManagerArticletypeTable.getSelectionModel().addListSelectionListener(
-            new javax.swing.event.ListSelectionListener() {
+                new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
                         jTableStockManagerArticletypeTableValueChanged(e);
-                    };
-            });
+                    }
+                ;
+        });
         
         jTableStockManagerArticles.getSelectionModel().addListSelectionListener(
-            new javax.swing.event.ListSelectionListener() {
+                new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
                         jTableStockManagerArticlesTableValueChanged(e);
-                    };
-            });        
+                    }
+                ;
+    }
+
+    );        
     }
 
     /**
@@ -96,21 +109,15 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
      * @param e
      */
     public void jTableStockManagerArticlesTableValueChanged(ListSelectionEvent e) {
-        if(jTableStockManagerArticles.isEnabled() && articleTypeId != null && jTableStockManagerArticles.getSelectedRow() >= 0)
-        {
+        if (jTableStockManagerArticles.isEnabled() && articleTypeId != null && jTableStockManagerArticles.getSelectedRow() >= 0) {
             jButtonStockManagerArticlePrintBarcode.setEnabled(true);
             jButtonStockManagerArticleNewArticle.setEnabled(true);
             jButtonStockManagerArticleDelete.setEnabled(true);
-        }
-        else
-        {
+        } else {
             jButtonStockManagerArticleDelete.setEnabled(false);
-            if(articleTypeId == null)
-            {
+            if (articleTypeId == null) {
                 jButtonStockManagerArticleNewArticle.setEnabled(false);
-            }
-            else
-            {
+            } else {
                 jButtonStockManagerArticleNewArticle.setEnabled(true);
             }
             jButtonStockManagerArticlePrintBarcode.setEnabled(false);
@@ -120,33 +127,56 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     /**
      *
      */
-    public void createJTableStockManagerArticles()
-    {
-        DefaultTableModel model = new DefaultTableModel(0, 1);
-        model.setColumnIdentifiers(new Object[] {"Artikel-ID"});
+    public void createJTableStockManagerArticles() {
+        mainWindow.setBusy();
 
-        if(placeManager.getStorages().size() > 0 && articleTypeId != null)
-        {
-            List<ArticleDTO> articles = articleManager.getAllArticleByArticleType(articleTypeId);
-            for(ArticleDTO article : articles)
-            {
-                model.addRow(new Object[] {article.getId()});
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                DefaultTableModel model = new DefaultTableModel(0, 1);
+                model.setColumnIdentifiers(new Object[]{"Artikel-ID"});
+
+                if (placeManager.getStorages().size() > 0 && articleTypeId != null) {
+                    List<ArticleDTO> articles = articleManager.getAllArticleByArticleType(articleTypeId);
+                    for (ArticleDTO article : articles) {
+                        model.addRow(new Object[]{article.getId()});
+                    }
+
+                    return model;
+                } else {
+                    return null;
+                }
             }
-            jTableStockManagerArticles.setModel(model);
-            TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticles);
-            tca.adjustColumns();
-            jTableStockManagerArticles.setEnabled(true);
-        }
-        else
-        {
-            jButtonStockManagerArticleDelete.setEnabled(false);
-            jButtonStockManagerArticleNewArticle.setEnabled(false);
-            jButtonStockManagerArticlePrintBarcode.setEnabled(false);
-            jTableStockManagerArticles.setModel(model);
-            TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticles);
-            tca.adjustColumns();
-            jTableStockManagerArticles.setEnabled(false);
-        }
+
+            @Override
+            public void done() {
+                try {
+                    Object returnParam = get();
+                    if (returnParam != null) {
+                        jTableStockManagerArticles.setModel((DefaultTableModel) returnParam);
+                        TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticles);
+                        tca.adjustColumns();
+                        jTableStockManagerArticles.setEnabled(true);
+                    } else {
+                        DefaultTableModel model = new DefaultTableModel(0, 1);
+                        model.setColumnIdentifiers(new Object[]{"Artikel-ID"});
+                        jButtonStockManagerArticleDelete.setEnabled(false);
+                        jButtonStockManagerArticleNewArticle.setEnabled(false);
+                        jButtonStockManagerArticlePrintBarcode.setEnabled(false);
+                        jTableStockManagerArticles.setModel(model);
+                        TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticles);
+                        tca.adjustColumns();
+                        jTableStockManagerArticles.setEnabled(false);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+
+                mainWindow.clearBusy();
+            }
+        };
+
+        worker.execute();
     }
 
     /**
@@ -154,28 +184,24 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
      * @param e
      */
     public void jTableStockManagerArticletypeTableValueChanged(ListSelectionEvent e) {
-        if(jTableStockManagerArticletypeTable.isEnabled())
-        {
-            if(jTableStockManagerArticletypeTable.getSelectedRow() >= 0)
-            {
+        if (jTableStockManagerArticletypeTable.isEnabled()) {
+            if (jTableStockManagerArticletypeTable.getSelectedRow() >= 0) {
                 String articleName = jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0).toString();
                 String articleDescription = jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 1).toString();
-                
-                articleTypeId = (Integer) ((Item)jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj();
+
+                articleTypeId = (Integer) ((Item) jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj();
                 jTextFieldStockManagerArticletypesName.setText(articleName);
                 jTextAreaStockManagerArticletypeDescription.setText(articleDescription);
                 jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(true);
                 jButtonStockManagerArticletypeModify.setEnabled(true);
-                
+
                 jButtonStockManagerArticleDelete.setEnabled(false);
                 jButtonStockManagerArticleNewArticle.setEnabled(true);
                 jButtonStockManagerArticlePrintBarcode.setEnabled(false);
                 jTableStockManagerArticles.setEnabled(true);
-                
+
                 createJTableStockManagerArticles();
-            }
-            else
-            {
+            } else {
                 articleTypeId = null;
                 jButtonStockManagerArticletypeModify.setEnabled(false);
                 jButtonStockManagerArticletypeModify.setEnabled(false);
@@ -186,39 +212,112 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
                 jButtonStockManagerArticleNewArticle.setEnabled(false);
                 jButtonStockManagerArticlePrintBarcode.setEnabled(false);
                 jTableStockManagerArticles.setEnabled(false);
-                createJTableStockManagerArticles();
+                
+                DefaultTableModel model = new DefaultTableModel(0, 1);
+                model.setColumnIdentifiers(new Object[]{"Artikel-ID"});
+                jTableStockManagerArticles.setModel(model);
             }
-        }        
+        }
     }
+
+    private class SwingWorkerHelperArticletypes extends SwingWorker {
+
+        public String filterName;
+        public String filterDescr;
+
+        @Override
+        protected Object doInBackground() {
+            articleTypeId = null;
+            DefaultTableModel model = new DefaultTableModel(0, 3);
+            model.setColumnIdentifiers(new Object[]{"Artikelartname", "Artikelartbeschreibung", "Artikelart-ID"});
+
+            if (placeManager.getStorages().size() > 0) {
+                //List<ArticleTypeDTO> articles = articleManager.getAllArticleTypes(placeManager.getStorages().get(0).getId());
+                List<ArticleTypeDTO> articles = articleManager.searchArticleType(
+                        filterName,
+                        filterDescr, null);
+
+                for (ArticleTypeDTO article : articles) {
+                    model.addRow(new Object[]{new Item((Integer) article.getId(), article.getName()), article.getDescription(), article.getId()});
+                }
+
+                return model;
+            } else {
+                return null;
+            }
+        }
+
+        @Override
+        public void done() {
+            try {
+                Object returnParam = get();
+
+                if (returnParam != null) {
+                    jTableStockManagerArticletypeTable.setModel((DefaultTableModel) returnParam);
+                    TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticletypeTable);
+                    tca.adjustColumns();
+                } else {
+                    jButtonStockManagerArticletypeModify.setEnabled(false);
+                    jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(false);
+                    jButtonStockManagerArticletypeNewArticletype.setEnabled(false);
+                    jTextAreaStockManagerArticletypeDescription.setEnabled(false);
+                    jTextFieldStockManagerArticletypesName.setEnabled(false);
+                    jButtonStockManagerArticleDelete.setEnabled(false);
+                    jButtonStockManagerArticleNewArticle.setEnabled(false);
+                    jButtonStockManagerArticlePrintBarcode.setEnabled(false);
+                    jTableStockManagerArticles.setEnabled(false);
+
+                    DefaultTableModel model = new DefaultTableModel(0, 3);
+                    model.setColumnIdentifiers(new Object[]{"Artikelartname", "Artikelartbeschreibung", "Artikelart-ID"});
+
+                    jTableStockManagerArticletypeTable.setModel(model);
+                    TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticletypeTable);
+                    tca.adjustColumns();
+                }
+
+                createJTableStockManagerArticles();
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+            mainWindow.clearBusy();
+        }
+    };
 
     /**
      *
      */
-    public void createJTableStockManagerArticletypes()
-    {
+    public void createJTableStockManagerArticletypes() {
+        mainWindow.setBusy();
+
+        SwingWorkerHelperArticletypes worker = new SwingWorkerHelperArticletypes();
+
+        worker.filterName = jTextFieldStockManagerSearchName.getText();
+        worker.filterDescr = jTextFieldStockManagerArticleSearchDescription.getText();
+        worker.execute();
+    }
+
+    private void createJTableStockManagerArticletypesInGUIThread() {
+        String filterName = jTextFieldStockManagerSearchName.getText();;
+        String filterDescr = jTextFieldStockManagerArticleSearchDescription.getText();
+
         articleTypeId = null;
         DefaultTableModel model = new DefaultTableModel(0, 3);
-        model.setColumnIdentifiers(new Object[] {"Artikeltypname", "Artikeltypbeschreibung", "Artikeltyp-ID"});
- 
-        if(placeManager.getStorages().size() > 0)
-        {
+        model.setColumnIdentifiers(new Object[]{"Artikelartname", "Artikelartbeschreibung", "Artikelart-ID"});
+
+        if (placeManager.getStorages().size() > 0) {
             //List<ArticleTypeDTO> articles = articleManager.getAllArticleTypes(placeManager.getStorages().get(0).getId());
             List<ArticleTypeDTO> articles = articleManager.searchArticleType(
-                    jTextFieldStockManagerSearchName.getText(), 
-                    jTextFieldStockManagerArticleSearchDescription.getText(), null);
-            
-            for(ArticleTypeDTO article : articles)
-            {
-                model.addRow(new Object[] {new Item((Integer) article.getId(), article.getName()), article.getDescription(), article.getId()});
+                    filterName,
+                    filterDescr, null);
+
+            for (ArticleTypeDTO article : articles) {
+                model.addRow(new Object[]{new Item((Integer) article.getId(), article.getName()), article.getDescription(), article.getId()});
             }
 
             jTableStockManagerArticletypeTable.setModel(model);
             TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticletypeTable);
             tca.adjustColumns();
-            createJTableStockManagerArticles();
-        }
-        else
-        {
+        } else {
             jButtonStockManagerArticletypeModify.setEnabled(false);
             jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(false);
             jButtonStockManagerArticletypeNewArticletype.setEnabled(false);
@@ -228,10 +327,26 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             jButtonStockManagerArticleNewArticle.setEnabled(false);
             jButtonStockManagerArticlePrintBarcode.setEnabled(false);
             jTableStockManagerArticles.setEnabled(false);
-            createJTableStockManagerArticles();
+
+            model = new DefaultTableModel(0, 3);
+            model.setColumnIdentifiers(new Object[]{"Artikelartname", "Artikelartbeschreibung", "Artikelart-ID"});
+
+            jTableStockManagerArticletypeTable.setModel(model);
+            TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticletypeTable);
+            tca.adjustColumns();
         }
+
+        model = new DefaultTableModel(0, 1);
+        model.setColumnIdentifiers(new Object[]{"Artikel-ID"});
+        jButtonStockManagerArticleDelete.setEnabled(false);
+        jButtonStockManagerArticleNewArticle.setEnabled(false);
+        jButtonStockManagerArticlePrintBarcode.setEnabled(false);
+        jTableStockManagerArticles.setModel(model);
+        TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerArticles);
+        tca.adjustColumns();
+        jTableStockManagerArticles.setEnabled(false);
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -381,7 +496,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel3.add(jTextFieldStockManagerSearchName, gridBagConstraints);
 
-        jLabel2.setText("Artikeltypname:");
+        jLabel2.setText("Artikelartname:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -395,7 +510,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel3.add(jLabel3, gridBagConstraints);
 
-        jLabel4.setText("Artikeltypbeschreibung:");
+        jLabel4.setText("Artikelartbeschreibung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -437,7 +552,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.weightx = 1.0;
         jPanel8.add(jTextFieldStockManagerArticletypesName, gridBagConstraints);
 
-        jLabel11.setText("Artikeltypname:");
+        jLabel11.setText("Artikelartname:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -457,7 +572,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel8.add(jButtonStockManagerArticletypeDeleteAndDiscard, gridBagConstraints);
 
-        jButtonStockManagerArticletypeNewArticletype.setText("Neuen Artikeltypen anlegen");
+        jButtonStockManagerArticletypeNewArticletype.setText("Neue Artikelart anlegen");
         jButtonStockManagerArticletypeNewArticletype.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButtonStockManagerArticletypeNewArticletypeActionPerformed(evt);
@@ -469,7 +584,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.LINE_START;
         jPanel8.add(jButtonStockManagerArticletypeNewArticletype, gridBagConstraints);
 
-        jLabel1.setText("Artikeltypbeschreibung:");
+        jLabel1.setText("Artikelartbeschreibung:");
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
@@ -492,7 +607,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
         gridBagConstraints.weighty = 1.0;
         jPanel8.add(jScrollPane1, gridBagConstraints);
 
-        jButtonStockManagerArticletypeModify.setText("Artikeltyp bearbeiten");
+        jButtonStockManagerArticletypeModify.setText("Artikelart bearbeiten");
         jButtonStockManagerArticletypeModify.setEnabled(false);
         jButtonStockManagerArticletypeModify.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -528,7 +643,6 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
 
         jScrollPane3.setMinimumSize(new java.awt.Dimension(350, 302));
         jScrollPane3.setName(""); // NOI18N
-        jScrollPane3.setPreferredSize(null);
 
         jTableStockManagerArticles.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -606,28 +720,22 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButtonStockManagerArticletypeDeleteAndDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticletypeDeleteAndDiscardActionPerformed
-        if(jButtonStockManagerArticletypeDeleteAndDiscard.getText().equals("Löschen"))
-        {
-            if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Artikeltypen: " +
-                jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0) +
-                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION)
-            {
-                try
-                {
-                    articleManager.deleteArticleType((Integer)(((Item)jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj()));
+        if (jButtonStockManagerArticletypeDeleteAndDiscard.getText().equals("Löschen")) {
+            if (JOptionPane.showConfirmDialog(this, "Moechten Sie die Artikelart: "
+                    + jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)
+                    + " wirklich loeschen?", "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+                    == JOptionPane.YES_OPTION) {
+                try {
+                    articleManager.deleteArticleType((Integer) (((Item) jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)).getObj()));
                     createJTableStockManagerArticletypes();
-                } catch(Exception ex)
-                {
-                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Artikeltyps: "
+                } catch (Exception ex) {
+                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen der Artikelart: "
                             + jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0)
-                            + ". Bitte loeschen Sie zuerst alle Artikel dieses Artikeltyps.", 
+                            + ". Bitte loeschen Sie zuerst alle Artikel dieser Artikelart.",
                             "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }
-        else
-        {
+        } else {
             jButtonStockManagerArticletypeDeleteAndDiscard.setText("Löschen");
             jButtonStockManagerArticletypeNewArticletype.setEnabled(true);
             jTextFieldStockManagerArticletypesName.setEnabled(false);
@@ -636,23 +744,22 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             jTextAreaStockManagerArticletypeDescription.setText("");
             jButtonStockManagerArticletypeDeleteAndDiscard.setText("Löschen");
             jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(false);
-            jButtonStockManagerArticletypeNewArticletype.setText("Neuen Artikeltypen anlegen");
+            jButtonStockManagerArticletypeNewArticletype.setText("Neue Artikelart anlegen");
             jButtonStockManagerArticletypeModify.setEnabled(false);
-            jButtonStockManagerArticletypeModify.setText("Artikeltyp bearbeiten");
+            jButtonStockManagerArticletypeModify.setText("Artikelart bearbeiten");
             jTableStockManagerArticletypeTable.setEnabled(true);
-            
+
             jButtonStockManagerArticleDelete.setEnabled(false);
             jButtonStockManagerArticleNewArticle.setEnabled(false);
             jButtonStockManagerArticlePrintBarcode.setEnabled(false);
             jTableStockManagerArticles.setEnabled(false);
-            
+
             createJTableStockManagerArticletypes();
         }
     }//GEN-LAST:event_jButtonStockManagerArticletypeDeleteAndDiscardActionPerformed
 
     private void jButtonStockManagerArticletypeNewArticletypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticletypeNewArticletypeActionPerformed
-        if(!jButtonStockManagerArticletypeNewArticletype.getText().equals("Speichern"))
-        {
+        if (!jButtonStockManagerArticletypeNewArticletype.getText().equals("Speichern")) {
             articleTypeId = null;
             jButtonStockManagerArticletypeModify.setEnabled(false);
             jButtonStockManagerArticletypeNewArticletype.setText("Speichern");
@@ -665,18 +772,16 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
 
             jTextFieldStockManagerArticletypesName.setText("");
             jTextAreaStockManagerArticletypeDescription.setText("");
-        }
-        else
-        {
+        } else {
             String articletypeName = jTextFieldStockManagerArticletypesName.getText();
             String articletypeDescription = jTextAreaStockManagerArticletypeDescription.getText();
-  
-            articleManager.createNewArticleType(articletypeName, articletypeDescription, 
+
+            articleManager.createNewArticleType(articletypeName, articletypeDescription,
                     placeManager.getStorages().get(0).getId());
 
             jButtonStockManagerArticletypeDeleteAndDiscard.setText("Löschen");
             jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(false);
-            jButtonStockManagerArticletypeNewArticletype.setText("Neuen Artikeltypen anlegen");
+            jButtonStockManagerArticletypeNewArticletype.setText("Neue Artikelart anlegen");
             jTableStockManagerArticletypeTable.setEnabled(true);
             jTextFieldStockManagerArticletypesName.setEnabled(false);
             jTextFieldStockManagerArticletypesName.setText("");
@@ -687,8 +792,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     }//GEN-LAST:event_jButtonStockManagerArticletypeNewArticletypeActionPerformed
 
     private void jButtonStockManagerArticletypeModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticletypeModifyActionPerformed
-        if(!jButtonStockManagerArticletypeModify.getText().equals("Speichern"))
-        {
+        if (!jButtonStockManagerArticletypeModify.getText().equals("Speichern")) {
             jButtonStockManagerArticletypeModify.setText("Speichern");
             jButtonStockManagerArticletypeDeleteAndDiscard.setText("Abbrechen");
             jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(true);
@@ -699,9 +803,7 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             jButtonStockManagerArticleNewArticle.setEnabled(false);
             jButtonStockManagerArticlePrintBarcode.setEnabled(false);
             jTableStockManagerArticles.setEnabled(false);
-        }
-        else
-        {
+        } else {
             Integer artTypeId = articleTypeId;
             String desription = jTextAreaStockManagerArticletypeDescription.getText();
             String name = jTextFieldStockManagerArticletypesName.getText();
@@ -710,19 +812,19 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
             article.setDescription(desription);
             article.setName(name);
             articleManager.updateArticleType(article);
-            
+
             jTextAreaStockManagerArticletypeDescription.setText("");
             jTextAreaStockManagerArticletypeDescription.setEnabled(false);
-            
+
             jTextFieldStockManagerArticletypesName.setText("");
             jTextFieldStockManagerArticletypesName.setEnabled(false);
-            
+
             jButtonStockManagerArticletypeDeleteAndDiscard.setText("Löschen");
             jButtonStockManagerArticletypeDeleteAndDiscard.setEnabled(false);
-            
-            jButtonStockManagerArticletypeModify.setText("Artikeltyp bearbeiten");
+
+            jButtonStockManagerArticletypeModify.setText("Artikelart bearbeiten");
             jButtonStockManagerArticletypeModify.setEnabled(false);
-            
+
             jButtonStockManagerArticleDelete.setEnabled(false);
             jButtonStockManagerArticleNewArticle.setEnabled(false);
             jButtonStockManagerArticlePrintBarcode.setEnabled(false);
@@ -734,48 +836,46 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
     private void jButtonStockManagerArticleNewArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticleNewArticleActionPerformed
         ArticleDTO article = articleManager.createNewArticle(articleTypeId);
         int id = article.getId();
-        
-        int width = 440; 
-        int height = 48;            
-        
+
+        int width = 440;
+        int height = 48;
+
         selectedPrintService = null;
         PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
         pras.add(new Copies(1));
         pss = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.PNG, pras);
-        
+
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for(int cnt = 0; cnt < pss.length; cnt++)
-        {
+        for (int cnt = 0; cnt < pss.length; cnt++) {
             model.addElement(pss[cnt].getName());
         }
-        
+
         jComboBox1.setModel(model);
-                
+
         jComboBox1.doLayout();
         jComboBox1.invalidate();
-        
+
         jDialog1.setModal(true);
         jDialog1.setVisible(true);
-        
-        if(selectedPrintService != null)
-        {
+
+        if (selectedPrintService != null) {
             BitMatrix bitMatrix;
             try {
-                bitMatrix = new Code128Writer().encode("A" + id,BarcodeFormat.CODE_128,width,height,null);
+                bitMatrix = new Code128Writer().encode("A" + id, BarcodeFormat.CODE_128, width, height, null);
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
                 MatrixToImageWriter.writeToStream(bitMatrix, "png", streamMemoryStream);
-                
+
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
-                                
+
                 DocPrintJob job = selectedPrintService.createPrintJob();
                 Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
-                job.print(doc, pras); 
-                streamInput.close();                
+                job.print(doc, pras);
+                streamInput.close();
             } catch (Exception e) {
-            }    
-        }                                                                  
-        
+            }
+        }
+
         createJTableStockManagerArticles();
     }//GEN-LAST:event_jButtonStockManagerArticleNewArticleActionPerformed
 
@@ -803,68 +903,63 @@ public class JPanelStockManagerArticletypes extends javax.swing.JPanel {
 
     private void jButtonStockManagerArticlePrintBarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticlePrintBarcodeActionPerformed
         int id = (Integer) jTableStockManagerArticles.getValueAt(jTableStockManagerArticles.getSelectedRow(), 0);
-        
-        int width = 440; 
-        int height = 48;            
-        
+
+        int width = 440;
+        int height = 48;
+
         selectedPrintService = null;
         PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
         pras.add(new Copies(1));
         pss = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.PNG, pras);
-        
+
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for(int cnt = 0; cnt < pss.length; cnt++)
-        {
+        for (int cnt = 0; cnt < pss.length; cnt++) {
             model.addElement(pss[cnt].getName());
         }
-        
+
         jComboBox1.setModel(model);
-                
+
         jComboBox1.doLayout();
         jComboBox1.invalidate();
-        
+
         jDialog1.setModal(true);
         jDialog1.setVisible(true);
-        
-        if(selectedPrintService != null)
-        {
+
+        if (selectedPrintService != null) {
             BitMatrix bitMatrix;
             try {
-                bitMatrix = new Code128Writer().encode("A" + id,BarcodeFormat.CODE_128,width,height,null);
+                bitMatrix = new Code128Writer().encode("A" + id, BarcodeFormat.CODE_128, width, height, null);
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
                 MatrixToImageWriter.writeToStream(bitMatrix, "png", streamMemoryStream);
-                
+
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
-                                
+
                 DocPrintJob job = selectedPrintService.createPrintJob();
                 Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
-                job.print(doc, pras); 
-                streamInput.close();                
+                job.print(doc, pras);
+                streamInput.close();
             } catch (Exception e) {
-            }    
-        } 
+            }
+        }
     }//GEN-LAST:event_jButtonStockManagerArticlePrintBarcodeActionPerformed
 
     private void jButtonStockManagerArticleDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticleDeleteActionPerformed
         int id = (Integer) jTableStockManagerArticles.getValueAt(jTableStockManagerArticles.getSelectedRow(), 0);
-        if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Artikel mit der ID: " +
-                id +
-                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION)
-        {
-            try
-            {
+        if (JOptionPane.showConfirmDialog(this, "Moechten Sie den Artikel mit der ID: "
+                + id
+                + " wirklich loeschen?", "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+                == JOptionPane.YES_OPTION) {
+            try {
                 articleManager.deleteArticle(id);
                 jButtonStockManagerArticleDelete.setEnabled(false);
                 jButtonStockManagerArticlePrintBarcode.setEnabled(false);
                 createJTableStockManagerArticles();
-            } catch(Exception ex)
-            {
+            } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Artikels mit der ID: "
-                            + id
-                            + ".", 
-                            "Fehler", JOptionPane.ERROR_MESSAGE);
+                        + id
+                        + ".",
+                        "Fehler", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_jButtonStockManagerArticleDeleteActionPerformed

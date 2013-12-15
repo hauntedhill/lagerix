@@ -181,7 +181,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel2">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Artikeltypname:"/>
+                    <Property name="text" type="java.lang.String" value="Artikelartname:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -201,7 +201,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Artikeltypbeschreibung:"/>
+                    <Property name="text" type="java.lang.String" value="Artikelartbeschreibung:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -254,7 +254,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel11">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Artikeltypname:"/>
+                    <Property name="text" type="java.lang.String" value="Artikelartname:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -278,7 +278,7 @@
                 </Component>
                 <Component class="javax.swing.JButton" name="jButtonStockManagerArticletypeNewArticletype">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Neuen Artikeltypen anlegen"/>
+                    <Property name="text" type="java.lang.String" value="Neue Artikelart anlegen"/>
                   </Properties>
                   <Events>
                     <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButtonStockManagerArticletypeNewArticletypeActionPerformed"/>
@@ -291,7 +291,7 @@
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel1">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Artikeltypbeschreibung:"/>
+                    <Property name="text" type="java.lang.String" value="Artikelartbeschreibung:"/>
                   </Properties>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout" value="org.netbeans.modules.form.compat2.layouts.DesignGridBagLayout$GridBagConstraintsDescription">
@@ -327,7 +327,7 @@
                 </Container>
                 <Component class="javax.swing.JButton" name="jButtonStockManagerArticletypeModify">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="Artikeltyp bearbeiten"/>
+                    <Property name="text" type="java.lang.String" value="Artikelart bearbeiten"/>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                   <Events>

@@ -17,6 +17,9 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.print.Doc;
 import javax.print.DocFlavor;
 import javax.print.DocPrintJob;
@@ -28,6 +31,7 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -39,14 +43,15 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private PrintService selectedPrintService = null;
     private PrintService pss[] = null;
+    private JFrameJavaAppClientMainWindow mainWindow = null;
     
     /**
      * Creates new form JPanelStockManagerYards
      */
-    public JPanelStockManagerYards(PlaceManagerEJBRemoteInterface placeManager) {
+    public JPanelStockManagerYards(PlaceManagerEJBRemoteInterface placeManager, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.placeManager = placeManager;
-        
+        this.mainWindow = mainWindow;
         jTableStockManagerYardsTable.getSelectionModel().addListSelectionListener(
             new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
@@ -277,33 +282,64 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
 
     public void createJTableStockManagerYards()
     {
-        if(placeManager.getStorages().size() > 0)
-        {
-            jButtonStockManagerPrintYardBarcode.setEnabled(false);
-            jButtonStockManagerYardDelete.setEnabled(false);
-            jTextFieldStockManagerYardId.setEnabled(false);
-            
-            DefaultTableModel model = new DefaultTableModel(0, 1);
-            model.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
+        mainWindow.setBusy();
+        
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                if(placeManager.getStorages().size() > 0)
+                {
+                    DefaultTableModel model = new DefaultTableModel(0, 1);
+                    model.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
 
-            List<YardDTO> yards = placeManager.getAllYards(placeManager.getStorages().get(0).getId());
+                    List<YardDTO> yards = placeManager.getAllYards(placeManager.getStorages().get(0).getId());
 
-            for(YardDTO yard : yards)
-            {
-                model.addRow(new Object[] {(Integer)yard.getId()});
+                    for(YardDTO yard : yards)
+                    {
+                        model.addRow(new Object[] {(Integer)yard.getId()});
+                    }
+                    
+                    return model;
+                }
+                else
+                {
+                    return null;
+                }
             }
-
-            jTableStockManagerYardsTable.setModel(model);
-            TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerYardsTable);
-            tca.adjustColumns();
-        }
-        else
-        {
-            jButtonStockManagerPrintYardBarcode.setEnabled(false);
-            jButtonStockManagerYardDelete.setEnabled(false);
-            jButtonStockManagerYardNewYard.setEnabled(false);
-            jTextFieldStockManagerYardId.setEnabled(false);
-        }
+            
+            @Override
+            public void done() {
+                try {
+                    Object returnParam = get();
+                    if(returnParam != null)
+                    {
+                        jButtonStockManagerPrintYardBarcode.setEnabled(false);
+                        jButtonStockManagerYardDelete.setEnabled(false);
+                        jTextFieldStockManagerYardId.setEnabled(false);
+                        jTableStockManagerYardsTable.setModel((DefaultTableModel)returnParam);
+                        TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerYardsTable);
+                        tca.adjustColumns();
+                    }
+                    else
+                    {
+                        DefaultTableModel model = new DefaultTableModel(0, 1);
+                        model.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
+                        jTableStockManagerYardsTable.setModel(model);
+                        
+                        jButtonStockManagerPrintYardBarcode.setEnabled(false);
+                        jButtonStockManagerYardDelete.setEnabled(false);
+                        jButtonStockManagerYardNewYard.setEnabled(false);
+                        jTextFieldStockManagerYardId.setEnabled(false);
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                
+                mainWindow.clearBusy();
+            }
+        };
+        
+        worker.execute();
     }
 
     

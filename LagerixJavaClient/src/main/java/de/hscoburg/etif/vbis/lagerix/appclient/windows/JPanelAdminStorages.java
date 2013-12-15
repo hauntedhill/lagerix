@@ -14,8 +14,12 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -26,12 +30,14 @@ import javax.swing.table.DefaultTableModel;
 public class JPanelAdminStorages extends javax.swing.JPanel {
 
     private PlaceManagerEJBRemoteInterface placeManager = null;
+    private JFrameJavaAppClientMainWindow mainWindow = null;
     /**
      * Creates new form JPanelAdminStorages
      */
-    public JPanelAdminStorages(PlaceManagerEJBRemoteInterface placeManager) {
+    public JPanelAdminStorages(PlaceManagerEJBRemoteInterface placeManager, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.placeManager = placeManager;
+        this.mainWindow = mainWindow;
         
         jTableAdminStoragesTable.getSelectionModel().addListSelectionListener(
             new javax.swing.event.ListSelectionListener() {
@@ -235,20 +241,40 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
 
     public void createJTableAdminStorage()
     {
-        jButtonAdminStorageDeleteAndDiscard.setEnabled(false);
-        DefaultTableModel model = new DefaultTableModel(0, 2);
-        model.setColumnIdentifiers(new Object[] {"Lagername", "Lager-ID"});
- 
-        List<StorageDTO> storages = placeManager.getAllStorages();
+        mainWindow.setBusy();
         
-        for(StorageDTO storage : storages)
-        {
-            model.addRow(new Object[] {storage.getName(), storage.getId()});
-        }
- 
-        jTableAdminStoragesTable.setModel(model);
-        TableColumnAdjuster tca = new TableColumnAdjuster(jTableAdminStoragesTable);
-        tca.adjustColumns();
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                DefaultTableModel model = new DefaultTableModel(0, 2);
+                model.setColumnIdentifiers(new Object[] {"Lagername", "Lager-ID"});
+
+                List<StorageDTO> storages = placeManager.getAllStorages();
+
+                for(StorageDTO storage : storages)
+                {
+                    model.addRow(new Object[] {storage.getName(), storage.getId()});
+                }
+                return model;
+            }
+            
+            @Override
+            public void done() {
+                try {
+                    DefaultTableModel model = (DefaultTableModel) get();
+                    jButtonAdminStorageDeleteAndDiscard.setEnabled(false);
+                    jTableAdminStoragesTable.setModel(model);
+                    TableColumnAdjuster tca = new TableColumnAdjuster(jTableAdminStoragesTable);
+                    tca.adjustColumns();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                
+                mainWindow.clearBusy();
+            }
+        };
+       
+        worker.execute();
     }
   
     

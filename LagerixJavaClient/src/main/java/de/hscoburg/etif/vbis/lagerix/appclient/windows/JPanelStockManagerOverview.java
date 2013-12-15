@@ -15,6 +15,10 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingWorker;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -24,73 +28,97 @@ import javax.swing.table.DefaultTableModel;
 public class JPanelStockManagerOverview extends javax.swing.JPanel {
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private ArticleManagerEJBRemoteInterface articleManager = null;
+    private JFrameJavaAppClientMainWindow mainWindow = null;
         
     /**
      * Creates new form JPanelStockManagerOverview
      */
-    public JPanelStockManagerOverview(PlaceManagerEJBRemoteInterface placeManager, ArticleManagerEJBRemoteInterface articleManager) {
+    public JPanelStockManagerOverview(PlaceManagerEJBRemoteInterface placeManager, ArticleManagerEJBRemoteInterface articleManager, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.articleManager = articleManager;
         this.placeManager = placeManager;
+        this.mainWindow = mainWindow;
     }
 
     public void createTables()
     {
-        DefaultTableModel modelFree = new DefaultTableModel(0, 1);
-        modelFree.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
-        DefaultTableModel modelOccupied = new DefaultTableModel(0, 4);
-        modelOccupied.setColumnIdentifiers(new Object[] {"Lagerplatz-ID", "Artikeltypname", "Artikeltyp-ID", "Artikel-ID"});
-        if(placeManager.getStorages().size() > 0)
-        {
-            List<Integer> occupiedYards = new ArrayList<Integer>();
-            List<Integer> freeYards = new ArrayList<Integer>();
-            StorageDTO storage = placeManager.getStorages().get(0);
-            List<YardDTO> yards = placeManager.getAllYards(storage.getId());
-            List<ArticleTypeDTO> articleTypes = articleManager.getAllArticleTypes(storage.getId());
-            for(ArticleTypeDTO articleType : articleTypes)
-            {
-                List<ArticleDTO> articles = articleManager.getAllArticleByArticleType(articleType.getId());
-                for(ArticleDTO article : articles)
+        mainWindow.setBusy();
+        
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                DefaultTableModel modelFree = new DefaultTableModel(0, 1);
+                modelFree.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
+                DefaultTableModel modelOccupied = new DefaultTableModel(0, 4);
+                modelOccupied.setColumnIdentifiers(new Object[] {"Lagerplatz-ID", "Artikeltypname", "Artikeltyp-ID", "Artikel-ID"});
+                if(placeManager.getStorages().size() > 0)
                 {
-                    if(article.getYardID() != 0)
+                    List<Integer> occupiedYards = new ArrayList<Integer>();
+                    List<Integer> freeYards = new ArrayList<Integer>();
+                    StorageDTO storage = placeManager.getStorages().get(0);
+                    List<YardDTO> yards = placeManager.getAllYards(storage.getId());
+                    List<ArticleTypeDTO> articleTypes = articleManager.getAllArticleTypes(storage.getId());
+                    for(ArticleTypeDTO articleType : articleTypes)
                     {
-                        occupiedYards.add(article.getYardID());
-                        modelOccupied.addRow(new Object[] {article.getYardID(), articleType.getName(),
-                                                    articleType.getId(), article.getId()});
+                        List<ArticleDTO> articles = articleManager.getAllArticleByArticleType(articleType.getId());
+                        for(ArticleDTO article : articles)
+                        {
+                            if(article.getYardID() != 0)
+                            {
+                                occupiedYards.add(article.getYardID());
+                                modelOccupied.addRow(new Object[] {article.getYardID(), articleType.getName(),
+                                                            articleType.getId(), article.getId()});
+                            }
+                        }
+                    }            
+
+                    for(YardDTO yard : yards)
+                    {
+                        boolean inOccupied = false;
+                        for(Integer occupiedYard : occupiedYards)
+                        {
+                            if(occupiedYard == yard.getId())
+                            {
+                                inOccupied = true;
+                                break;
+                            }
+                        }
+
+                        if(inOccupied == false)
+                        {
+                            freeYards.add(yard.getId());
+                        }
+                    }
+
+                    for(Integer yard : freeYards)
+                    {
+                        modelFree.addRow(new Object[] {yard});
                     }
                 }
+                return new Object[] {modelFree, modelOccupied};
             }
-            
-            
-            for(YardDTO yard : yards)
-            {
-                boolean inOccupied = false;
-                for(Integer occupiedYard : occupiedYards)
-                {
-                    if(occupiedYard == yard.getId())
-                    {
-                        inOccupied = true;
-                        break;
-                    }
-                }
                 
-                if(inOccupied == false)
-                {
-                    freeYards.add(yard.getId());
+            @Override
+            public void done() {
+                try {
+                    Object[] returnParam = (Object[]) get();
+                    DefaultTableModel modelFree = (DefaultTableModel)returnParam[0];
+                    DefaultTableModel modelOccupied = (DefaultTableModel)returnParam[1];
+                    
+                    jTableStockManagerOverviewFreeYards.setModel(modelFree);
+                    jTableStockManagerOverviewOccupiedYards.setModel(modelOccupied);
+                    TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerOverviewFreeYards);
+                    tca.adjustColumns();
+                    TableColumnAdjuster tca2 = new TableColumnAdjuster(jTableStockManagerOverviewOccupiedYards); 
+                    tca2.adjustColumns();
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
+                mainWindow.clearBusy();
             }
-            
-            for(Integer yard : freeYards)
-            {
-                modelFree.addRow(new Object[] {yard});
-            }
-        }
-        jTableStockManagerOverviewFreeYards.setModel(modelFree);
-        jTableStockManagerOverviewOccupiedYards.setModel(modelOccupied);
-        TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerOverviewFreeYards);
-        tca.adjustColumns();
-        TableColumnAdjuster tca2 = new TableColumnAdjuster(jTableStockManagerOverviewOccupiedYards);
-        tca2.adjustColumns();        
+        }; 
+        
+        worker.execute();
     }
     
     /**

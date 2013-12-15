@@ -21,7 +21,7 @@ import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
-import static de.hscoburg.etif.vbis.lagerixjavaclient.Main.serverConfig;
+import static de.hscoburg.etif.vbis.lagerix.appclient.main.Main.serverConfig;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Component;
@@ -31,7 +31,12 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -63,14 +68,14 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author tima0900
  */
-public class MainWindow extends javax.swing.JFrame {
-    private JPanelStockManagerArticletypes jPanelStockManagerArticletypes = null;
+public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
+    private JPanelStockManagerArticles jPanelStockManagerArticletypes = null;
     private ArticleManagerEJBRemoteInterface articleManager = null;
     private UserManagerEJBRemoteInterface userManager = null;
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private boolean initDone = false;
     private ProgrammaticLogin pl = new ProgrammaticLogin();
-    private MainWindow thisWindow = this;
+    private JFrameJavaAppClientMainWindow thisWindow = this;
     private JPanelAdminUsers jPanelAdminUsers = null;
     private JPanelAdminStorages jPanelAdminStorages = null;
     private JPanelStockManagerYards jPanelStockManagerYards = null;
@@ -78,7 +83,7 @@ public class MainWindow extends javax.swing.JFrame {
     /**
      * Creates new form MainWindow
      */
-    public MainWindow() {
+    public JFrameJavaAppClientMainWindow() {
         initComponents();
         initDone = true;
     }
@@ -86,7 +91,7 @@ public class MainWindow extends javax.swing.JFrame {
     final Integer busyLock = 1;
     Integer busyCounter = 0;
     
-    private void setBusy()
+    public void setBusy()
     {
         synchronized (busyLock) {
             if(busyCounter == 0)
@@ -99,7 +104,7 @@ public class MainWindow extends javax.swing.JFrame {
         }
     }
     
-    private void clearBusy()
+    public void clearBusy()
     {
         synchronized (busyLock) {
             busyCounter--;
@@ -327,6 +332,8 @@ public class MainWindow extends javax.swing.JFrame {
             protected Object doInBackground() throws Exception {
                 try
                 {        
+                    String host = null;
+                    int port = 0;
                     Properties environment = new Properties();
                     
                     boolean configLoaded = false;
@@ -351,11 +358,14 @@ public class MainWindow extends javax.swing.JFrame {
                                 {
                                     environment.put("org.omg.CORBA.ORBInitialHost", splittedtFileContents[0].trim());
                                     environment.put("org.omg.CORBA.ORBInitialPort", splittedtFileContents[1].trim());
+                                    
+                                    host = splittedtFileContents[0].trim();
+                                    port = Integer.parseInt(splittedtFileContents[1].trim());
                                     configLoaded = true;
                                 }
                             } catch(Exception ex)
                             {
-
+                                System.err.print("Fehlerhafte \"server.conf\" Konfigurationsdatei");
                             } finally {
                                 br.close();
                             }
@@ -370,9 +380,34 @@ public class MainWindow extends javax.swing.JFrame {
                         environment.put("org.omg.CORBA.ORBInitialPort", "3700");
                         JOptionPane.showMessageDialog(thisWindow, "Fehler beim Laden der server.conf Datei. "
                                 + "Es werden die Standard Einstellungen benutzt.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                    
+                        host = "localhost";
+                        port = 3700;
                     }
                     
-                    System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout","10000");//10 seconds timeout for connection to glassfish ever
+                    SocketAddress sockaddr = new InetSocketAddress(host, port);
+                    // Create your socket
+                    Socket socket = new Socket();
+                    boolean online = true;
+                    // Connect with 10 s timeout
+                    try {
+                        socket.connect(sockaddr, 10000);
+                    } catch (Exception ex) {
+                        online = false;    
+                    } finally {
+                        try {
+                            socket.close();
+                        } catch (IOException ex) {
+                            //bad but nothing else can be done
+                        }
+                    }
+                    
+                    if(!online)
+                    {
+                        return null;//server offline, doesn't make sense to try to connect
+                    }
+                    
+                    System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout","10000");//10 seconds timeout for connection to glassfish ever, doesn't always work
                     System.setProperty("java.security.auth.login.config", "auth.conf");
                 
                     InitialContext ctx = new InitialContext(environment);
@@ -395,6 +430,7 @@ public class MainWindow extends javax.swing.JFrame {
                     placeManager = null;
                     pl.logout();                    
                 }               
+               
                 return null;
             }
             
@@ -411,8 +447,8 @@ public class MainWindow extends javax.swing.JFrame {
                          if(userManager.isInGroup(GroupType.ADMINISTRATOR))
                          {
                              UserDTO loggedInUsr = userManager.find(usrName);
-                             jPanelAdminUsers = new JPanelAdminUsers(userManager, placeManager, loggedInUsr);
-                             jPanelAdminStorages = new JPanelAdminStorages(placeManager);
+                             jPanelAdminUsers = new JPanelAdminUsers(userManager, placeManager, loggedInUsr, thisWindow);
+                             jPanelAdminStorages = new JPanelAdminStorages(placeManager, thisWindow);
                              jTabbedPaneAdministrator.removeAll();
                              jTabbedPaneAdministrator.addTab("Benutzerverwaltung", jPanelAdminUsers);
                              jTabbedPaneAdministrator.addTab("Lagerverwaltung", jPanelAdminStorages);
@@ -424,9 +460,9 @@ public class MainWindow extends javax.swing.JFrame {
                          }
                          else if(userManager.isInGroup(GroupType.LAGERVERWALTER))
                          {
-                            jPanelStockManagerOverview = new JPanelStockManagerOverview(placeManager, articleManager);
-                            jPanelStockManagerArticletypes = new JPanelStockManagerArticletypes(articleManager, placeManager);
-                            jPanelStockManagerYards = new JPanelStockManagerYards(placeManager);
+                            jPanelStockManagerOverview = new JPanelStockManagerOverview(placeManager, articleManager, thisWindow);
+                            jPanelStockManagerArticletypes = new JPanelStockManagerArticles(articleManager, placeManager, thisWindow);
+                            jPanelStockManagerYards = new JPanelStockManagerYards(placeManager, thisWindow);
                             jTabbedPaneStockMan.removeAll();
                             jTabbedPaneStockMan.addTab("Lagerplatzverwaltung", jPanelStockManagerYards);
                             jTabbedPaneStockMan.addTab("Artikelverwaltung", jPanelStockManagerArticletypes);
@@ -452,8 +488,10 @@ public class MainWindow extends javax.swing.JFrame {
                    // ex.printStackTrace();
                     System.out.println(ex.toString());
                 }
+                
                 clearBusy();
             }
+ 
         };
        
        worker.execute();

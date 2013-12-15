@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
@@ -29,17 +30,19 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
     private UserManagerEJBRemoteInterface userManager = null;
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private UserDTO loggedInUsr = null;
+    private JFrameJavaAppClientMainWindow mainWindow = null;
     /**
      * Creates new form JPanelAdminUsers
      * @param userManager
      * @param placeManager
      * @param user
      */
-    public JPanelAdminUsers(UserManagerEJBRemoteInterface userManager, PlaceManagerEJBRemoteInterface placeManager, UserDTO user) {
+    public JPanelAdminUsers(UserManagerEJBRemoteInterface userManager, PlaceManagerEJBRemoteInterface placeManager, UserDTO user, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.userManager = userManager;
         this.placeManager = placeManager;
         loggedInUsr = user;
+        this.mainWindow = mainWindow;
         
         jTableAdminUsersTable.getSelectionModel().addListSelectionListener(
             new javax.swing.event.ListSelectionListener() {
@@ -487,42 +490,67 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
        
     public void createJTableAdminUsers()
     {
-        jButtonAdminUserDeleteAndDiscard.setEnabled(false);
-        jButtonAdminUserEditAndSave.setEnabled(false);
+                mainWindow.setBusy();
         
-        List<UserDTO> users = userManager.getAllUsers();
-
-        DefaultTableModel model = new DefaultTableModel(0, 5);
-        model.setColumnIdentifiers(new Object[] {"Benutzername", "Rolle", "Lager", "Vorname", "Nachname"});
-        for(UserDTO user : users)
-        {
-            String storageName = "";
-            List<GroupDTO> groups = user.getGroups();
-            
-            if(groups.get(0).getGroup() == GroupType.LAGERARBEITER 
-                    || groups.get(0).getGroup() == GroupType.LAGERVERWALTER)
-            {
-                Integer storageId = null;
-                try
+        SwingWorker worker = new SwingWorker() {
+            @Override
+            protected Object doInBackground() {
+                List<UserDTO> users = userManager.getAllUsers();
+                DefaultTableModel model = new DefaultTableModel(0, 5);
+                model.setColumnIdentifiers(new Object[] {"Benutzername", "Rolle", "Lager", "Vorname", "Nachname"});
+                for(UserDTO user : users)
                 {
-                    storageId = groups.get(0).getStorageId().get(0);
-                } catch(Exception ex) {  }
-                
-                if(storageId != null)
-                {
+                    String storageName = "";
+                    List<GroupDTO> groups = user.getGroups();
+                    String groupName = "";
                     try
                     {
-                        storageName = placeManager.getStorage(storageId).getName();
-                    } catch(Exception ex){ }
+                        if(groups.get(0).getGroup() == GroupType.LAGERARBEITER 
+                                || groups.get(0).getGroup() == GroupType.LAGERVERWALTER)
+                        {
+                            Integer storageId = null;
+                            try
+                            {
+                                storageId = groups.get(0).getStorageId().get(0);
+                            } catch(Exception ex) {  }
+
+                            if(storageId != null)
+                            {
+                                try
+                                {
+                                    storageName = placeManager.getStorage(storageId).getName();
+                                } catch(Exception ex){ }
+                            }
+                        }
+
+                        groupName = groups.get(0).getGroup().toString();
+                    } catch(Exception ex)
+                    {  }
+                    model.addRow(new Object[] {user.getEmail(), groupName,
+                                storageName, user.getFname(), user.getLname()});
                 }
+                
+                return model;
             }
             
-            model.addRow(new Object[] {user.getEmail(), groups.get(0).getGroup().toString(),
-                        storageName, user.getFname(), user.getLname()});
-        }
-        jTableAdminUsersTable.setModel(model);
-        TableColumnAdjuster tca = new TableColumnAdjuster(jTableAdminUsersTable);
-        tca.adjustColumns();
+            @Override
+            public void done() {
+                try {
+                    DefaultTableModel model = (DefaultTableModel) get();
+
+                    jButtonAdminUserDeleteAndDiscard.setEnabled(false);
+                    jButtonAdminUserEditAndSave.setEnabled(false);
+                    jTableAdminUsersTable.setModel(model);
+                    TableColumnAdjuster tca = new TableColumnAdjuster(jTableAdminUsersTable);
+                    tca.adjustColumns();                   
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+                mainWindow.clearBusy();
+            }
+        };
+        
+        worker.execute();
     }
     
     
