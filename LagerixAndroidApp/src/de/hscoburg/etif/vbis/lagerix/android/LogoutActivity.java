@@ -57,6 +57,7 @@ public class LogoutActivity extends Activity {
 
 		LagerixRestClient.get(baseURL+getString(R.string.restURI_logout), new TextHttpResponseHandler() {
 
+			// The REST request was successful.
 			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 				Log.d("logout(): REST-Request", "Response: "+responseBody);
@@ -82,12 +83,16 @@ public class LogoutActivity extends Activity {
 				}
 			}
 
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 				Log.e("logout(): REST-Request", "Error: "+responseBody);
 				Log.e("logout(): REST-Request", "Statuscode: "+statusCode);
+				
+				// Hide the progess indicator
 				showProgress(false);
 				
+				//Show an error message depending on the status code and send the user back to the scan activity
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else

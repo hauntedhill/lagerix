@@ -38,7 +38,7 @@ public class SearchResultDetailActivity extends Activity {
 	TextView articleIdView;
 	TextView articleNameView;
 	TextView articleDescriptionView;
-	TextView storageLocationsView;
+	TextView yardsView;
 	ProgressBar spinner;
 	LinearLayout resultLayout;
 	
@@ -56,7 +56,7 @@ public class SearchResultDetailActivity extends Activity {
 		articleIdView = (TextView) findViewById(R.id.label_articleID_value);
 		articleNameView = (TextView) findViewById(R.id.label_articleName_value);
 		articleDescriptionView = (TextView) findViewById(R.id.label_articleDescription_value);
-		storageLocationsView = (TextView) findViewById(R.id.label_storageLocations_value);
+		yardsView = (TextView) findViewById(R.id.label_yards_value);
 		
 		SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
 		baseURL = sharedPref.getString("server_ip", getString(R.string.ipAddress_default));
@@ -93,6 +93,11 @@ public class SearchResultDetailActivity extends Activity {
 	    }
 	}
 
+	/**
+	 * Performs a REST request to get all yards, where an article type is stored in
+	 * The results are displayed in yardsView
+	 * @param articleTypeId ID of the article type
+	 */
 	private void getYards(int articleTypeId) {
 
 		//Submit the search REST request
@@ -101,15 +106,15 @@ public class SearchResultDetailActivity extends Activity {
 			// The REST request was successful.
 			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
-				Log.d("Search REST-Request", "Response: "+response);
-				Log.d("Search REST-Request", "Statuscode: "+statusCode);
+				Log.d("getYards() REST-Request", "Response: "+response);
+				Log.d("getYards() REST-Request", "Statuscode: "+statusCode);
 				resultLayout.removeView(spinner);
-				String storageLocations = "";
+				String yards = "";
 				try {
 					for(int i = 0; i < response.length(); i++) {
 						JSONObject object = response.getJSONObject(i);
 						int id = object.getInt("id");
-						storageLocations += id+"\n";
+						yards += id+"\n";
 					}
 				} catch(JSONException e) {
 					Log.e("JSON-Exception", e.toString());
@@ -117,27 +122,37 @@ public class SearchResultDetailActivity extends Activity {
 					Toast.makeText(getApplicationContext(), getString(R.string.status_unexpected_result), Toast.LENGTH_LONG).show();
 				}
 
-				storageLocationsView.setText(storageLocations);
+				yardsView.setText(yards);
 
 				
 			}
 			
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
-				Log.e("getStorageLocations() REST-Request", "Error: "+errorResponse);
-				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
+				Log.e("getYards() REST-Request", "Error: "+errorResponse);
+				Log.e("getYards() REST-Request", "Statuscode: "+statusCode);
+				
+				// Hide the progess indicator
 				resultLayout.removeView(spinner);
+				
+				//Show an error message depending on the status code
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
-				Log.e("getStorageLocations() REST-Request", "Error: "+responseBody);
-				Log.e("getStorageLocations() REST-Request", "Statuscode: "+statusCode);
+				Log.e("getYards() REST-Request", "Error: "+responseBody);
+				Log.e("getYards() REST-Request", "Statuscode: "+statusCode);
+				
+				// Hide the progess indicator
 				resultLayout.removeView(spinner);
+				
+				//Show an error message depending on the status code
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else

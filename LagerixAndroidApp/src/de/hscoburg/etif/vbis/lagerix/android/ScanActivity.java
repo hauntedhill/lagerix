@@ -31,7 +31,7 @@ public class ScanActivity extends Activity {
 
 	//UI elements
 	TextView articleResultView;
-	TextView storageLocationResultView;
+	TextView yardsResultView;
 	RadioButton isBookedIn;
 	ProgressBar spinner;
 
@@ -48,7 +48,7 @@ public class ScanActivity extends Activity {
 		setContentView(R.layout.activity_scan);
 
 		articleResultView = (TextView) findViewById(R.id.label_articleIDResult);
-		storageLocationResultView = (TextView) findViewById(R.id.label_storageIDResult);
+		yardsResultView = (TextView) findViewById(R.id.label_storageIDResult);
 
 		isBookedIn = (RadioButton) findViewById(R.id.radio_bookedIn);
 		
@@ -103,7 +103,7 @@ public class ScanActivity extends Activity {
 		super.onSaveInstanceState(outState);
 		
 		outState.putCharSequence("articleResultView", articleResultView.getText().toString());
-		outState.putCharSequence("storageLocationResultView", storageLocationResultView.getText().toString());
+		outState.putCharSequence("yardsResultView", yardsResultView.getText().toString());
 		outState.putBoolean("isBookedIn", isBookedIn.isChecked());
 	}
 	
@@ -111,7 +111,7 @@ public class ScanActivity extends Activity {
 		super.onRestoreInstanceState(savedState);
 		
 		articleResultView.setText(savedState.getCharSequence("articleResultView"));
-		storageLocationResultView.setText(savedState.getCharSequence("storageLocationResultView"));
+		yardsResultView.setText(savedState.getCharSequence("yardsResultView"));
 		isBookedIn.setChecked(savedState.getBoolean("isBookedIn"));
 
 	}
@@ -153,9 +153,9 @@ public class ScanActivity extends Activity {
 				if(result.charAt(0) == 'A')
 					articleResultView.setText(result.substring(1));
 
-				//Storage barcodes start withe the letter 'S'
+				//Storage location barcodes start with the letter 'S'
 				else if(result.charAt(0) == 'S')
-					storageLocationResultView.setText(result.substring(1));
+					yardsResultView.setText(result.substring(1));
 			}
 		}
 	}
@@ -167,12 +167,12 @@ public class ScanActivity extends Activity {
 	 */
 	public void sendEntry(View view) {
 		
-		if(articleResultView.getText().length() != 0 && storageLocationResultView.getText().length() != 0) {
+		if(articleResultView.getText().length() != 0 && yardsResultView.getText().length() != 0) {
 
 			// Create parameters for the REST request
 			RequestParams params = new RequestParams();
 			params.put("articleID", articleResultView.getText().toString());
-			params.put("yardID", storageLocationResultView.getText().toString());
+			params.put("yardID", yardsResultView.getText().toString());
 			if(isBookedIn.isChecked())
 				params.put("bookedIn", "true");
 			else
@@ -183,6 +183,8 @@ public class ScanActivity extends Activity {
 
 			// Call the REST helper class and send the request
 			LagerixRestClient.post(baseURL+getString(R.string.restURI_bookEntry), params, new TextHttpResponseHandler() {
+				
+				// The REST request was successful.
 				@Override
 				public void onSuccess(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody) {
 					Log.d("sendEntry(): REST-Request", "Request successful");
@@ -191,6 +193,7 @@ public class ScanActivity extends Activity {
 					
 					spinner.setVisibility(View.INVISIBLE);
 					
+					//Readout the response status code and show an appropriate status message
 					try {
 						if(Integer.parseInt(responseBody) == 0)
 							Toast.makeText(getApplicationContext(), getString(R.string.status_book_successful), Toast.LENGTH_LONG).show();
@@ -211,14 +214,17 @@ public class ScanActivity extends Activity {
 					
 				}
 
+				// The REST request failed.
 				@Override
 				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 					Log.e("sendEntry(): REST-Request", "Request failed");
 					Log.e("sendEntry(): REST-Request", "Response: "+responseBody);
 					Log.e("sendEntry(): REST-Request", "Statuscode: "+statusCode);
 					
+					// Hide the progess indicator
 					spinner.setVisibility(View.INVISIBLE);
 					
+					//Show an error message depending on the status code
 					if(statusCode == 403)
 						Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 					else
@@ -227,6 +233,7 @@ public class ScanActivity extends Activity {
 			});
 		}
 		else {
+			//Article ID or storage location ID is empty
 			Toast.makeText(getApplicationContext(), getString(R.string.status_information_incomplete), Toast.LENGTH_LONG).show();
 		}
 	}

@@ -40,6 +40,8 @@ public class SearchResultActivity extends ListActivity {
 	
 	//UI elements
 	LinearLayout resultLayout;
+	
+	
 	/**
 	 * Initializer method for the activity
 	 * Gets called on first launch
@@ -86,6 +88,9 @@ public class SearchResultActivity extends ListActivity {
 	    }
 	}
 	
+	/**
+	 * Gets called when the user presses on a list element
+	 */
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		ArticleTypeDTO articleType = (ArticleTypeDTO) getListView().getAdapter().getItem(position);
@@ -96,10 +101,10 @@ public class SearchResultActivity extends ListActivity {
 	
 	/**
 	 * Performs a REST request to search for article types using the supplied search keys
+	 * The results are added to the list view
 	 * @param articleName Name of the article type
 	 * @param articleDescription Description of the article type
 	 */
-
 	private void searchArticleTypes(String articleName, String articleDescription) {
 
 		//Submit the search REST request
@@ -108,8 +113,8 @@ public class SearchResultActivity extends ListActivity {
 			// The REST request was successful.
 			@Override
 			public void onSuccess(int statusCode, org.apache.http.Header[] headers, JSONArray response) {
-				Log.d("Search REST-Request", "Response: "+response);
-				Log.d("Search REST-Request", "Statuscode: "+statusCode);
+				Log.d("searchArticleTypes() REST-Request", "Response: "+response);
+				Log.d("searchArticleTypes() REST-Request", "Statuscode: "+statusCode);
 				if(response.length() > 0) {
 					// The search returned objects matching the search criterias.
 					try {
@@ -144,6 +149,7 @@ public class SearchResultActivity extends ListActivity {
 				
 			}
 			
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+errorResponse);
@@ -152,12 +158,14 @@ public class SearchResultActivity extends ListActivity {
 				// Hide the progess indicator
 				resultLayout.setVisibility(View.INVISIBLE);
 				
+				//Show an error message depending on the status code
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("searchArticleTypes() REST-Request", "Error: "+responseBody);
@@ -166,6 +174,7 @@ public class SearchResultActivity extends ListActivity {
 				// Hide the progess indicator
 				resultLayout.setVisibility(View.INVISIBLE);
 				
+				//Show an error message depending on the status code
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else

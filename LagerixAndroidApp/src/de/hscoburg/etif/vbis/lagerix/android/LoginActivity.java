@@ -258,7 +258,11 @@ public class LoginActivity extends Activity {
         				public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
         					Log.e("login(): Second REST-Request", "Error: "+responseBody);
         					Log.e("login(): Second REST-Request", "Statuscode: "+statusCode);
+        					
+        					// Hide the progess indicator
         					showProgress(false);
+        					
+        					//Show an error message depending on the status code
         					if(statusCode == 401)
         						Toast.makeText(getApplicationContext(), getString(R.string.error_incorrect_credentials), Toast.LENGTH_LONG).show();
         					else if(statusCode == 403)
@@ -274,7 +278,11 @@ public class LoginActivity extends Activity {
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable error) {
 				Log.e("login(): First REST-Request", "Error: "+responseBody);
 				Log.e("login(): First REST-Request", "Statuscode: "+statusCode);
+				
+				// Hide the progess indicator
 				showProgress(false);
+				
+				//Show an error message depending on the status code
 				if(statusCode == 401)
 					Toast.makeText(getApplicationContext(), getString(R.string.error_incorrect_credentials), Toast.LENGTH_LONG).show();
 				else if(statusCode == 403)

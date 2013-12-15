@@ -18,6 +18,8 @@ public class SearchFormActivity extends Activity {
 	//UI elements
 	EditText searchNameView;
 	EditText searchDescriptionView;
+	
+	
 	/**
 	 * Initializer method for the activity
 	 * Gets called on first launch
@@ -63,6 +65,9 @@ public class SearchFormActivity extends Activity {
 	    }
 	}
 	
+	/**
+	 * Calls SearchResultActivity with values from the search form
+	 */
 	public void sendSearch(View view) {
     	Intent intent = new Intent(this, SearchResultActivity.class);
     	intent.putExtra("ARTICLE_NAME", searchNameView.getText().toString());

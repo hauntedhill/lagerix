@@ -70,6 +70,10 @@ public class StorageOverviewActivity extends Activity {
 		}
 	}
 
+	/**
+	 * Performs a REST request to get all yards and their status
+	 * The results are displayed in yardIdView and yardStatusView
+	 */
 	public void getStorageOverview() {
 
 		//Submit the storage overview REST request
@@ -104,22 +108,32 @@ public class StorageOverviewActivity extends Activity {
 
 			}
 
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, java.lang.Throwable e, JSONObject errorResponse)  {
 				Log.e("getStorageOverview() REST-Request", "Error: "+errorResponse);
 				Log.e("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
+				
+				// Hide the progess indicator
 				resultLayout.removeView(spinner);
+				
+				//Show an error message depending on the status code
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
 					Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 			}
 			
+			// The REST request failed.
 			@Override
 			public void onFailure(int statusCode, org.apache.http.Header[] headers, java.lang.String responseBody, java.lang.Throwable e) {
 				Log.e("getStorageOverview() REST-Request", "Error: "+responseBody);
 				Log.e("getStorageOverview() REST-Request", "Statuscode: "+statusCode);
+				
+				// Hide the progess indicator
 				resultLayout.removeView(spinner);
+				
+				//Show an error message depending on the status code
 				if(statusCode == 403)
 					Toast.makeText(getApplicationContext(), getString(R.string.status_not_authorized), Toast.LENGTH_LONG).show();
 				else
