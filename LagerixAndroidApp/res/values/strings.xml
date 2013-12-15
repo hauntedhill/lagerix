@@ -69,7 +69,7 @@
     <string name="label_article_id">Article type ID:</string>
     <string name="label_article_name">Article type name:</string>
     <string name="label_article_description">Article type description:</string>
-    <string name="label_yards"><u>Storage Locations</u></string>
+    <string name="label_yards"><u>Storage location IDs</u></string>
     <string name="status_no_searchResults">The search returned no results</string>
 
     <!-- Strings related to storage overview -->

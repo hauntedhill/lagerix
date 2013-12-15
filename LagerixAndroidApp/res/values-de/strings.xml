@@ -59,7 +59,7 @@
     <string name="label_article_id">Artikelart-ID:</string>
     <string name="label_article_name">Artikelart Name:</string>
     <string name="label_article_description">Artikelart Beschreibung:</string>
-    <string name="label_yards"><u>Lagerplätze</u></string>
+    <string name="label_yards"><u>Lagerplatz-IDs</u></string>
     <string name="status_no_searchResults">Die Suche lieferte keine Ergebnisse</string>
 
     <!-- Strings related to storage overview -->

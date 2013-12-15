@@ -28,7 +28,7 @@
             android:id="@+id/label_yardID"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".50"
+            android:layout_weight=".20"
             android:gravity="center"
             android:text="@string/label_yardID"
             android:textColor="@android:color/black" />
@@ -37,7 +37,7 @@
             android:id="@+id/label_yardStatus"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight=".50"
+            android:layout_weight=".80"
             android:gravity="center"
             android:text="@string/label_yardStatus"
             android:textColor="@android:color/black" />
@@ -58,7 +58,7 @@
                 android:id="@+id/label_yardIDResult"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".50"
+                android:layout_weight=".20"
                 android:gravity="center"
                 android:textColor="@android:color/black" />
 
@@ -66,7 +66,7 @@
                 android:id="@+id/label_yardStatusResult"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight=".50"
+                android:layout_weight=".80"
                 android:gravity="center"
                 android:textColor="@android:color/black" />
         </LinearLayout>
