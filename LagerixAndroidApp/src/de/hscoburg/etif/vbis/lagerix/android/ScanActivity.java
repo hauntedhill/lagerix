@@ -166,6 +166,7 @@ public class ScanActivity extends Activity {
 	 * @param view
 	 */
 	public void sendEntry(View view) {
+		
 		if(articleResultView.getText().length() != 0 && storageLocationResultView.getText().length() != 0) {
 
 			// Create parameters for the REST request
@@ -224,6 +225,9 @@ public class ScanActivity extends Activity {
 						Toast.makeText(getApplicationContext(), getString(R.string.status_communication_error), Toast.LENGTH_LONG).show();
 				}
 			});
+		}
+		else {
+			Toast.makeText(getApplicationContext(), getString(R.string.status_information_incomplete), Toast.LENGTH_LONG).show();
 		}
 	}
 }
