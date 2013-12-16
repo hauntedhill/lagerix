@@ -405,10 +405,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         jButtonStockManagerArticleNewArticle = new javax.swing.JButton();
 
         jDialog1.setAlwaysOnTop(true);
-        jDialog1.setMinimumSize(new java.awt.Dimension(380, 170));
+        jDialog1.setMinimumSize(new java.awt.Dimension(580, 170));
         jDialog1.setModal(true);
-        jDialog1.setPreferredSize(new java.awt.Dimension(380, 170));
-        jDialog1.setResizable(false);
+        jDialog1.setPreferredSize(new java.awt.Dimension(580, 170));
 
         jLabel5.setText("Bitte wählen Sie einen Drucker aus:");
 
