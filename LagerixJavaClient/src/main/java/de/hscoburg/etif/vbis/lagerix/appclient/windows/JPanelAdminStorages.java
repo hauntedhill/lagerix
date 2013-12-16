@@ -1,70 +1,60 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.appclient.windows;
 
-import de.hscoburg.etif.vbis.lagerix.appclient.utils.Item;
 import de.hscoburg.etif.vbis.lagerix.appclient.utils.TableColumnAdjuster;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Displays the storages frame
  * @author mti578
  */
 public class JPanelAdminStorages extends javax.swing.JPanel {
 
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private JFrameJavaAppClientMainWindow mainWindow = null;
+
     /**
      * Creates new form JPanelAdminStorages
+     * @param placeManager
+     * @param mainWindow
      */
     public JPanelAdminStorages(PlaceManagerEJBRemoteInterface placeManager, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.placeManager = placeManager;
         this.mainWindow = mainWindow;
-        
+
         jTableAdminStoragesTable.getSelectionModel().addListSelectionListener(
-            new javax.swing.event.ListSelectionListener() {
+                new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
                         jTableAdminStoragesTableValueChanged(e);
-                    };
-            });
+                    }
+                ;
     }
 
-    
-    public void jTableAdminStoragesTableValueChanged(ListSelectionEvent e) {
-        if(jTableAdminStoragesTable.isEnabled())
-        {
-            if(jTableAdminStoragesTable.getSelectedRow() >= 0)
-            {
+    );
+    }
+
+    /*
+    updates the gui elements
+    */
+    private void jTableAdminStoragesTableValueChanged(ListSelectionEvent e) {
+        if (jTableAdminStoragesTable.isEnabled()) {
+            if (jTableAdminStoragesTable.getSelectedRow() >= 0) {
                 String storageName = (String) jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 0);
                 jTextFieldAdminStorageName.setText(storageName);
                 jButtonAdminStorageDeleteAndDiscard.setEnabled(true);
-            }
-            else
-            {
+            } else {
                 jButtonAdminStorageDeleteAndDiscard.setEnabled(false);
                 jTextFieldAdminStorageName.setText("");
             }
-        }        
+        }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -178,29 +168,26 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
         add(jPanelAdminStoragesPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+    deletes the selected storage or discards the changes
+    */
     private void jButtonAdminStorageDeleteAndDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminStorageDeleteAndDiscardActionPerformed
-        if(jButtonAdminStorageDeleteAndDiscard.getText().equals("Löschen"))
-        {
-            if(JOptionPane.showConfirmDialog(this, "Moechten Sie das Lager: " +
-                jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 0) +
-                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION)
-            {
-                try
-                {
-                    placeManager.deleteStorage((Integer)jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 1));
+        if (jButtonAdminStorageDeleteAndDiscard.getText().equals("Löschen")) {
+            if (JOptionPane.showConfirmDialog(this, "Moechten Sie das Lager: "
+                    + jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 0)
+                    + " wirklich loeschen?", "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+                    == JOptionPane.YES_OPTION) {
+                try {
+                    placeManager.deleteStorage((Integer) jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 1));
                     createJTableAdminStorage();
-                } catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Lagers: "
                             + jTableAdminStoragesTable.getModel().getValueAt(jTableAdminStoragesTable.getSelectedRow(), 0)
-                            + ". Bitte loeschen Sie zuerst alle Artikeltypen und Lagerplaetze des Lagers.", 
+                            + ". Bitte loeschen Sie zuerst alle Artikeltypen und Lagerplaetze des Lagers.",
                             "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }
-        else
-        {
+        } else {
             jButtonAdminStorageDeleteAndDiscard.setText("Löschen");
             jButtonAdminStorageNewStorage.setEnabled(true);
             jTextFieldAdminStorageName.setEnabled(false);
@@ -212,9 +199,11 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonAdminStorageDeleteAndDiscardActionPerformed
 
+    /*
+    Creates a new storage or saves the new storage
+    */
     private void jButtonAdminStorageNewStorageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminStorageNewStorageActionPerformed
-        if(!jButtonAdminStorageNewStorage.getText().equals("Speichern"))
-        {
+        if (!jButtonAdminStorageNewStorage.getText().equals("Speichern")) {
             jButtonAdminStorageNewStorage.setText("Speichern");
             jTextFieldAdminStorageName.setEnabled(true);
 
@@ -223,12 +212,10 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
             jTableAdminStoragesTable.setEnabled(false);
 
             jTextFieldAdminStorageName.setText("");
-        }
-        else
-        {
+        } else {
             String storageName = jTextFieldAdminStorageName.getText();
             placeManager.createNewStorage(storageName);
-            
+
             jButtonAdminStorageDeleteAndDiscard.setText("Löschen");
             jButtonAdminStorageDeleteAndDiscard.setEnabled(false);
             jButtonAdminStorageNewStorage.setText("Neues Lager anlegen");
@@ -239,25 +226,26 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonAdminStorageNewStorageActionPerformed
 
-    public void createJTableAdminStorage()
-    {
+    /**
+     * Updates the storage table
+     */
+    public void createJTableAdminStorage() {
         mainWindow.setBusy();
-        
+
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() {
                 DefaultTableModel model = new DefaultTableModel(0, 2);
-                model.setColumnIdentifiers(new Object[] {"Lagername", "Lager-ID"});
+                model.setColumnIdentifiers(new Object[]{"Lagername", "Lager-ID"});
 
                 List<StorageDTO> storages = placeManager.getAllStorages();
 
-                for(StorageDTO storage : storages)
-                {
-                    model.addRow(new Object[] {storage.getName(), storage.getId()});
+                for (StorageDTO storage : storages) {
+                    model.addRow(new Object[]{storage.getName(), storage.getId()});
                 }
                 return model;
             }
-            
+
             @Override
             public void done() {
                 try {
@@ -269,15 +257,14 @@ public class JPanelAdminStorages extends javax.swing.JPanel {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                
+
                 mainWindow.clearBusy();
             }
         };
-       
+
         worker.execute();
     }
-  
-    
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdminStorageDeleteAndDiscard;

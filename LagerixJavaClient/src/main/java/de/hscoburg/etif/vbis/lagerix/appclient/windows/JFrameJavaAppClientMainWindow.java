@@ -1,86 +1,45 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package de.hscoburg.etif.vbis.lagerix.appclient.windows;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.Code128Writer;
 import com.sun.enterprise.security.ee.auth.login.ProgrammaticLogin;
-import de.hscoburg.etif.vbis.lagerix.appclient.utils.Item;
-import de.hscoburg.etif.vbis.lagerix.appclient.utils.TableColumnAdjuster;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.ArticleTypeDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.GroupDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.UserDTO;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.base.GroupType;
-import static de.hscoburg.etif.vbis.lagerix.appclient.main.Main.serverConfig;
-import java.awt.BorderLayout;
 import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.GridLayout;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.InitialContext;
-import javax.print.Doc;
-import javax.print.DocFlavor;
-import javax.print.DocPrintJob;
 import javax.print.PrintService;
-import javax.print.PrintServiceLookup;
-import javax.print.SimpleDoc;
-import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.Copies;
-import javax.swing.ComboBoxModel;
-import javax.swing.DefaultComboBoxModel;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.SwingWorker;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.table.DefaultTableModel;
 
 /**
+ * Main window of the java client
  *
  * @author tima0900
  */
 public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
-    private String prefixPath;
+
+    private final String prefixPath;
     private JPanelStockManagerArticles jPanelStockManagerArticletypes = null;
     private ArticleManagerEJBRemoteInterface articleManager = null;
     private UserManagerEJBRemoteInterface userManager = null;
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private boolean initDone = false;
     private ProgrammaticLogin pl = new ProgrammaticLogin();
-    private JFrameJavaAppClientMainWindow thisWindow = this;
+    private final JFrameJavaAppClientMainWindow thisWindow = this;
     private JPanelAdminUsers jPanelAdminUsers = null;
     private JPanelAdminStorages jPanelAdminStorages = null;
     private JPanelStockManagerYards jPanelStockManagerYards = null;
     private JPanelStockManagerOverview jPanelStockManagerOverview = null;
+
     /**
      * Creates new form MainWindow
      */
@@ -90,34 +49,37 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
         this.prefixPath = prefixPath;
     }
 
+    //Synchronizes the access of the busyCounter
     final Integer busyLock = 1;
     Integer busyCounter = 0;
-    
-    public void setBusy()
-    {
+
+    /**
+     * Displays a spinner
+     */
+    public void setBusy() {
         synchronized (busyLock) {
-            if(busyCounter == 0)
-            {
-                CardLayout cl = (CardLayout)(jPanelWindow.getLayout());
+            if (busyCounter == 0) {
+                CardLayout cl = (CardLayout) (jPanelWindow.getLayout());
                 cl.show(jPanelWindow, "BusyCard");
             }
 
             busyCounter++;
         }
     }
-    
-    public void clearBusy()
-    {
+
+    /**
+     * Clears the spinner
+     */
+    public void clearBusy() {
         synchronized (busyLock) {
             busyCounter--;
-            if(busyCounter == 0)
-            {
-                CardLayout cl = (CardLayout)(jPanelWindow.getLayout());
+            if (busyCounter == 0) {
+                CardLayout cl = (CardLayout) (jPanelWindow.getLayout());
                 cl.show(jPanelWindow, "ControlCard");
             }
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -153,11 +115,6 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
         setTitle("Lagerix");
         setMaximumSize(null);
         setMinimumSize(new java.awt.Dimension(850, 500));
-        addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowOpened(java.awt.event.WindowEvent evt) {
-                formWindowOpened(evt);
-            }
-        });
         getContentPane().setLayout(new java.awt.GridLayout(1, 1));
 
         jPanelWindow.setLayout(new java.awt.CardLayout());
@@ -323,27 +280,28 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    
+
+    /*Is excecuted when the client presses the log in button
+     *Connects to the server, trys to authenticate the user and gets the remote EJB's
+     *After succesfull operation displays the next frame
+     */
     private void jButtonLogInActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLogInActionPerformed
         setBusy();
         final String usrName = jTextFieldUserName.getText();
         final String password = new String(jPasswordFieldPassword.getPassword());
-        
+
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() throws Exception {
-                try
-                {        
+                try {
                     String host = null;
                     int port = 0;
                     Properties environment = new Properties();
-                    
+
                     boolean configLoaded = false;
                     File f = new File(prefixPath + "server.conf");
-                    if(f.exists()) 
-                    {
-                        try
-                        {
+                    if (f.exists()) {
+                        try {
                             BufferedReader br = new BufferedReader(new FileReader(prefixPath + "server.conf"));
                             try {
                                 StringBuilder sb = new StringBuilder();
@@ -356,46 +314,41 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
                                 }
                                 String fileContent = sb.toString().trim();
                                 String[] splittedtFileContents = fileContent.split(":");
-                                if(splittedtFileContents.length > 1)
-                                {
+                                if (splittedtFileContents.length > 1) {
                                     environment.put("org.omg.CORBA.ORBInitialHost", splittedtFileContents[0].trim());
                                     environment.put("org.omg.CORBA.ORBInitialPort", splittedtFileContents[1].trim());
-                                    
+
                                     host = splittedtFileContents[0].trim();
                                     port = Integer.parseInt(splittedtFileContents[1].trim());
                                     configLoaded = true;
                                 }
-                            } catch(Exception ex)
-                            {
+                            } catch (Exception ex) {
                                 System.err.print("Fehlerhafte \"server.conf\" Konfigurationsdatei");
                             } finally {
                                 br.close();
                             }
-                        } catch(Exception e)
-                        {
+                        } catch (Exception e) {
                         }
                     }
-		
-                    if(!configLoaded)
-                    {
+
+                    if (!configLoaded) {
                         environment.put("org.omg.CORBA.ORBInitialHost", "localhost");
                         environment.put("org.omg.CORBA.ORBInitialPort", "3700");
                         JOptionPane.showMessageDialog(thisWindow, "Fehler beim Laden der server.conf Datei. "
                                 + "Es werden die Standard Einstellungen benutzt.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                    
+
                         host = "localhost";
                         port = 3700;
                     }
-                    
+
+                    //ceck if the server is reachable
                     SocketAddress sockaddr = new InetSocketAddress(host, port);
-                    // Create your socket
                     Socket socket = new Socket();
                     boolean online = true;
-                    // Connect with 10 s timeout
                     try {
                         socket.connect(sockaddr, 10000);
                     } catch (Exception ex) {
-                        online = false;    
+                        online = false;
                     } finally {
                         try {
                             socket.close();
@@ -403,65 +356,57 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
                             //bad but nothing else can be done
                         }
                     }
-                    
-                    if(!online)
-                    {
+
+                    if (!online) {
                         return null;//server offline, doesn't make sense to try to connect
                     }
-                    
-                    System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout","10000");//10 seconds timeout for connection to glassfish ever, doesn't always work
-                    System.setProperty("java.security.auth.login.config", prefixPath + "auth.conf");
-                
-                    InitialContext ctx = new InitialContext(environment);
-                    
-                    pl.login(usrName, password.toCharArray(), "userMgmtJdbcRealm", true);
-                    articleManager = (ArticleManagerEJBRemoteInterface) 
-                             ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/ArticleManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface");
-                    placeManager = (PlaceManagerEJBRemoteInterface)
-                             ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/PlaceManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface");
 
-                    userManager = (UserManagerEJBRemoteInterface) 
-                            ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/UserManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface");
-                         //if that works getUserRoles and return it...
-                    
-                } catch (Exception e)
-                {
-                    e.printStackTrace();   
+                    //waitforresponse timeout doesn't work with glassfish, that's why we check the state of the server before
+                    System.setProperty("com.sun.corba.ee.transport.ORBWaitForResponseTimeout", "10000");//10 seconds timeout for connection to glassfish ever, doesn't always work
+                    System.setProperty("java.security.auth.login.config", prefixPath + "auth.conf");
+
+                    InitialContext ctx = new InitialContext(environment);
+
+                    pl.login(usrName, password.toCharArray(), "userMgmtJdbcRealm", true);
+                    articleManager = (ArticleManagerEJBRemoteInterface) ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/ArticleManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.ArticleManagerEJBRemoteInterface");
+                    placeManager = (PlaceManagerEJBRemoteInterface) ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/PlaceManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface");
+
+                    userManager = (UserManagerEJBRemoteInterface) ctx.lookup("java:global/LagerixPrj-1.0.0/LagerixEJBModule-1.0.0/UserManagerEJBean!de.hscoburg.etif.vbis.lagerix.backend.interfaces.UserManagerEJBRemoteInterface");
+                    //if that works getUserRoles and return it...
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                     articleManager = null;
                     userManager = null;
                     placeManager = null;
-                    pl.logout();                    
-                }               
-               
+                    pl.logout();
+                }
+
                 return null;
             }
-            
+
             @Override
             public void done() {
                 try {
-                    if(userManager != null)
-                    {
+                    if (userManager != null) {
                         jTextFieldUserName.setText("");
                         jPasswordFieldPassword.setText("");
 
                         jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br></html>");
-                     
-                         if(userManager.isInGroup(GroupType.ADMINISTRATOR))
-                         {
-                             UserDTO loggedInUsr = userManager.find(usrName);
-                             jPanelAdminUsers = new JPanelAdminUsers(userManager, placeManager, loggedInUsr, thisWindow);
-                             jPanelAdminStorages = new JPanelAdminStorages(placeManager, thisWindow);
-                             jTabbedPaneAdministrator.removeAll();
-                             jTabbedPaneAdministrator.addTab("Benutzerverwaltung", jPanelAdminUsers);
-                             jTabbedPaneAdministrator.addTab("Lagerverwaltung", jPanelAdminStorages);
-                             jPanelAdminUsers.createJTableAdminUsers();
-                             jPanelAdminStorages.createJTableAdminStorage();
 
-                            CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
-                            cl.show(jPanelControlsMain, "AdminCard");            
-                         }
-                         else if(userManager.isInGroup(GroupType.LAGERVERWALTER))
-                         {
+                        if (userManager.isInGroup(GroupType.ADMINISTRATOR)) {
+                            UserDTO loggedInUsr = userManager.find(usrName);
+                            jPanelAdminUsers = new JPanelAdminUsers(userManager, placeManager, loggedInUsr, thisWindow);
+                            jPanelAdminStorages = new JPanelAdminStorages(placeManager, thisWindow);
+                            jTabbedPaneAdministrator.removeAll();
+                            jTabbedPaneAdministrator.addTab("Benutzerverwaltung", jPanelAdminUsers);
+                            jTabbedPaneAdministrator.addTab("Lagerverwaltung", jPanelAdminStorages);
+                            jPanelAdminUsers.createJTableAdminUsers();
+                            jPanelAdminStorages.createJTableAdminStorage();
+
+                            CardLayout cl = (CardLayout) (jPanelControlsMain.getLayout());
+                            cl.show(jPanelControlsMain, "AdminCard");
+                        } else if (userManager.isInGroup(GroupType.LAGERVERWALTER)) {
                             jPanelStockManagerOverview = new JPanelStockManagerOverview(placeManager, articleManager, thisWindow);
                             jPanelStockManagerArticletypes = new JPanelStockManagerArticles(articleManager, placeManager, thisWindow);
                             jPanelStockManagerYards = new JPanelStockManagerYards(placeManager, thisWindow);
@@ -472,97 +417,88 @@ public class JFrameJavaAppClientMainWindow extends javax.swing.JFrame {
                             jPanelStockManagerYards.createJTableStockManagerYards();
                             jPanelStockManagerArticletypes.createJTableStockManagerArticletypes();
                             jPanelStockManagerOverview.createTables();
-                            
-                            CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
-                            cl.show(jPanelControlsMain, "UserCard");   
-                         } else
-                         {
-                             jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br>"
-                                + "<font color='red'>Benutzer ist kein Lagerverwalter oder Administrator.</font></html>");
-                         }
-                    }
-                    else
-                    {
+
+                            CardLayout cl = (CardLayout) (jPanelControlsMain.getLayout());
+                            cl.show(jPanelControlsMain, "UserCard");
+                        } else {
+                            jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br>"
+                                    + "<font color='red'>Benutzer ist kein Lagerverwalter oder Administrator.</font></html>");
+                        }
+                    } else {
                         jLabelLogIn.setText("<html>Bitte melden Sie sich an:<br><br>"
                                 + "<font color='red'>Anmeldung nicht m&ouml;lich.</font></html>");
-                    }                    
+                    }
                 } catch (Exception ex) {
-                   // ex.printStackTrace();
+                    // ex.printStackTrace();
                     System.out.println(ex.toString());
                 }
-                
+
                 clearBusy();
             }
- 
+
         };
-       
-       worker.execute();
+
+        worker.execute();
     }//GEN-LAST:event_jButtonLogInActionPerformed
-    
-    
-    private PrintService selectedPrintService = null;
-    private PrintService pss[] = null;
-    
-    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
 
-    }//GEN-LAST:event_formWindowOpened
-
+    /*
+    Is excecuted if the user presses the LogOut button and logs the user out and displays the start frame
+    */
     private void LogOutUser(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LogOutUser
-        CardLayout cl = (CardLayout)(jPanelControlsMain.getLayout());
+        CardLayout cl = (CardLayout) (jPanelControlsMain.getLayout());
         cl.show(jPanelControlsMain, "LogInCard");
-        
+
         this.JPanelLogin.setVisible(true);
         this.JPanelLogin.setEnabled(true);
-        pl.logout(); 
+        pl.logout();
     }//GEN-LAST:event_LogOutUser
 
+    /*
+    Refreshes the content of the displayed frame
+    */
     private void jTabbedPaneAdministratorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneAdministratorStateChanged
         int selectedTabb = jTabbedPaneAdministrator.getSelectedIndex();
-        switch(selectedTabb)
-        {
+        switch (selectedTabb) {
             case 0:
-                if(jPanelAdminUsers != null)
-                {
+                if (jPanelAdminUsers != null) {
                     jPanelAdminUsers.createJTableAdminUsers();
                 }
                 break;
-                
+
             case 1:
-                if(jPanelAdminStorages != null)
-                {
+                if (jPanelAdminStorages != null) {
                     jPanelAdminStorages.createJTableAdminStorage();
                 }
                 break;
         }
     }//GEN-LAST:event_jTabbedPaneAdministratorStateChanged
 
+    /*
+    Refreshes the content of the displayes frame
+    */
     private void jTabbedPaneStockManStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTabbedPaneStockManStateChanged
         int selectedTabb = jTabbedPaneStockMan.getSelectedIndex();
-        switch(selectedTabb)
-        {
+        switch (selectedTabb) {
             case 1:
-                if(jPanelStockManagerArticletypes != null)
-                {
+                if (jPanelStockManagerArticletypes != null) {
                     jPanelStockManagerArticletypes.createJTableStockManagerArticletypes();
                 }
                 break;
-                
+
             case 0:
-                if(jPanelStockManagerYards != null)
-                {
+                if (jPanelStockManagerYards != null) {
                     jPanelStockManagerYards.createJTableStockManagerYards();
                 }
                 break;
-                
+
             case 2:
-                if(jPanelStockManagerOverview != null)
-                {
+                if (jPanelStockManagerOverview != null) {
                     jPanelStockManagerOverview.createTables();
                 }
                 break;
         }
     }//GEN-LAST:event_jTabbedPaneStockManStateChanged
-   
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel JPanelLogin;
     private javax.swing.JPanel JPanelStockManOverview;

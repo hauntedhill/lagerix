@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.appclient.windows;
 
 import de.hscoburg.etif.vbis.lagerix.appclient.utils.Item;
@@ -23,16 +17,19 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
- *
+ * Displays the user frame
  * @author mti578
  */
 public class JPanelAdminUsers extends javax.swing.JPanel {
+
     private UserManagerEJBRemoteInterface userManager = null;
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private UserDTO loggedInUsr = null;
     private JFrameJavaAppClientMainWindow mainWindow = null;
+
     /**
      * Creates new form JPanelAdminUsers
+     *
      * @param userManager
      * @param placeManager
      * @param user
@@ -43,13 +40,16 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
         this.placeManager = placeManager;
         loggedInUsr = user;
         this.mainWindow = mainWindow;
-        
+
         jTableAdminUsersTable.getSelectionModel().addListSelectionListener(
-            new javax.swing.event.ListSelectionListener() {
+                new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
                         JTableAdminUserValueChanged(e);
-                    };
-            });
+                    }
+                ;
+    }
+
+    );
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -146,11 +146,6 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
         jPanel8.add(jTextFieldAdminUserLastName, gridBagConstraints);
 
         jPasswordFieldAdminUserPassword.setEnabled(false);
-        jPasswordFieldAdminUserPassword.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jPasswordFieldAdminUserPasswordActionPerformed(evt);
-            }
-        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 1;
         gridBagConstraints.gridy = 3;
@@ -277,21 +272,16 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
         add(jPanelAdminUsers, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jPasswordFieldAdminUserPasswordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jPasswordFieldAdminUserPasswordActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jPasswordFieldAdminUserPasswordActionPerformed
-
+    /*
+    edits the selected user or saves the user
+    */
     private void jButtonAdminUserEditAndSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserEditAndSaveActionPerformed
-        if(!jButtonAdminUserEditAndSave.getText().equals("Speichern"))
-        {
-            if(((String)jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0))
-                .equals(loggedInUsr.getEmail()))
-            {
+        if (!jButtonAdminUserEditAndSave.getText().equals("Speichern")) {
+            if (((String) jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0))
+                    .equals(loggedInUsr.getEmail())) {
                 JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
-                    + "kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
+                        + "kann nicht bearbeitet werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            } else {
                 jButtonAdminUserEditAndSave.setText("Speichern");
                 jButtonAdminUserDeleteAndDiscard.setText("Abbrechen");
                 jTableAdminUsersTable.setEnabled(false);
@@ -299,18 +289,15 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
                 jComboBoxAdminUserStorage.setEnabled(true);
                 jButtonAdminUserNewUser.setEnabled(false);
             }
-        }
-        else
-        {
+        } else {
             UserDTO user = userManager.find(jTextFieldAdminUserName.getText());
             GroupDTO group = new GroupDTO();
-            group.setGroup((GroupType)((Item)jComboBoxAdminUserGroup.getSelectedItem()).getObj());
+            group.setGroup((GroupType) ((Item) jComboBoxAdminUserGroup.getSelectedItem()).getObj());
 
-            Item storage = (Item)jComboBoxAdminUserStorage.getSelectedItem();
-            if(storage.getObj() != null)
-            {
+            Item storage = (Item) jComboBoxAdminUserStorage.getSelectedItem();
+            if (storage.getObj() != null) {
                 List storagesUser = new ArrayList<Integer>();
-                storagesUser.add(((StorageDTO)storage.getObj()).getId());
+                storagesUser.add(((StorageDTO) storage.getObj()).getId());
                 group.setStorageId(storagesUser);
             }
             List<GroupDTO> groups = new ArrayList<GroupDTO>();
@@ -328,38 +315,32 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonAdminUserEditAndSaveActionPerformed
 
+    /*
+    deletes the selectes user or discards any changes
+    */
     private void jButtonAdminUserDeleteAndDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserDeleteAndDiscardActionPerformed
-        if(jButtonAdminUserDeleteAndDiscard.getText().equals("Löschen"))
-        {
-            if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Benutzer: " +
-                jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0) +
-                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION)
-        {
-            if(((String)jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0))
-                .equals(loggedInUsr.getEmail()))
-            {
-                JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
-                    + "kann nicht geloescht werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
-                try
-                {
-                    userManager.deleteUser((String)jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0));
-                    createJTableAdminUsers();
-                } catch (Exception ex)
-                {
-                    JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Benutzers: "
-                            + jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0)
-                            + ".", 
-                            "Fehler", JOptionPane.ERROR_MESSAGE);
+        if (jButtonAdminUserDeleteAndDiscard.getText().equals("Löschen")) {
+            if (JOptionPane.showConfirmDialog(this, "Moechten Sie den Benutzer: "
+                    + jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0)
+                    + " wirklich loeschen?", "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+                    == JOptionPane.YES_OPTION) {
+                if (((String) jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0))
+                        .equals(loggedInUsr.getEmail())) {
+                    JOptionPane.showMessageDialog(this, "Der aktuell angemeldete Benutzer "
+                            + "kann nicht geloescht werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    try {
+                        userManager.deleteUser((String) jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0));
+                        createJTableAdminUsers();
+                    } catch (Exception ex) {
+                        JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Benutzers: "
+                                + jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0)
+                                + ".",
+                                "Fehler", JOptionPane.ERROR_MESSAGE);
+                    }
                 }
             }
-        }
-        }
-        else
-        {
+        } else {
             jButtonAdminUserEditAndSave.setText("Bearbeiten");
             jButtonAdminUserDeleteAndDiscard.setText("Löschen");
             jComboBoxAdminUserGroup.setEnabled(false);
@@ -380,9 +361,11 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonAdminUserDeleteAndDiscardActionPerformed
 
+    /*
+    creates a new user or saves the new user
+    */
     private void jButtonAdminUserNewUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonAdminUserNewUserActionPerformed
-        if(!jButtonAdminUserNewUser.getText().equals("Speichern"))
-        {
+        if (!jButtonAdminUserNewUser.getText().equals("Speichern")) {
             jButtonAdminUserEditAndSave.setEnabled(false);
             jButtonAdminUserNewUser.setText("Speichern");
 
@@ -399,16 +382,14 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
             jTableAdminUsersTable.setEnabled(false);
 
             DefaultComboBoxModel modelGroups = new DefaultComboBoxModel();
-            for(GroupType type : GroupType.values())
-            {
+            for (GroupType type : GroupType.values()) {
                 modelGroups.addElement(new Item(type, type.toString()));
             }
             jComboBoxAdminUserGroup.setModel(modelGroups);
 
             DefaultComboBoxModel modelStorages = new DefaultComboBoxModel();
             modelStorages.addElement(new Item(null, ""));
-            for(StorageDTO storage : placeManager.getAllStorages())
-            {
+            for (StorageDTO storage : placeManager.getAllStorages()) {
                 Item itm = new Item(storage, storage.getName());
                 modelStorages.addElement(itm);
             }
@@ -419,26 +400,18 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
             jTextFieldAdminUserName.setText("");
             jPasswordFieldAdminUserPassword.setText("");
             jPasswordFieldAdminUserPassword2.setText("");
-        }
-        else
-        {
+        } else {
             String passwd1 = new String(jPasswordFieldAdminUserPassword.getPassword());
             String passwd2 = new String(jPasswordFieldAdminUserPassword2.getPassword());
-            if(!passwd1.equals(passwd2))
-            {
+            if (!passwd1.equals(passwd2)) {
                 JOptionPane.showMessageDialog(this, "Die Passwort-Felder sind nicht identisch.", "Fehler", JOptionPane.ERROR_MESSAGE);
-            }
-            else
-            {
+            } else {
                 String email = jTextFieldAdminUserName.getText();
-                if(!email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!"
+                if (!email.matches("[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!"
                         + "#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-"
-                        + "z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?"))
-                {
+                        + "z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")) {
                     JOptionPane.showMessageDialog(this, "Der Bentzername muss eine E-Mail Adresse sein.", "Fehler", JOptionPane.ERROR_MESSAGE);
-                }
-                else
-                {
+                } else {
                     UserDTO user = new UserDTO();
                     user.setEmail(jTextFieldAdminUserName.getText());
                     user.setFname(jTextFieldAdminUserFirstName.getText());
@@ -447,22 +420,20 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
                     user.setPassword2(passwd2);
 
                     GroupDTO group = new GroupDTO();
-                    group.setGroup((GroupType)((Item)jComboBoxAdminUserGroup.getSelectedItem()).getObj());
+                    group.setGroup((GroupType) ((Item) jComboBoxAdminUserGroup.getSelectedItem()).getObj());
 
-                    Item storage = (Item)jComboBoxAdminUserStorage.getSelectedItem();
-                    if(storage.getObj() != null && group.getGroup() != GroupType.ADMINISTRATOR
-                        && group.getGroup() != GroupType.EINKAEUFER)
-                    {
+                    Item storage = (Item) jComboBoxAdminUserStorage.getSelectedItem();
+                    if (storage.getObj() != null && group.getGroup() != GroupType.ADMINISTRATOR
+                            && group.getGroup() != GroupType.EINKAEUFER) {
                         List storagesUser = new ArrayList<Integer>();
-                        storagesUser.add((Integer)((StorageDTO)storage.getObj()).getId());
+                        storagesUser.add((Integer) ((StorageDTO) storage.getObj()).getId());
                         group.setStorageId(storagesUser);
                     }
                     List<GroupDTO> groups = new ArrayList<GroupDTO>();
                     groups.add(group);
                     user.setGroups(groups);
 
-                    try
-                    {
+                    try {
                         userManager.register(user);
 
                         jTextFieldAdminUserFirstName.setEnabled(false);
@@ -477,62 +448,58 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
                         jButtonAdminUserNewUser.setText("Neuen Benutzer anlegen");
                         jTableAdminUsersTable.setEnabled(true);
                         createJTableAdminUsers();
-                    } catch(Exception es)
-                    {
+                    } catch (Exception es) {
                         JOptionPane.showMessageDialog(this, "Fehler beim Erstellen des Benutzer."
-                            + "(evtl. ist der Benutzername schon vergeben)", "Fehler", JOptionPane.ERROR_MESSAGE);
+                                + "(evtl. ist der Benutzername schon vergeben)", "Fehler", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
         }
     }//GEN-LAST:event_jButtonAdminUserNewUserActionPerformed
 
-       
-    public void createJTableAdminUsers()
-    {
-                mainWindow.setBusy();
-        
+    /**
+     * updates the user table
+     */
+    public void createJTableAdminUsers() {
+        mainWindow.setBusy();
+
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() {
                 List<UserDTO> users = userManager.getAllUsers();
                 DefaultTableModel model = new DefaultTableModel(0, 5);
-                model.setColumnIdentifiers(new Object[] {"Benutzername", "Rolle", "Lager", "Vorname", "Nachname"});
-                for(UserDTO user : users)
-                {
+                model.setColumnIdentifiers(new Object[]{"Benutzername", "Rolle", "Lager", "Vorname", "Nachname"});
+                for (UserDTO user : users) {
                     String storageName = "";
                     List<GroupDTO> groups = user.getGroups();
                     String groupName = "";
-                    try
-                    {
-                        if(groups.get(0).getGroup() == GroupType.LAGERARBEITER 
-                                || groups.get(0).getGroup() == GroupType.LAGERVERWALTER)
-                        {
+                    try {
+                        if (groups.get(0).getGroup() == GroupType.LAGERARBEITER
+                                || groups.get(0).getGroup() == GroupType.LAGERVERWALTER) {
                             Integer storageId = null;
-                            try
-                            {
+                            try {
                                 storageId = groups.get(0).getStorageId().get(0);
-                            } catch(Exception ex) {  }
+                            } catch (Exception ex) {
+                            }
 
-                            if(storageId != null)
-                            {
-                                try
-                                {
+                            if (storageId != null) {
+                                try {
                                     storageName = placeManager.getStorage(storageId).getName();
-                                } catch(Exception ex){ }
+                                } catch (Exception ex) {
+                                }
                             }
                         }
 
                         groupName = groups.get(0).getGroup().toString();
-                    } catch(Exception ex)
-                    {  }
-                    model.addRow(new Object[] {user.getEmail(), groupName,
-                                storageName, user.getFname(), user.getLname()});
+                    } catch (Exception ex) {
+                    }
+                    model.addRow(new Object[]{user.getEmail(), groupName,
+                        storageName, user.getFname(), user.getLname()});
                 }
-                
+
                 return model;
             }
-            
+
             @Override
             public void done() {
                 try {
@@ -542,23 +509,23 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
                     jButtonAdminUserEditAndSave.setEnabled(false);
                     jTableAdminUsersTable.setModel(model);
                     TableColumnAdjuster tca = new TableColumnAdjuster(jTableAdminUsersTable);
-                    tca.adjustColumns();                   
+                    tca.adjustColumns();
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
                 mainWindow.clearBusy();
             }
         };
-        
+
         worker.execute();
     }
-    
-    
-        public void JTableAdminUserValueChanged(ListSelectionEvent e) {
-        if(jTableAdminUsersTable.isEnabled())
-        {
-            if(jTableAdminUsersTable.getSelectedRow() >= 0)
-            {
+
+    /*
+    updates the gui elements
+    */
+    private void JTableAdminUserValueChanged(ListSelectionEvent e) {
+        if (jTableAdminUsersTable.isEnabled()) {
+            if (jTableAdminUsersTable.getSelectedRow() >= 0) {
                 String userName = (String) jTableAdminUsersTable.getModel().getValueAt(jTableAdminUsersTable.getSelectedRow(), 0);
                 UserDTO selectedUser = userManager.find(userName);
 
@@ -568,7 +535,7 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
                 jPasswordFieldAdminUserPassword.setText("");
                 jPasswordFieldAdminUserPassword2.setText("");
                 List<GroupDTO> groups = selectedUser.getGroups();
-                if(groups.isEmpty()) //User doesn't belong to a Group, not possible make him sth...
+                if (groups.isEmpty()) //User doesn't belong to a Group, not possible make him sth...
                 {
                     GroupDTO group = new GroupDTO();
                     group.setGroup(GroupType.ADMINISTRATOR);
@@ -580,19 +547,16 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
 
                 DefaultComboBoxModel modelGroups = new DefaultComboBoxModel();
                 Item selectedGroup = null;
-                for(GroupType type : GroupType.values())
-                {
+                for (GroupType type : GroupType.values()) {
                     Item itmGroup = new Item(type, type.toString());
-                    if(groups.get(0).getGroup().equals(type))
-                    {
+                    if (groups.get(0).getGroup().equals(type)) {
                         selectedGroup = itmGroup;
                     }
                     modelGroups.addElement(itmGroup);
                 }
 
                 jComboBoxAdminUserGroup.setModel(modelGroups);
-                if(selectedGroup != null)
-                {
+                if (selectedGroup != null) {
                     jComboBoxAdminUserGroup.setSelectedItem(selectedGroup);
                 }
 
@@ -601,14 +565,11 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
                 modelStorages.addElement(new Item(null, ""));
                 List<Integer> listStorages = groups.get(0).getStorageId();
                 Item selectedItem = null;
-                for(StorageDTO storage : placeManager.getAllStorages())
-                {
+                for (StorageDTO storage : placeManager.getAllStorages()) {
                     Item itm = new Item(storage, storage.getName());
                     modelStorages.addElement(itm);
-                    if(!listStorages.isEmpty())
-                    {              
-                        if(listStorages.get(0) == storage.getId())
-                        {
+                    if (!listStorages.isEmpty()) {
+                        if (listStorages.get(0) == storage.getId()) {
                             selectedItem = itm;
                         }
                     }
@@ -616,16 +577,13 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
 
                 jComboBoxAdminUserStorage.setModel(modelStorages);
 
-                if(selectedItem != null)
-                {
+                if (selectedItem != null) {
                     jComboBoxAdminUserStorage.setSelectedItem(selectedItem);
                 }
 
                 jButtonAdminUserEditAndSave.setEnabled(true);
                 jButtonAdminUserDeleteAndDiscard.setEnabled(true);
-            }
-            else
-            {
+            } else {
                 jButtonAdminUserEditAndSave.setText("Benutzer bearbeiten");
                 jButtonAdminUserEditAndSave.setEnabled(false);
 
@@ -642,7 +600,6 @@ public class JPanelAdminUsers extends javax.swing.JPanel {
         }
     }
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonAdminUserDeleteAndDiscard;

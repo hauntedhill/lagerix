@@ -1,9 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package de.hscoburg.etif.vbis.lagerix.appclient.windows;
 
 import com.google.zxing.BarcodeFormat;
@@ -12,7 +6,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.oned.Code128Writer;
 import de.hscoburg.etif.vbis.lagerix.appclient.utils.TableColumnAdjuster;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.PlaceManagerEJBRemoteInterface;
-import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.StorageDTO;
 import de.hscoburg.etif.vbis.lagerix.backend.interfaces.dto.YardDTO;
 import java.awt.Color;
 import java.awt.Font;
@@ -22,9 +15,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.print.Doc;
 import javax.print.DocFlavor;
@@ -42,51 +32,55 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.table.DefaultTableModel;
 
 /**
+ * Displays the yards frame
  *
  * @author mti578
  */
 public class JPanelStockManagerYards extends javax.swing.JPanel {
+
     private PlaceManagerEJBRemoteInterface placeManager = null;
     private PrintService selectedPrintService = null;
     private PrintService pss[] = null;
     private JFrameJavaAppClientMainWindow mainWindow = null;
-    
+
     /**
      * Creates new form JPanelStockManagerYards
+     * @param placeManager
+     * @param mainWindow
      */
     public JPanelStockManagerYards(PlaceManagerEJBRemoteInterface placeManager, JFrameJavaAppClientMainWindow mainWindow) {
         initComponents();
         this.placeManager = placeManager;
         this.mainWindow = mainWindow;
         jTableStockManagerYardsTable.getSelectionModel().addListSelectionListener(
-            new javax.swing.event.ListSelectionListener() {
+                new javax.swing.event.ListSelectionListener() {
                     public void valueChanged(ListSelectionEvent e) {
                         jTableStockManagerYardsTableValueChanged(e);
-                    };
-            });
+                    }
+                ;
     }
 
-       
-    public void jTableStockManagerYardsTableValueChanged(ListSelectionEvent e) {
-        if(jTableStockManagerYardsTable.isEnabled())
-        {
-            if(jTableStockManagerYardsTable.getSelectedRow() >= 0)
-            {
+    );
+    }
+
+    /*
+    update the gui elements
+    */
+    private void jTableStockManagerYardsTableValueChanged(ListSelectionEvent e) {
+        if (jTableStockManagerYardsTable.isEnabled()) {
+            if (jTableStockManagerYardsTable.getSelectedRow() >= 0) {
                 String yardId = jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0).toString();
                 jTextFieldStockManagerYardId.setText(yardId);
                 jButtonStockManagerYardDelete.setEnabled(true);
                 jButtonStockManagerPrintYardBarcode.setEnabled(true);
-            }
-            else
-            {
+            } else {
                 jButtonStockManagerPrintYardBarcode.setEnabled(false);
                 jButtonStockManagerYardDelete.setEnabled(false);
                 jTextFieldStockManagerYardId.setText("");
             }
-        }        
+        }
     }
 
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -117,24 +111,8 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         jDialog1.setMinimumSize(new java.awt.Dimension(269, 170));
         jDialog1.setModal(true);
         jDialog1.setResizable(false);
-        jDialog1.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                jDialog1WindowActivated(evt);
-            }
-        });
-        jDialog1.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                jDialog1ComponentShown(evt);
-            }
-        });
 
         jLabel5.setText("Bitte wählen Sie einen Drucker aus:");
-
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Drucken");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -286,52 +264,48 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         add(jPanelStockManagerYardsPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
-    public void createJTableStockManagerYards()
-    {
+    /**
+     * updates the yards table
+     */
+    
+    public void createJTableStockManagerYards() {
         mainWindow.setBusy();
-        
+
         SwingWorker worker = new SwingWorker() {
             @Override
             protected Object doInBackground() {
-                if(placeManager.getStorages().size() > 0)
-                {
+                if (placeManager.getStorages().size() > 0) {
                     DefaultTableModel model = new DefaultTableModel(0, 1);
-                    model.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
+                    model.setColumnIdentifiers(new Object[]{"Lagerplatz-ID"});
 
                     List<YardDTO> yards = placeManager.getAllYards(placeManager.getStorages().get(0).getId());
 
-                    for(YardDTO yard : yards)
-                    {
-                        model.addRow(new Object[] {(Integer)yard.getId()});
+                    for (YardDTO yard : yards) {
+                        model.addRow(new Object[]{(Integer) yard.getId()});
                     }
-                    
+
                     return model;
-                }
-                else
-                {
+                } else {
                     return null;
                 }
             }
-            
+
             @Override
             public void done() {
                 try {
                     Object returnParam = get();
-                    if(returnParam != null)
-                    {
+                    if (returnParam != null) {
                         jButtonStockManagerPrintYardBarcode.setEnabled(false);
                         jButtonStockManagerYardDelete.setEnabled(false);
                         jTextFieldStockManagerYardId.setEnabled(false);
-                        jTableStockManagerYardsTable.setModel((DefaultTableModel)returnParam);
+                        jTableStockManagerYardsTable.setModel((DefaultTableModel) returnParam);
                         TableColumnAdjuster tca = new TableColumnAdjuster(jTableStockManagerYardsTable);
                         tca.adjustColumns();
-                    }
-                    else
-                    {
+                    } else {
                         DefaultTableModel model = new DefaultTableModel(0, 1);
-                        model.setColumnIdentifiers(new Object[] {"Lagerplatz-ID"});
+                        model.setColumnIdentifiers(new Object[]{"Lagerplatz-ID"});
                         jTableStockManagerYardsTable.setModel(model);
-                        
+
                         jButtonStockManagerPrintYardBarcode.setEnabled(false);
                         jButtonStockManagerYardDelete.setEnabled(false);
                         jButtonStockManagerYardNewYard.setEnabled(false);
@@ -340,39 +314,35 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
-                
+
                 mainWindow.clearBusy();
             }
         };
-        
+
         worker.execute();
     }
 
-    
+    /*
+    deletes the selected yard or discards any changes
+    */
     private void jButtonStockManagerYardDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerYardDeleteActionPerformed
-        if(jButtonStockManagerYardDelete.getText().equals("Löschen"))
-        {
-            if(JOptionPane.showConfirmDialog(this, "Moechten Sie den Lagerplatz: " +
-                jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0) +
-                " wirklich loeschen?" , "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
-            == JOptionPane.YES_OPTION)
-            {
-                try
-                {
-                    Integer yardId = (Integer)jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0);
+        if (jButtonStockManagerYardDelete.getText().equals("Löschen")) {
+            if (JOptionPane.showConfirmDialog(this, "Moechten Sie den Lagerplatz: "
+                    + jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0)
+                    + " wirklich loeschen?", "Sind Sie sicher?", JOptionPane.YES_NO_OPTION)
+                    == JOptionPane.YES_OPTION) {
+                try {
+                    Integer yardId = (Integer) jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0);
                     placeManager.deleteYard(yardId);
                     createJTableStockManagerYards();
-                } catch(Exception ex)
-                {
+                } catch (Exception ex) {
                     JOptionPane.showMessageDialog(this, "Fehler beim loeschen des Lagerplatzes: "
                             + jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0)
-                            + ". Bitte loeschen Sie zuerst den aktuell im Lagerplatz eingelagerten Artikel.", 
+                            + ". Bitte loeschen Sie zuerst den aktuell im Lagerplatz eingelagerten Artikel.",
                             "Fehler", JOptionPane.ERROR_MESSAGE);
                 }
             }
-        }
-        else
-        {
+        } else {
             jButtonStockManagerYardNewYard.setEnabled(true);
             jButtonStockManagerYardDelete.setText("Löschen");
             jButtonStockManagerYardDelete.setEnabled(false);
@@ -383,64 +353,70 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonStockManagerYardDeleteActionPerformed
 
+    /*
+    creates a new yard
+    */
     private void jButtonStockManagerYardNewYardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerYardNewYardActionPerformed
         placeManager.createNewYard(placeManager.getStorages().get(0).getId());
         createJTableStockManagerYards();
     }//GEN-LAST:event_jButtonStockManagerYardNewYardActionPerformed
-    
+
+    /*
+    prints the yard id as barcode
+    */
     private void jButtonStockManagerPrintYardBarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerPrintYardBarcodeActionPerformed
         int id = (Integer) jTableStockManagerYardsTable.getModel().getValueAt(jTableStockManagerYardsTable.getSelectedRow(), 0);
-        
-        int width = 440; 
-        int height = 48;            
-        
+
+        int width = 440;
+        int height = 48;
+
         selectedPrintService = null;
         PrintRequestAttributeSet pras = new HashPrintRequestAttributeSet();
         pras.add(new Copies(1));
         pss = PrintServiceLookup.lookupPrintServices(DocFlavor.INPUT_STREAM.PNG, pras);
-        
+
         DefaultComboBoxModel model = new DefaultComboBoxModel();
-        for(int cnt = 0; cnt < pss.length; cnt++)
-        {
+        for (int cnt = 0; cnt < pss.length; cnt++) {
             model.addElement(pss[cnt].getName());
         }
-        
+
         jComboBox1.setModel(model);
-                
+
         jComboBox1.doLayout();
         jComboBox1.invalidate();
-        
+
         jDialog1.setModal(true);
         jDialog1.setVisible(true);
-        
-        if(selectedPrintService != null)
-        {
+
+        if (selectedPrintService != null) {
             BitMatrix bitMatrix;
             try {
-                bitMatrix = new Code128Writer().encode("S" + id,BarcodeFormat.CODE_128,width,height,null);
+                bitMatrix = new Code128Writer().encode("S" + id, BarcodeFormat.CODE_128, width, height, null);
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
                 BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
                 BufferedImage barcodeAndText = process(buffImage, "S" + id);
                 ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
-                
+
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
-                                
+
                 DocPrintJob job = selectedPrintService.createPrintJob();
                 Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
-                job.print(doc, pras); 
-                streamInput.close();                
+                job.print(doc, pras);
+                streamInput.close();
             } catch (Exception e) {
-                int ahhh=0;
-            }    
+                int ahhh = 0;
+            }
         }
     }//GEN-LAST:event_jButtonStockManagerPrintYardBarcodeActionPerformed
-
-        private BufferedImage process(BufferedImage old, String text) {
+    /*
+    helper class for printing the yard id below the barcode
+    */
+    private BufferedImage process(BufferedImage old, String text) {
         int w = old.getWidth();
         int h = old.getHeight() + 50;
         BufferedImage img = new BufferedImage(
-            w, h, BufferedImage.TYPE_INT_ARGB);
+                w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
         g2d.drawImage(old, 0, 0, null);
         g2d.setPaint(Color.BLACK);
@@ -452,29 +428,22 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         g2d.dispose();
         return img;
     }
-    
-    
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
 
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    /*
+    selects the selected printer
+    */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         selectedPrintService = pss[jComboBox1.getSelectedIndex()];
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /*
+    avorts printing
+    */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         selectedPrintService = null;
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
-
-    private void jDialog1WindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog1WindowActivated
-
-    }//GEN-LAST:event_jDialog1WindowActivated
-
-    private void jDialog1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jDialog1ComponentShown
-
-    }//GEN-LAST:event_jDialog1ComponentShown
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

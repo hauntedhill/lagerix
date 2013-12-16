@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics2D;
-import java.awt.event.ComponentAdapter;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -50,7 +49,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
     private PrintService selectedPrintService = null;
     private PrintService pss[] = null;
     private JFrameJavaAppClientMainWindow mainWindow = null;
-    
+
     /**
      * Creates new form JPanelStockManagerArticletypes
      *
@@ -64,7 +63,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         this.mainWindow = mainWindow;
 
         jTextFieldStockManagerSearchName.getDocument().addDocumentListener(new DocumentListener() {
-            public void changedUpdate(DocumentEvent e) {                
+            public void changedUpdate(DocumentEvent e) {
                 createJTableStockManagerArticletypesInGUIThread();
             }
 
@@ -111,10 +110,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
     }
 
     /**
-     * 
-     * @param e
+     * update the gui elements
      */
-    public void jTableStockManagerArticlesTableValueChanged(ListSelectionEvent e) {
+    private void jTableStockManagerArticlesTableValueChanged(ListSelectionEvent e) {
         if (jTableStockManagerArticles.isEnabled() && articleTypeId != null && jTableStockManagerArticles.getSelectedRow() >= 0) {
             jButtonStockManagerArticlePrintBarcode.setEnabled(true);
             jButtonStockManagerArticleNewArticle.setEnabled(true);
@@ -131,7 +129,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
     }
 
     /**
-     *
+     * Updates the article table
      */
     public void createJTableStockManagerArticles() {
         mainWindow.setBusy();
@@ -186,10 +184,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
     }
 
     /**
-     *
-     * @param e
+     * updates the gui elements
      */
-    public void jTableStockManagerArticletypeTableValueChanged(ListSelectionEvent e) {
+    private void jTableStockManagerArticletypeTableValueChanged(ListSelectionEvent e) {
         if (jTableStockManagerArticletypeTable.isEnabled()) {
             if (jTableStockManagerArticletypeTable.getSelectedRow() >= 0) {
                 String articleName = jTableStockManagerArticletypeTable.getModel().getValueAt(jTableStockManagerArticletypeTable.getSelectedRow(), 0).toString();
@@ -218,7 +215,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
                 jButtonStockManagerArticleNewArticle.setEnabled(false);
                 jButtonStockManagerArticlePrintBarcode.setEnabled(false);
                 jTableStockManagerArticles.setEnabled(false);
-                
+
                 DefaultTableModel model = new DefaultTableModel(0, 1);
                 model.setColumnIdentifiers(new Object[]{"Artikel-ID"});
                 jTableStockManagerArticles.setModel(model);
@@ -226,6 +223,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         }
     }
 
+    /*
+    is used to update the articletypes table
+    */
     private class SwingWorkerHelperArticletypes extends SwingWorker {
 
         public String filterName;
@@ -290,7 +290,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
     };
 
     /**
-     *
+     * updates the articletypes table
      */
     public void createJTableStockManagerArticletypes() {
         mainWindow.setBusy();
@@ -302,6 +302,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         worker.execute();
     }
 
+    /*
+    updates the articletypes and article tables in same thread as gui, needed because of lost focus of textfield when filter are applied
+    */
     private void createJTableStockManagerArticletypesInGUIThread() {
         String filterName = jTextFieldStockManagerSearchName.getText();;
         String filterDescr = jTextFieldStockManagerArticleSearchDescription.getText();
@@ -399,24 +402,8 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         jDialog1.setMinimumSize(new java.awt.Dimension(269, 170));
         jDialog1.setModal(true);
         jDialog1.setResizable(false);
-        jDialog1.addWindowListener(new java.awt.event.WindowAdapter() {
-            public void windowActivated(java.awt.event.WindowEvent evt) {
-                jDialog1WindowActivated(evt);
-            }
-        });
-        jDialog1.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentShown(java.awt.event.ComponentEvent evt) {
-                jDialog1ComponentShown(evt);
-            }
-        });
 
         jLabel5.setText("Bitte wählen Sie einen Drucker aus:");
-
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("Drucken");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -725,6 +712,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         add(jPanelAdminStoragesPanel, gridBagConstraints);
     }// </editor-fold>//GEN-END:initComponents
 
+    /*
+    deletes the selected articletype or discards any changes
+    */
     private void jButtonStockManagerArticletypeDeleteAndDiscardActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticletypeDeleteAndDiscardActionPerformed
         if (jButtonStockManagerArticletypeDeleteAndDiscard.getText().equals("Löschen")) {
             if (JOptionPane.showConfirmDialog(this, "Moechten Sie die Artikelart: "
@@ -764,6 +754,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonStockManagerArticletypeDeleteAndDiscardActionPerformed
 
+    /*
+    creates a new articletype or saves the articletype
+    */
     private void jButtonStockManagerArticletypeNewArticletypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticletypeNewArticletypeActionPerformed
         if (!jButtonStockManagerArticletypeNewArticletype.getText().equals("Speichern")) {
             articleTypeId = null;
@@ -797,6 +790,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonStockManagerArticletypeNewArticletypeActionPerformed
 
+    /*
+    modifies the selected articletype or saves the changes
+    */
     private void jButtonStockManagerArticletypeModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticletypeModifyActionPerformed
         if (!jButtonStockManagerArticletypeModify.getText().equals("Speichern")) {
             jButtonStockManagerArticletypeModify.setText("Speichern");
@@ -839,6 +835,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonStockManagerArticletypeModifyActionPerformed
 
+    /*
+    creates a new article or saves the article
+    */
     private void jButtonStockManagerArticleNewArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticleNewArticleActionPerformed
         ArticleDTO article = articleManager.createNewArticle(articleTypeId);
         int id = article.getId();
@@ -873,7 +872,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
                 BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
                 BufferedImage barcodeAndText = process(buffImage, "A" + id);
                 ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
-                
+
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
 
@@ -888,11 +887,14 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         createJTableStockManagerArticles();
     }//GEN-LAST:event_jButtonStockManagerArticleNewArticleActionPerformed
 
-           private BufferedImage process(BufferedImage old, String text) {
+    /*
+    helper method for printing the article id's, adds the id under the barcode
+    */
+    private BufferedImage process(BufferedImage old, String text) {
         int w = old.getWidth();
         int h = old.getHeight() + 50;
         BufferedImage img = new BufferedImage(
-            w, h, BufferedImage.TYPE_INT_ARGB);
+                w, h, BufferedImage.TYPE_INT_ARGB);
         Graphics2D g2d = img.createGraphics();
         g2d.drawImage(old, 0, 0, null);
         g2d.setPaint(Color.BLACK);
@@ -904,29 +906,25 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         g2d.dispose();
         return img;
     }
-    
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-
-    }//GEN-LAST:event_jComboBox1ActionPerformed
-
+    /*
+    sets the selected printer
+    */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         selectedPrintService = pss[jComboBox1.getSelectedIndex()];
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    /*
+    aborts print
+    */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         selectedPrintService = null;
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jDialog1WindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_jDialog1WindowActivated
-
-    }//GEN-LAST:event_jDialog1WindowActivated
-
-    private void jDialog1ComponentShown(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_jDialog1ComponentShown
-
-    }//GEN-LAST:event_jDialog1ComponentShown
-
+    /*
+    prints the barcode for the selected article
+    */
     private void jButtonStockManagerArticlePrintBarcodeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticlePrintBarcodeActionPerformed
         int id = (Integer) jTableStockManagerArticles.getValueAt(jTableStockManagerArticles.getSelectedRow(), 0);
 
@@ -971,6 +969,9 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_jButtonStockManagerArticlePrintBarcodeActionPerformed
 
+    /*
+    deletes the selected article
+    */
     private void jButtonStockManagerArticleDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonStockManagerArticleDeleteActionPerformed
         int id = (Integer) jTableStockManagerArticles.getValueAt(jTableStockManagerArticles.getSelectedRow(), 0);
         if (JOptionPane.showConfirmDialog(this, "Moechten Sie den Artikel mit der ID: "
