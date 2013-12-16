@@ -14,6 +14,7 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.print.Doc;
@@ -26,9 +27,11 @@ import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.Copies;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
 import javax.swing.event.ListSelectionEvent;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -42,6 +45,7 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
     private PrintService selectedPrintService = null;
     private PrintService pss[] = null;
     private JFrameJavaAppClientMainWindow mainWindow = null;
+    private File saveAsFile = null;
 
     /**
      * Creates new form JPanelStockManagerYards
@@ -96,6 +100,8 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         jComboBox1 = new javax.swing.JComboBox();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
+        jFileChooser1 = new javax.swing.JFileChooser();
         jPanelStockManagerYardsPanel = new javax.swing.JPanel();
         jScrollPaneStockManagerYardManagment = new javax.swing.JScrollPane();
         jTableStockManagerYardsTable = new javax.swing.JTable();
@@ -108,8 +114,9 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         jTextFieldStockManagerYardId = new javax.swing.JTextField();
 
         jDialog1.setAlwaysOnTop(true);
-        jDialog1.setMinimumSize(new java.awt.Dimension(269, 170));
+        jDialog1.setMinimumSize(new java.awt.Dimension(380, 170));
         jDialog1.setModal(true);
+        jDialog1.setPreferredSize(new java.awt.Dimension(380, 170));
         jDialog1.setResizable(false);
 
         jLabel5.setText("Bitte wählen Sie einen Drucker aus:");
@@ -128,20 +135,32 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
             }
         });
 
+        jButton1.setText("Als Datei speichern");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
         jDialog1Layout.setHorizontalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDialog1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jDialog1Layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton2))
-                    .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(jDialog1Layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jButton2))
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton1)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jDialog1Layout.setVerticalGroup(
             jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -153,7 +172,8 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
                 .addGap(29, 29, 29)
                 .addGroup(jDialog1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(jButton3)
+                    .addComponent(jButton1))
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
@@ -388,22 +408,30 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
         jDialog1.setModal(true);
         jDialog1.setVisible(true);
 
-        if (selectedPrintService != null) {
+        if (selectedPrintService != null || saveAsFile != null) {
             BitMatrix bitMatrix;
             try {
                 bitMatrix = new Code128Writer().encode("S" + id, BarcodeFormat.CODE_128, width, height, null);
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
                 BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
                 BufferedImage barcodeAndText = process(buffImage, "S" + id);
-                ImageIO.write(barcodeAndText, "png", streamMemoryStream);
+                
+                if(saveAsFile != null)
+                {
+                    ImageIO.write(barcodeAndText, "png", saveAsFile);
+                }
+                else
+                {
+                    ImageIO.write(barcodeAndText, "png", streamMemoryStream);
 
-                byte[] barcodeImage = streamMemoryStream.toByteArray();
-                ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
+                    byte[] barcodeImage = streamMemoryStream.toByteArray();
+                    ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
 
-                DocPrintJob job = selectedPrintService.createPrintJob();
-                Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
-                job.print(doc, pras);
-                streamInput.close();
+                    DocPrintJob job = selectedPrintService.createPrintJob();
+                    Doc doc = new SimpleDoc(streamInput, DocFlavor.INPUT_STREAM.PNG, null);
+                    job.print(doc, pras);
+                    streamInput.close();
+                }
             } catch (Exception e) {
                 int ahhh = 0;
             }
@@ -434,19 +462,40 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         selectedPrintService = pss[jComboBox1.getSelectedIndex()];
+        saveAsFile = null;
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /*
-    avorts printing
+    aborts printing
     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         selectedPrintService = null;
+        saveAsFile = null;
         jDialog1.setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    /*
+    saves the barcode as a file
+    */
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        jFileChooser1.setFileFilter(new FileNameExtensionFilter("Bilddatei", "png"));
+        if(jFileChooser1.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+        {
+            String filepath = jFileChooser1.getSelectedFile().getPath();
+            if (!filepath.endsWith(".png") && !filepath.endsWith(".PNG"))
+            {
+                filepath = filepath + ".png";
+            }
+            saveAsFile = new File(filepath);
+            selectedPrintService = null;
+            jDialog1.setVisible(false);
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButtonStockManagerPrintYardBarcode;
@@ -454,6 +503,7 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
     private javax.swing.JButton jButtonStockManagerYardNewYard;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JDialog jDialog1;
+    private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel4;
