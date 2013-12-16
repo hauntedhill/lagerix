@@ -395,7 +395,7 @@ public class JPanelStockManagerYards extends javax.swing.JPanel {
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
                 BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
                 BufferedImage barcodeAndText = process(buffImage, "S" + id);
-                ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
+                ImageIO.write(barcodeAndText, "png", streamMemoryStream);
 
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);

@@ -871,7 +871,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
 
                 BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
                 BufferedImage barcodeAndText = process(buffImage, "A" + id);
-                ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
+                ImageIO.write(barcodeAndText, "png", streamMemoryStream);
 
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
@@ -956,7 +956,7 @@ public class JPanelStockManagerArticles extends javax.swing.JPanel {
                 ByteArrayOutputStream streamMemoryStream = new ByteArrayOutputStream();
                 BufferedImage buffImage = MatrixToImageWriter.toBufferedImage(bitMatrix);
                 BufferedImage barcodeAndText = process(buffImage, "A" + id);
-                ImageIO.write(barcodeAndText, "jpg", streamMemoryStream);
+                ImageIO.write(barcodeAndText, "png", streamMemoryStream);
                 byte[] barcodeImage = streamMemoryStream.toByteArray();
                 ByteArrayInputStream streamInput = new ByteArrayInputStream(barcodeImage);
 
